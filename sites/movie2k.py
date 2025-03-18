@@ -153,10 +153,12 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         if '_id' in movie:
             total += 1
     for movie in aJson['movies']:
-        sTitle = movie['title']
-        if sSearchText and not cParser().search(sSearchText, sTitle):
+        if not '_id' in movie:
             continue
-        if 'Staffel' in sTitle:
+        sTitle = movie['title']
+        if sSearchText and not cParser.search(sSearchText, sTitle):
+            continue
+        if 'Staffel' in sTitle or 'Season' in sTitle:
             isTvshow = True
         oGuiElement = cGuiElement(sTitle, SITE_IDENTIFIER, 'showEpisodes' if isTvshow else 'showHosters')
         if 'poster_path_season' in movie:
@@ -295,4 +297,4 @@ def _search(oGui, sSearchText):
         sLang = '2'
     if sLanguage == '2':  # prefLang Englisch
         sLang = '3'
-    showEntries(URL_SEARCH % (sLang, cParser().quotePlus(sSearchText), '1'), oGui, sSearchText)
+    showEntries(URL_SEARCH % (sLang, cParser.quotePlus(sSearchText), '1'), oGui, sSearchText)
