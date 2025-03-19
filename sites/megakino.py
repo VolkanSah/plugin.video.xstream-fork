@@ -14,9 +14,6 @@ from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.config import cConfig
 from resources.lib.gui.gui import cGui
 
-if cConfig().getSetting('bypassDNSlock') == 'true':
-    from resources.lib.handler.requestHandler import cRequestHandlerwDNS as cRequestHandler
-
 SITE_IDENTIFIER = 'megakino'
 SITE_NAME = 'Megakino'
 SITE_ICON = 'megakino.png'
@@ -68,7 +65,7 @@ def load(): # Menu structure of the site plugin
 def showGenre():
     params = ParameterHandler()
     entryUrl = params.getValue('sUrl')
-    oRequest = cRequestHandler(entryUrl)
+    oRequest = cRequestHandler(entryUrl, bypass_dns=True)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 48 # 48 Stunden
     sHtmlContent = oRequest.request()    
@@ -90,7 +87,7 @@ def showGenre():
 def showCollection():
     params = ParameterHandler()
     entryUrl = params.getValue('sUrl')
-    oRequest = cRequestHandler(entryUrl)
+    oRequest = cRequestHandler(entryUrl, bypass_dns=True)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 48 # 48 Stunden
     sHtmlContent = oRequest.request()
@@ -114,7 +111,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False, sSearchPageText =
     params = ParameterHandler()
     isTvshow = False
     if not entryUrl: entryUrl = params.getValue('sUrl')
-    oRequest = cRequestHandler(entryUrl, ignoreErrors=(sGui is not False))
+    oRequest = cRequestHandler(entryUrl, ignoreErrors=(sGui is not False), bypass_dns=True)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 6  # 6 Stunden
     sHtmlContent = oRequest.request()
@@ -159,7 +156,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False, sSearchPageText =
         params.setParam('sDesc', sDesc)
         oGui.addFolder(oGuiElement, params, isTvshow, total)
     if not sGui and not sSearchText and not sSearchPageText:
-        isMatchNextPage, sNextUrl = cParser().parseSingleResult(sHtmlContent, 'class="pagination.*?href="([^"]+)">\D')
+        isMatchNextPage, sNextUrl = cParser.parseSingleResult(sHtmlContent, 'class="pagination.*?href="([^"]+)">\D')
         # Start Page Function
         isMatchSiteSearch, sHtmlContainer = cParser.parseSingleResult(sHtmlContent, 'class="pagination(.*?)</section>')
         if isMatchSiteSearch:
@@ -193,7 +190,7 @@ def showEpisodes():
         cGui().showInfo()
         return
 
-    oRequest = cRequestHandler(sUrl)
+    oRequest = cRequestHandler(sUrl, bypass_dns=True)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 4  # HTML Cache Zeit 4 Stunden
     sHtmlContent = oRequest.request()     
@@ -217,7 +214,7 @@ def showEpisodes():
 def showHosters():
     hosters = []
     sUrl = ParameterHandler().getValue('entryUrl')
-    sHtmlContent = cRequestHandler(sUrl).request()
+    sHtmlContent = cRequestHandler(sUrl, bypass_dns=True).request()
     pattern = '<iframe.*?src=([^\s]+)'
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
     if isMatch:
@@ -239,7 +236,7 @@ def showEpisodeHosters():
     hosters = []
     sUrl = ParameterHandler().getValue('entryUrl')
     episodeId = 'ep' + ParameterHandler().getValue('episodeId')
-    sHtmlContent = cRequestHandler(sUrl).request()
+    sHtmlContent = cRequestHandler(sUrl, bypass_dns=True).request()
     pattern = '<select\s+name="pmovie__select-items"\s+class="[^"]+"\s+style="[^"]+"\s+id="%s">\s*(.*?)\s*</select>' % episodeId
     isMatch, sContainer = cParser.parseSingleResult(sHtmlContent, pattern)
     if isMatch:

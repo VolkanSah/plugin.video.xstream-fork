@@ -18,9 +18,6 @@ from xbmcvfs import translatePath
 from resources.lib.tools import platform
 
 
-#if cConfig().getSetting('bypassDNSlock') == 'true': #ToDo Noch mal prüfen ob wir das so brauchen oder die Logger-Meldungen so lassen
-#    from resources.lib.handler.requestHandler import cRequestHandlerwDNS as cRequestHandler
-
 ADDON_PATH = translatePath(os.path.join('special://home/addons/', '%s'))
 LOGMESSAGE = cConfig().getLocalizedString(30166)
 class cPluginHandler:

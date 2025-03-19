@@ -7,8 +7,8 @@ import xbmcaddon
 import hashlib
 import re
 import os
+import time
 
-from functools import lru_cache
 from resources.lib.handler.ParameterHandler import ParameterHandler
 from resources.lib import utils
 from resources.lib import pyaes
@@ -106,7 +106,6 @@ def textBox(heading, announce):
 
 class cParser:
     @staticmethod
-    @lru_cache(maxsize=None)
     def _get_compiled_pattern(pattern, flags=0):
         return re.compile(pattern, flags)
     
@@ -138,28 +137,26 @@ class cParser:
 
     @staticmethod
     def parseSingleResult(sHtmlContent, pattern, ignoreCase=False):
-        aMatches = None
-        
         if sHtmlContent:
+            flags = re.S | re.M
             if ignoreCase:
-                aMatches = cParser._get_compiled_pattern(pattern, re.S | re.M | re.I).findall(sHtmlContent)
-            else:
-                aMatches = cParser._get_compiled_pattern(pattern, re.S | re.M).findall(sHtmlContent)
+                flags |= re.I
+
+            matches = cParser._get_compiled_pattern(pattern, flags).search(sHtmlContent)
             
-            if len(aMatches) == 1:
-                return True, cParser._replaceSpecialCharacters(aMatches[0])
+            if matches:
+                return True, cParser._replaceSpecialCharacters(matches.group(1))
         
-        return False, aMatches
+        return False, None
     
     @staticmethod
     def parse(sHtmlContent, pattern, iMinFoundValue=1, ignoreCase=False):
-        aMatches = None
-        
         if sHtmlContent:
+            flags = re.DOTALL
             if ignoreCase:
-                aMatches = cParser._get_compiled_pattern(pattern, re.DOTALL | re.I).findall(sHtmlContent)
-            else:
-                aMatches = cParser._get_compiled_pattern(pattern, re.DOTALL).findall(sHtmlContent)
+                flags |= re.I
+
+            aMatches = cParser._get_compiled_pattern(pattern, flags).findall(sHtmlContent)
             
             if len(aMatches) >= iMinFoundValue:
                 # handle both single strings and tuples of matches
@@ -171,7 +168,7 @@ class cParser:
                     aMatches = [cParser._replaceSpecialCharacters(x) if isinstance(x, str) else x for x in aMatches]
                 
                 return True, aMatches
-        return False, aMatches
+        return False, None
 
     @staticmethod
     def replace(pattern, sReplaceString, sValue):
@@ -179,10 +176,10 @@ class cParser:
 
     @staticmethod
     def search(pattern, sValue, ignoreCase=True):
+        flags = 0
         if ignoreCase:
-            return cParser._get_compiled_pattern(pattern, re.IGNORECASE).search(sValue)
-        else:
-            return cParser._get_compiled_pattern(pattern).search(sValue)
+            flags = re.IGNORECASE
+        return cParser._get_compiled_pattern(pattern, flags).search(sValue)
 
     @staticmethod
     def escape(sValue):
@@ -337,3 +334,32 @@ def valid_email(email): #ToDo: Funktion in Settings / Konten aktivieren
         return True
     else:
         return False
+
+class cCache(object):
+    _win = None
+
+    def __init__(self):
+        # see https://kodi.wiki/view/Window_IDs
+        # use WINDOW_SCREEN_CALIBRATION to store all data
+        self._win = xbmcgui.Window(10011)
+
+    def __del__(self):
+        del self._win
+
+    def get(self, key, cache_time):
+        cachedata = self._win.getProperty(key)
+
+        if cachedata:
+            cachedata = eval(cachedata)
+            if time.time() - cachedata[0] < cache_time:
+                return cachedata[1]
+            else:
+                self._win.clearProperty(key)
+
+        return None
+    
+    def set(self, key, data):
+        self._win.setProperty(key, repr((time.time(), data)))
+
+    def clear(self):
+        self._win.clearProperties()

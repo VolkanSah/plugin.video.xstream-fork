@@ -15,9 +15,6 @@ from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.config import cConfig
 from resources.lib.gui.gui import cGui
 
-if cConfig().getSetting('bypassDNSlock') == 'true':
-    from resources.lib.handler.requestHandler import cRequestHandlerwDNS as cRequestHandler
-
 
 SITE_IDENTIFIER = 'filmpalast'
 SITE_NAME = 'FilmPalast'
@@ -92,7 +89,7 @@ def showSeriesMenu():   # Menu structure of series menu
 def showValue():
     params = ParameterHandler()
     value = params.getValue("value")
-    oRequest = cRequestHandler(params.getValue('sUrl'))
+    oRequest = cRequestHandler(params.getValue('sUrl'), bypass_dns=True)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 24 # HTML Cache Zeit 1 Tag
     sHtmlContent = oRequest.request()
@@ -114,7 +111,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     params = ParameterHandler()
     if not entryUrl: entryUrl = params.getValue('sUrl')
     isTvshow = False
-    oRequest = cRequestHandler(entryUrl, ignoreErrors=(sGui is not False))
+    oRequest = cRequestHandler(entryUrl, ignoreErrors=(sGui is not False), bypass_dns=True)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 6  # 6 Stunden
     sHtmlContent = oRequest.request()
@@ -131,7 +128,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     for sUrl, sName, sThumbnail, sDummy in aResult:
         isTvshow, aResult = cParser.parse(sName, 'S\d\dE\d\d')
         # seriesname should not be crippled here!
-        if sSearchText and not cParser().search(sSearchText, sName):
+        if sSearchText and not cParser.search(sSearchText, sName):
             continue
         if sThumbnail.startswith('/'):
             sThumbnail = URL_MAIN + sThumbnail
@@ -176,7 +173,7 @@ def showSeasons():
     sUrl = params.getValue('entryUrl')
     sThumbnail = params.getValue("sThumbnail")
     sName = params.getValue('sName')
-    oRequest = cRequestHandler(sUrl)
+    oRequest = cRequestHandler(sUrl, bypass_dns=True)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 6  # HTML Cache Zeit 6 Stunden
     sHtmlContent = oRequest.request()
@@ -207,7 +204,7 @@ def showEpisodes():
     sThumbnail = params.getValue("sThumbnail")
     sSeason = params.getValue('season')
     sShowName = params.getValue('TVShowTitle')
-    oRequest = cRequestHandler(sUrl)
+    oRequest = cRequestHandler(sUrl, bypass_dns=True)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
         oRequest.cacheTime = 60 * 60 * 4  # HTML Cache Zeit 4 Stunden
     sHtmlContent = oRequest.request()
@@ -245,10 +242,10 @@ def showHosters():
     sUrl = params.getValue('entryUrl')
     if '-english' in sUrl: sLang = '(EN)'
     else: sLang = ''
-    sHtmlContent = cRequestHandler(sUrl).request()
+    sHtmlContent = cRequestHandler(sUrl, bypass_dns=True).request()
     pattern = 'hostName">([^<]+).*?(http[^"]+)' # Hoster Link
     releaseQuality = 'class="rb">.*?(\d\d\d+)p\.' # Release Qualität
-    isMatch, aResult = cParser().parse(sHtmlContent, pattern)
+    isMatch, aResult = cParser.parse(sHtmlContent, pattern)
     isQuality, sQuality = cParser.parseSingleResult(sHtmlContent, releaseQuality)  # sReleaseQuality auslesen z.B. 1080
     if not isQuality: sQuality = '720'
     hosters = []
@@ -280,4 +277,4 @@ def showSearch():
 
 
 def _search(oGui, sSearchText):
-    showEntries(URL_SEARCH % cParser().quotePlus(sSearchText), oGui, sSearchText)
+    showEntries(URL_SEARCH % cParser.quotePlus(sSearchText), oGui, sSearchText)
