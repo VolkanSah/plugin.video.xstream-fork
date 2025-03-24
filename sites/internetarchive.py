@@ -34,10 +34,9 @@ URL_MOVIE = URL_MAIN + '/details/'
 URL_SEARCH = URL_MAIN + '/advancedsearch.php?q=%s'
 URL_COLL = URL_MAIN + ('/advancedsearch.php?q=collection%3A%22')
 URL_COLL1 = ('%22&fl%5B%5D=collection&fl%5B%5D=description&fl%5B%5D=genre&fl%5B%5D=identifier&fl%5B%5D=language&fl%5B%5D=title&fl%5B%5D=year&rows=80000&page=1&output=json')
-URL_COLLECTIONS_LIST = {'Film Noir': 'film_noir', 'Feature Films': 'feature_films', 'Movie Trailers': 'movie_trailers', 'Short Format Films': 'short_films',
-                        'SciFi / Horror': 'scifi_horror', 'Cinemocracy': 'cinemocracy'}
+URL_COLLECTIONS_LIST = {'Film Noir': 'Film_Noir', 'Feature Films': 'feature_films', 'Movie Trailers': 'movie_trailers', 'Short Format Films': 'short_films',
+                        'SciFi / Horror': 'SciFi_Horror', 'Cinemocracy': 'cinemocracy'}
 
-#
 
 def load(): # Menu structure of the site plugin
     logger.info('Load %s' % SITE_NAME)
@@ -68,57 +67,57 @@ def showCollections(entryUrl=False, sGui=False):
         if not sGui: oGui.showInfo()
         return
 
-# Filter nach eingestellter Sprache in xstream laden
+    # Filter nach eingestellter Sprache in xstream laden
     sLanguage = cConfig().getSetting('prefLanguage')
+
     for i in aResults:
-        sId = i['identifier']  # ID des Films / Serie für die weitere URL
-        sName = i['title']  # Name des Films / Serie
-        #sName = sName.replace('"', '-')
-        oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showHosters')
-        # Resultate aus JSON nach voreingestellter Sprache filtern (Deutsch, Englisch, alle Sprachen)
-        if 'language' in i and i['language'] != '':
-            sLang = i['language']
-            if sLanguage == '1': # Voreingestellte Sprache Deutsch in settings.xml
-                if not sLang in ['ger', 'german', 'Ger', 'German']:
-                   continue
-            if sLanguage == '2':  # Voreingestellte Sprache Englisch in settings.xml
-                if not sLang in ['eng', 'english', 'English']:
-                    continue
-            if sLanguage == '0': # Alle Sprachen
-                if not sLang in ['ger', 'eng', 'english', 'English', 'Ger', 'German']:
-                    continue
-        else:
-            i['language'] = 'und'
-            sLang = 'und'
-            if sLanguage == '1': # Voreingestellte Sprache Deutsch in settings.xml
-                    continue
-            if sLanguage == '2':  # Voreingestellte Sprache Englisch in settings.xml
-                    continue
-            if sLanguage == '0': # Alle Sprachen
-                if not sLang in ['ger', 'eng', 'english', 'und', 'Ger', 'German', 'English']:
-                    continue
-        oGuiElement.setLanguage(i['language'])
+        if 'identifier' in i and i['identifier'] != '' and 'title' in i and i['title'] != '':
+            sId = str(i['identifier'])  # ID des Films / Serie für die weitere URL
+            sName = str(i['title'])  # Name des Films / Serie
+            #sName = sName.replace('"', '-')
+            oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showHosters')
+            # Resultate aus JSON nach voreingestellter Sprache filtern (Deutsch, Englisch, alle Sprachen)
+            if 'language' in i and i['language'] != '':
+                sLang = i['language']
+                if sLanguage == '1': # Voreingestellte Sprache Deutsch in settings.xml
+                    if not sLang in ['ger', 'german', 'Ger', 'German']:
+                       continue
+                if sLanguage == '2':  # Voreingestellte Sprache Englisch in settings.xml
+                    if not sLang in ['eng', 'english', 'English']:
+                        continue
+                if sLanguage == '0': # Alle Sprachen
+                    if not sLang in ['ger', 'eng', 'english', 'English', 'Ger', 'German']:
+                        continue
+            else:
+                i['language'] = 'und'
+                sLang = 'und'
+                if sLanguage == '1': # Voreingestellte Sprache Deutsch in settings.xml
+                        continue
+                if sLanguage == '2':  # Voreingestellte Sprache Englisch in settings.xml
+                        continue
+                if sLanguage == '0': # Alle Sprachen
+                    if not sLang in ['ger', 'eng', 'english', 'und', 'Ger', 'German', 'English']:
+                        continue
+            oGuiElement.setLanguage(i['language'])
 
+            #if 'is_series' in i: isTvshow = i['is_series']  # Wenn True dann Serie ToDo Prüfen wie sich Serien verhalten
+            #oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showSeasons' if isTvshow else 'showHosters')
+            #oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showHosters')
+            if 'year' in i and len(str(i['year'])) == 4: # Suche bei year nach 4 stelliger Zahl
+                oGuiElement.setYear(i['year'])
+            if 'description' in i and i['description'] != '':
+                sDesc = str(i['description'])
+                sDesc = sDesc.replace("'", "")
+                oGuiElement.setDescription(sDesc)  # Suche nach Desc wenn nicht leer dann setze GuiElement
 
-
-        #if 'is_series' in i: isTvshow = i['is_series']  # Wenn True dann Serie ToDo Prüfen wie sich Serien verhalten
-        #oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showSeasons' if isTvshow else 'showHosters')
-        #oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showHosters')
-        if 'year' in i and len(str(i['year'])) == 4: # Suche bei year nach 4 stelliger Zahl
-            oGuiElement.setYear(i['year'])
-        if 'description' in i and i['description'] != '':
-            oGuiElement.setDescription(i['description'])  # Suche nach Desc wenn nicht leer dann setze GuiElement
-
-
-
-        #oGuiElement.setMediaType('tvshow' if isTvshow else 'movie')
-        oGuiElement.setMediaType('movie')
-        # Parameter übergeben
-        params.setParam('entryUrl', URL_MOVIE + sId)
-        params.setParam('sName', sName)
-        #oGui.addFolder(oGuiElement, params, isTvshow, total)
-        #oGui.addFolder(oGuiElement, params, total)
-        oGui.addFolder(oGuiElement, params, False, total)
+            #oGuiElement.setMediaType('tvshow' if isTvshow else 'movie')
+            oGuiElement.setMediaType('movie')
+            # Parameter übergeben
+            params.setParam('entryUrl', URL_MOVIE + sId)
+            params.setParam('sName', sName)
+            #oGui.addFolder(oGuiElement, params, isTvshow, total)
+            #oGui.addFolder(oGuiElement, params, total)
+            oGui.addFolder(oGuiElement, params, False, total)
 
     if not sGui:
         #oGui.setView('tvshows' if isTvshow else 'movies')
@@ -147,54 +146,53 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     sLanguage = cConfig().getSetting('prefLanguage')
 
     for i in aResults:
-        sId = i['identifier']  # ID des Films / Serie für die weitere URL
-        sName = i['title']  # Name des Films / Serie
-        sName = sName.replace(':', '-')
-        oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showHosters')
-        # Resultate aus JSON nach voreingestellter Sprache filtern (Deutsch, Englisch, alle Sprachen)
-        if 'language' in i and i['language'] != '':
-            sLang = i['language']
-            if sLanguage == '1': # Voreingestellte Sprache Deutsch in settings.xml
-                if not sLang in ['ger', 'german']:
-                   continue
-            if sLanguage == '2':  # Voreingestellte Sprache Englisch in settings.xml
-                if not sLang in ['eng', 'english']:
-                    continue
-            if sLanguage == '0': # Alle Sprachen
-                if not sLang in ['ger', 'eng', 'english']:
-                    continue
-        else:
-            i['language'] = 'UND'
-            sLang = 'UND'
-            if sLanguage == '1': # Voreingestellte Sprache Deutsch in settings.xml
-                    continue
-            if sLanguage == '2':  # Voreingestellte Sprache Englisch in settings.xml
-                    continue
-            if sLanguage == '0': # Alle Sprachen
-                if not sLang in ['ger', 'eng', 'english', 'UND']:
-                    continue
-        oGuiElement.setLanguage(i['language'])
+        if 'identifier' in i and i['identifier'] != '' and 'title' in i and i['title'] != '':
+            sId = str(i['identifier'])  # ID des Films / Serie für die weitere URL
+            sName = str(i['title'])  # Name des Films / Serie
+            sName = sName.replace(':', '-')
+            oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showHosters')
+            # Resultate aus JSON nach voreingestellter Sprache filtern (Deutsch, Englisch, alle Sprachen)
+            if 'language' in i and i['language'] != '':
+                sLang = i['language']
+                if sLanguage == '1': # Voreingestellte Sprache Deutsch in settings.xml
+                    if not sLang in ['ger', 'german']:
+                       continue
+                if sLanguage == '2':  # Voreingestellte Sprache Englisch in settings.xml
+                    if not sLang in ['eng', 'english']:
+                        continue
+                if sLanguage == '0': # Alle Sprachen
+                    if not sLang in ['ger', 'eng', 'english']:
+                        continue
+            else:
+                i['language'] = 'UND'
+                sLang = 'UND'
+                if sLanguage == '1': # Voreingestellte Sprache Deutsch in settings.xml
+                        continue
+                if sLanguage == '2':  # Voreingestellte Sprache Englisch in settings.xml
+                        continue
+                if sLanguage == '0': # Alle Sprachen
+                    if not sLang in ['ger', 'eng', 'english', 'UND']:
+                        continue
+            oGuiElement.setLanguage(i['language'])
 
+            #if 'is_series' in i: isTvshow = i['is_series']  # Wenn True dann Serie ToDo Prüfen wie sich Serien verhalten
+            #oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showSeasons' if isTvshow else 'showHosters')
+            #oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showHosters')
+            if 'year' in i and len(str(i['year'])) == 4: # Suche bei year nach 4 stelliger Zahl
+                oGuiElement.setYear(i['year'])
+            if 'description' in i and i['description'] != '':
+                sDesc = str(i['description'])
+                sDesc = sDesc.replace("'", "")
+                oGuiElement.setDescription(sDesc)  # Suche nach Desc wenn nicht leer dann setze GuiElement
 
-
-        #if 'is_series' in i: isTvshow = i['is_series']  # Wenn True dann Serie ToDo Prüfen wie sich Serien verhalten
-        #oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showSeasons' if isTvshow else 'showHosters')
-        #oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showHosters')
-        if 'year' in i and len(str(i['year'])) == 4: # Suche bei year nach 4 stelliger Zahl
-            oGuiElement.setYear(i['year'])
-        if 'description' in i and i['description'] != '':
-            oGuiElement.setDescription(i['description'])  # Suche nach Desc wenn nicht leer dann setze GuiElement
-
-
-
-        #oGuiElement.setMediaType('tvshow' if isTvshow else 'movie')
-        oGuiElement.setMediaType('movie')
-        # Parameter übergeben
-        params.setParam('entryUrl', URL_MOVIE + sId)
-        params.setParam('sName', sName)
-        #oGui.addFolder(oGuiElement, params, isTvshow, total)
-        #oGui.addFolder(oGuiElement, params, total)
-        oGui.addFolder(oGuiElement, params, False, total)
+            #oGuiElement.setMediaType('tvshow' if isTvshow else 'movie')
+            oGuiElement.setMediaType('movie')
+            # Parameter übergeben
+            params.setParam('entryUrl', URL_MOVIE + sId)
+            params.setParam('sName', sName)
+            #oGui.addFolder(oGuiElement, params, isTvshow, total)
+            #oGui.addFolder(oGuiElement, params, total)
+            oGui.addFolder(oGuiElement, params, False, total)
 
     if not sGui:
         #oGui.setView('tvshows' if isTvshow else 'movies')
