@@ -192,6 +192,8 @@ class cTMDB:
             if Data:
                 try:
                     meta = json.loads(Data)
+                    if 'status_code' in meta and meta['status_code'] == 34:
+                        meta = {}
                 except Exception:
                     meta = {}
         if 'episodes' in meta:
