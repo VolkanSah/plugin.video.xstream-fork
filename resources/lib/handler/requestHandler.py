@@ -73,6 +73,9 @@ class RedirectFilter(HTTPRedirectHandler):
         return HTTPRedirectHandler.redirect_request(self, req, fp, code, msg, hdrs, newurl)
 
 class cRequestHandler:
+    # useful for e.g. tmdb request where multiple requests are made within a loop
+    persistent_openers = {}
+    
     def __init__(self, sUrl, caching=True, ignoreErrors=False, compression=True, jspost=False, ssl_verify=False, bypass_dns=False):
         self._sUrl = self.__cleanupUrl(sUrl)
         self._sRealUrl = ''
@@ -140,6 +143,8 @@ class cRequestHandler:
         self.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8')
         if self.compression:
             self.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
+        self.addHeaderEntry('Connection', 'keep-alive')
+        self.addHeaderEntry('Keep-Alive', 'timeout=5')
 
     @staticmethod
     def __getDefaultHandler(ssl_verify, ip=None):
@@ -186,12 +191,17 @@ class cRequestHandler:
             cookieJar.load(ignore_discard=self.__bIgnoreDiscard, ignore_expires=self.__bIgnoreExpired)
         except Exception as e:
             logger.debug(e)
+        
+        domain = urlparse(self._sUrl).netloc
+        if domain in cRequestHandler.persistent_openers:
+            opener = cRequestHandler.persistent_openers[domain]
+        else:
+            handlers = self.__getDefaultHandler(self._ssl_verify, ip_override)        
+            handlers += [HTTPHandler(), HTTPCookieProcessor(cookiejar=cookieJar), RedirectFilter()]
+            opener = build_opener(*handlers)
+            cRequestHandler.persistent_openers[domain] = opener
 
         sParameters = json.dumps(self._aParameters).encode() if self.jspost else urlencode(self._aParameters, True).encode()
-
-        handlers = self.__getDefaultHandler(self._ssl_verify, ip_override)        
-        handlers += [HTTPHandler(), HTTPCookieProcessor(cookiejar=cookieJar), RedirectFilter()]
-        opener = build_opener(*handlers)
         oRequest = Request(self._sUrl, sParameters if len(sParameters) > 0 else None)
 
         for key, value in self._headerEntries.items():
@@ -413,6 +423,7 @@ class cRequestHandler:
         # clear volatile cache
         if self.isMemoryCacheActive:
             self._memCache.clear()
+        cRequestHandler.persistent_openers.clear()
         
         # clear persistent cache
         files = os.listdir(self._cachePath)
