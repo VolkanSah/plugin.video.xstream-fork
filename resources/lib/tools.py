@@ -145,8 +145,12 @@ class cParser:
             matches = cParser._get_compiled_pattern(pattern, flags).search(sHtmlContent)
             
             if matches:
-                return True, cParser._replaceSpecialCharacters(matches.group(1))
-        
+                # Check if there's at least one capturing group
+                if matches.lastindex is not None and matches.lastindex >= 1:
+                    return True, cParser._replaceSpecialCharacters(matches.group(1))
+                else:
+                    # fallback to the entire match if no group was captured
+                    return True, cParser._replaceSpecialCharacters(matches.group(0))
         return False, None
     
     @staticmethod
@@ -162,10 +166,10 @@ class cParser:
                 # handle both single strings and tuples of matches
                 if isinstance(aMatches[0], tuple):
                     # Process each string in tuple
-                    aMatches = [tuple(cParser._replaceSpecialCharacters(x) if isinstance(x, str) else x for x in match) for match in aMatches]
+                    aMatches = [tuple(cParser._replaceSpecialCharacters(x) if isinstance(x, str) and x is not None else '' for x in match) for match in aMatches]
                 else:
                     # Process single strings
-                    aMatches = [cParser._replaceSpecialCharacters(x) if isinstance(x, str) else x for x in aMatches]
+                    aMatches = [cParser._replaceSpecialCharacters(x) if isinstance(x, str) and x is not None else '' for x in aMatches]
                 
                 return True, aMatches
         return False, None
