@@ -26,12 +26,12 @@ SITE_NAME = 'VoD - Huhu'
 SITE_ICON = 'vod_huhu.png'
 
 # Global search function is thus deactivated!
-#if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'false':
-    #SITE_GLOBAL_SEARCH = False
-    #logger.info('-> [SitePlugin]: globalSearch for %s is deactivated.' % SITE_NAME)
-SITE_GLOBAL_SEARCH = False
-cConfig().setSetting('global_search_' + SITE_IDENTIFIER, 'false')
-logger.info('-> [SitePlugin]: globalSearch for %s is deactivated.' % SITE_NAME)
+if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'false':
+    SITE_GLOBAL_SEARCH = False
+    logger.info('-> [SitePlugin]: globalSearch for %s is deactivated.' % SITE_NAME)
+#SITE_GLOBAL_SEARCH = False
+#cConfig().setSetting('global_search_' + SITE_IDENTIFIER, 'false')
+#logger.info('-> [SitePlugin]: globalSearch for %s is deactivated.' % SITE_NAME)
 
 # Domain Abfrage
 DOMAIN = cConfig().getSetting('plugin_' + SITE_IDENTIFIER + '.domain', 'www.huhu.to') # Domain Auswahl über die xStream Einstellungen möglich
@@ -291,3 +291,6 @@ def showSearchSeries():
 
 def _searchSeries(oGui, sSearchText):
     showEntries(URL_SEARCH_SERIES % cParser().quotePlus(sSearchText), oGui)
+
+def _search(oGui, sSearchText):
+    showEntries(URL_SEARCH_MOVIES % cParser.quotePlus(sSearchText), oGui)
