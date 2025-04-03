@@ -78,19 +78,20 @@ class cHosterGui:
 
         logger.info('-> [hoster]: play file link: ' + str(data['link']))
         list_item = xbmcgui.ListItem(path=data['link'])
-        #m3u8 und mpd via inputstream
-        if '.m3u8' in data['link'] or '.mpd' in data['link']:
-            list_item.setProperty("inputstream", "inputstream.adaptive")
-            if '.mpd' in data['link']:
-                if vers < 21: list_item.setProperty('inputstream.adaptive.manifest_type', 'mpd')
-                list_item.setMimeType('application/dash+xml')
-            else:
-                if vers < 21: list_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
-                list_item.setMimeType("application/vnd.apple.mpegurl")
-            if '|' in data['link']:
-                data['link'], header = data['link'].split('|')
-                list_item.setProperty('inputstream.adaptive.stream_headers', header)
-                if vers > 19: list_item.setProperty('inputstream.adaptive.manifest_headers', header)
+        #m3u8 und mpd via inputstream, exklusive Filemoon, da IA mit dem Hoster nicht unter Android läuft
+        if not 'filemoon' in siteResult['streamUrl']:
+            if '.m3u8' in data['link'] or '.mpd' in data['link']:
+                list_item.setProperty("inputstream", "inputstream.adaptive")
+                if '.mpd' in data['link']:
+                    if vers < 21: list_item.setProperty('inputstream.adaptive.manifest_type', 'mpd')
+                    list_item.setMimeType('application/dash+xml')
+                else:
+                    if vers < 21: list_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
+                    list_item.setMimeType("application/vnd.apple.mpegurl")
+                if '|' in data['link']:
+                    data['link'], header = data['link'].split('|')
+                    list_item.setProperty('inputstream.adaptive.stream_headers', header)
+                    if vers > 19: list_item.setProperty('inputstream.adaptive.manifest_headers', header)
 
         if 'youtube' in data['link']:
             import time

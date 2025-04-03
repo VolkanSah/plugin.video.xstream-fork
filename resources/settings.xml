@@ -1054,20 +1054,17 @@
 			</group>
 		</category>
 		<category id="indexsiteVoD" label="30407" help="">
-			<group id="indexpageVod" label="30408">
-				<setting id="indexVoDyes" type="boolean" label="30409" help="30411">
-					<level>0</level>
-					<default>False</default>
-					<control type="toggle"/>
-				</setting>
-			</group>
 			<group id="plugin_vod_huhu" label="30790">
 				<setting id="plugin_vod_huhu" type="boolean" label="30050" help="">
 					<level>0</level>
-                    <default>False</default>
+                    <default>True</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="global_search_vod_huhu" type="boolean" label="30052">
+					<level>0</level>
+					<default>True</default>
 					<dependencies>
-						<dependency type="enable" operator="!is" setting="indexVoDyes">false</dependency>
-						<dependency type="visible" operator="!is" setting="indexVoDyes">false</dependency>
+						<dependency type="enable" operator="!is" setting="plugin_vod_huhu">false</dependency>
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
@@ -1078,8 +1075,6 @@
 					<dependencies>
 						<dependency type="enable" operator="!is" setting="plugin_vod_huhu">false</dependency>
 						<dependency type="visible" operator="!is" setting="plugin_vod_huhu">false</dependency>
-						<dependency type="enable" operator="!is" setting="indexVoDyes">false</dependency>
-						<dependency type="visible" operator="!is" setting="indexVoDyes">false</dependency>
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
@@ -1092,8 +1087,6 @@
 					<dependencies>
 						<dependency type="enable" operator="!is" setting="plugin_vod_huhu">false</dependency>
 						<dependency type="visible" operator="!is" setting="plugin_vod_huhu">false</dependency>
-						<dependency type="enable" operator="!is" setting="indexVoDyes">false</dependency>
-						<dependency type="visible" operator="!is" setting="indexVoDyes">false</dependency>
 					</dependencies>
 					<control type="edit" format="string">
 						<heading>30278</heading>
@@ -1101,12 +1094,16 @@
 				</setting>
 			</group>
 			<group id="plugin_vod_kool" label="30791">
-				<setting id="plugin_vod_kool" type="boolean" label="30050" help="30411">
+				<setting id="plugin_vod_kool" type="boolean" label="30050" help="">
 					<level>0</level>
-                    <default>False</default>
+                    <default>True</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="global_search_vod_kool" type="boolean" label="30052">
+					<level>0</level>
+					<default>True</default>
 					<dependencies>
-						<dependency type="enable" operator="!is" setting="indexVoDyes">false</dependency>
-						<dependency type="visible" operator="!is" setting="indexVoDyes">false</dependency>
+						<dependency type="enable" operator="!is" setting="plugin_vod_kool">false</dependency>
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
@@ -1117,8 +1114,6 @@
 					<dependencies>
 						<dependency type="enable" operator="!is" setting="plugin_vod_kool">false</dependency>
 						<dependency type="visible" operator="!is" setting="plugin_vod_kool">false</dependency>
-						<dependency type="enable" operator="!is" setting="indexVoDyes">false</dependency>
-						<dependency type="visible" operator="!is" setting="indexVoDyes">false</dependency>
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
@@ -1131,8 +1126,6 @@
 					<dependencies>
 						<dependency type="enable" operator="!is" setting="plugin_vod_kool">false</dependency>
 						<dependency type="visible" operator="!is" setting="plugin_vod_kool">false</dependency>
-						<dependency type="enable" operator="!is" setting="indexVoDyes">false</dependency>
-						<dependency type="visible" operator="!is" setting="indexVoDyes">false</dependency>
 					</dependencies>
 					<control type="edit" format="string">
 						<heading>30278</heading>
@@ -1140,12 +1133,16 @@
 				</setting>
 			</group>
 			<group id="plugin_vod_oha" label="30792">
-				<setting id="plugin_vod_oha" type="boolean" label="30050" help="30411">
+				<setting id="plugin_vod_oha" type="boolean" label="30050" help="">
 					<level>0</level>
-                    <default>False</default>
+                    <default>True</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="global_search_vod_oha" type="boolean" label="30052">
+					<level>0</level>
+					<default>True</default>
 					<dependencies>
-						<dependency type="enable" operator="!is" setting="indexVoDyes">false</dependency>
-						<dependency type="visible" operator="!is" setting="indexVoDyes">false</dependency>
+						<dependency type="enable" operator="!is" setting="plugin_vod_oha">false</dependency>
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
@@ -1156,8 +1153,6 @@
 					<dependencies>
 						<dependency type="enable" operator="!is" setting="plugin_vod_oha">false</dependency>
 						<dependency type="visible" operator="!is" setting="plugin_vod_oha">false</dependency>
-						<dependency type="enable" operator="!is" setting="indexVoDyes">false</dependency>
-						<dependency type="visible" operator="!is" setting="indexVoDyes">false</dependency>
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
@@ -1170,8 +1165,6 @@
 					<dependencies>
 						<dependency type="enable" operator="!is" setting="plugin_vod_oha">false</dependency>
 						<dependency type="visible" operator="!is" setting="plugin_vod_oha">false</dependency>
-						<dependency type="enable" operator="!is" setting="indexVoDyes">false</dependency>
-						<dependency type="visible" operator="!is" setting="indexVoDyes">false</dependency>
 					</dependencies>
 					<control type="edit" format="string">
 						<heading>30278</heading>
@@ -1179,12 +1172,16 @@
 				</setting>
 			</group>
 			<group id="plugin_vod_vavoo" label="30793">
-				<setting id="plugin_vod_vavoo" type="boolean" label="30050" help="30411">
+				<setting id="plugin_vod_vavoo" type="boolean" label="30050" help="">
 					<level>0</level>
-                    <default>False</default>
+                    <default>True</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="global_search_vod_vavoo" type="boolean" label="30052">
+					<level>0</level>
+					<default>True</default>
 					<dependencies>
-						<dependency type="enable" operator="!is" setting="indexVoDyes">false</dependency>
-						<dependency type="visible" operator="!is" setting="indexVoDyes">false</dependency>
+						<dependency type="enable" operator="!is" setting="plugin_vod_vavoo">false</dependency>
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
@@ -1195,8 +1192,6 @@
 					<dependencies>
 						<dependency type="enable" operator="!is" setting="plugin_vod_vavoo">false</dependency>
 						<dependency type="visible" operator="!is" setting="plugin_vod_vavoo">false</dependency>
-						<dependency type="enable" operator="!is" setting="indexVoDyes">false</dependency>
-						<dependency type="visible" operator="!is" setting="indexVoDyes">false</dependency>
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
@@ -1209,8 +1204,6 @@
 					<dependencies>
 						<dependency type="enable" operator="!is" setting="plugin_vod_vavoo">false</dependency>
 						<dependency type="visible" operator="!is" setting="plugin_vod_vavoo">false</dependency>
-						<dependency type="enable" operator="!is" setting="indexVoDyes">false</dependency>
-						<dependency type="visible" operator="!is" setting="indexVoDyes">false</dependency>
 					</dependencies>
 					<control type="edit" format="string">
 						<heading>30278</heading>
