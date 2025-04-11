@@ -18,7 +18,7 @@ from resources.lib.config import cConfig
 from resources.lib.tools import logger, cCache
 from resources.lib import utils
 
-from urllib.parse import quote, urlencode, urlparse
+from urllib.parse import quote, urlencode, urlparse, quote_plus
 from urllib.error import HTTPError, URLError
 from urllib.request import HTTPHandler, HTTPSHandler, Request, HTTPCookieProcessor, build_opener, urlopen, HTTPRedirectHandler
 from http.cookiejar import LWPCookieJar, Cookie
@@ -73,6 +73,9 @@ class RedirectFilter(HTTPRedirectHandler):
         return HTTPRedirectHandler.redirect_request(self, req, fp, code, msg, hdrs, newurl)
 
 class cRequestHandler:
+    # useful for e.g. tmdb request where multiple requests are made within a loop
+    persistent_openers = {}
+    
     def __init__(self, sUrl, caching=True, ignoreErrors=False, compression=True, jspost=False, ssl_verify=False, bypass_dns=False):
         self._sUrl = self.__cleanupUrl(sUrl)
         self._sRealUrl = ''
@@ -140,6 +143,8 @@ class cRequestHandler:
         self.addHeaderEntry('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8')
         if self.compression:
             self.addHeaderEntry('Accept-Encoding', 'gzip, deflate')
+        self.addHeaderEntry('Connection', 'keep-alive')
+        self.addHeaderEntry('Keep-Alive', 'timeout=5')
 
     @staticmethod
     def __getDefaultHandler(ssl_verify, ip=None):
@@ -156,12 +161,20 @@ class cRequestHandler:
     @staticmethod
     def __cleanupUrl(url):
         # für Leerzeichen und Umlaute in der sUrl
-        for t in (('²', '&#xB2;'), ('³', '&#xB3;'), ('´', '&#xB4;'), ("'", "&#x27;"),('`', '&#x60;'), ('Ä', '&#xC4;'), ('ä', '&#xE4;'),
-                  ('Ö', '&#xD6;'), ('ö', '&#xF6;'), ('Ü', '&#xDC;'), ('ü', '&#xFC;'), ('ß', '&#xDF;'), ('¼', '&#xBC;'), ('½', '&#xBD;'),
-                  ('¾', '&#xBE;'), ('⅓', '&#8531;'), ('*', '%2a'),
-                  ('⭐', '%E2%AD%90'), ('✨', '%E2%9C%A8'), ('❄', '%e2%9d%84'), ('⛄', '%e2%9b%84')):
-            url = url.replace(*t)
-        return url
+        #for t in (('²', '&#xB2;'), ('³', '&#xB3;'), ('´', '&#xB4;'), ("'", "&#x27;"),('`', '&#x60;'), ('Ä', '&#xC4;'), ('ä', '&#xE4;'), #ToDo Löschen wenn untere Lösung funktioniert 10.04.25
+        #          ('Ö', '&#xD6;'), ('ö', '&#xF6;'), ('Ü', '&#xDC;'), ('ü', '&#xFC;'), ('ß', '&#xDF;'), ('¼', '&#xBC;'), ('½', '&#xBD;'),
+        #          ('¾', '&#xBE;'), ('⅓', '&#8531;'), ('*', '%2a'),
+        #          ('⭐', '%E2%AD%90'), ('✨', '%E2%9C%A8'), ('❄', '%e2%9d%84'), ('⛄', '%e2%9b%84')):
+        #    url = url.replace(*t)
+        #return url
+        p = urlparse(url)
+        if p.query:
+            query = quote_plus(p.query).replace('%3D', '=').replace('%26', '&')
+            p = p._replace(query=p.query.replace(p.query, query))
+        else:
+            path = quote_plus(p.path).replace('%2F', '/').replace('%26', '&').replace('%3D', '=')
+            p = p._replace(path=p.path.replace(p.path, path))
+        return p.geturl()
     
     def request(self):
         if self.caching and self.cacheTime > 0:
@@ -172,6 +185,13 @@ class cRequestHandler:
             if sContent:
                 self._Status = '200'
                 return sContent
+            else:
+                if self.isMemoryCacheActive:
+                    sContent = self.__readPersistentCache(self.getRequestUri())
+                    if sContent:
+                        self._Status = '200'
+                        self.__writeVolatileCache(self.getRequestUri(), sContent)
+                        return sContent
 
         # nur ausführen wenn der übergabeparameter und die konfiguration passen
         if self._bypass_dns and self.bypassDNSlock:
@@ -186,12 +206,17 @@ class cRequestHandler:
             cookieJar.load(ignore_discard=self.__bIgnoreDiscard, ignore_expires=self.__bIgnoreExpired)
         except Exception as e:
             logger.debug(e)
+        
+        domain = urlparse(self._sUrl).netloc
+        if domain in cRequestHandler.persistent_openers:
+            opener = cRequestHandler.persistent_openers[domain]
+        else:
+            handlers = self.__getDefaultHandler(self._ssl_verify, ip_override)        
+            handlers += [HTTPHandler(), HTTPCookieProcessor(cookiejar=cookieJar), RedirectFilter()]
+            opener = build_opener(*handlers)
+            cRequestHandler.persistent_openers[domain] = opener
 
         sParameters = json.dumps(self._aParameters).encode() if self.jspost else urlencode(self._aParameters, True).encode()
-
-        handlers = self.__getDefaultHandler(self._ssl_verify, ip_override)        
-        handlers += [HTTPHandler(), HTTPCookieProcessor(cookiejar=cookieJar), RedirectFilter()]
-        opener = build_opener(*handlers)
         oRequest = Request(self._sUrl, sParameters if len(sParameters) > 0 else None)
 
         for key, value in self._headerEntries.items():
@@ -413,6 +438,7 @@ class cRequestHandler:
         # clear volatile cache
         if self.isMemoryCacheActive:
             self._memCache.clear()
+        cRequestHandler.persistent_openers.clear()
         
         # clear persistent cache
         files = os.listdir(self._cachePath)

@@ -262,10 +262,6 @@ class cPluginHandler:
 
     # Überprüfung des Domain Namens. Leite um und hole neue URL und schreibe in die settings.xml. Bei nicht erreichen der Seite deaktiviere Globale Suche bis zum nächsten Start und überprüfe erneut.
     def checkDomain(self):
-
-        ## kasi - wofür?
-        xbmcaddon.Addon().setSetting('xstream_overs', 'rincewind')
-
         log(LOGMESSAGE + ' -> [checkDomain]: Query status code of the provider', LOGNOTICE)
         fileNames = self.__getFileNamesFromFolder(self.defaultFolder)
         for fileName in fileNames:

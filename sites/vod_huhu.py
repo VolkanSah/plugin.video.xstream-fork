@@ -26,12 +26,12 @@ SITE_NAME = 'VoD - Huhu'
 SITE_ICON = 'vod_huhu.png'
 
 # Global search function is thus deactivated!
-#if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'false':
-    #SITE_GLOBAL_SEARCH = False
-    #logger.info('-> [SitePlugin]: globalSearch for %s is deactivated.' % SITE_NAME)
-SITE_GLOBAL_SEARCH = False
-cConfig().setSetting('global_search_' + SITE_IDENTIFIER, 'false')
-logger.info('-> [SitePlugin]: globalSearch for %s is deactivated.' % SITE_NAME)
+if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'false':
+    SITE_GLOBAL_SEARCH = False
+    logger.info('-> [SitePlugin]: globalSearch for %s is deactivated.' % SITE_NAME)
+#SITE_GLOBAL_SEARCH = False
+#cConfig().setSetting('global_search_' + SITE_IDENTIFIER, 'false')
+#logger.info('-> [SitePlugin]: globalSearch for %s is deactivated.' % SITE_NAME)
 
 # Domain Abfrage
 DOMAIN = cConfig().getSetting('plugin_' + SITE_IDENTIFIER + '.domain', 'www.huhu.to') # Domain Auswahl über die xStream Einstellungen möglich
@@ -65,7 +65,7 @@ def load():  # Menu structure of the site plugin
     cGui().setEndOfDirectory()
 
 
-def showEntries(entryUrl=False, sGui=False):
+def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     oGui = sGui if sGui else cGui()
     params = ParameterHandler()
     # Parameter laden
@@ -75,6 +75,8 @@ def showEntries(entryUrl=False, sGui=False):
     oRequest.addHeaderEntry('Referer', URL_MAIN)
     oRequest.addHeaderEntry('Origin', 'https://' + DOMAIN)
     oRequest.removeNewLines(False)
+    if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
+        oRequest.cacheTime = 60 * 60 * 6  # 6 Stunden
     jSearch = json.loads(oRequest.request())  # Lade JSON aus dem Request der URL
     if not jSearch: return  # Wenn Suche erfolglos - Abbruch
     aResults = jSearch['data']
@@ -85,6 +87,8 @@ def showEntries(entryUrl=False, sGui=False):
         return
     isTvshow = False
     for i in aResults:
+        if sSearchText and not cParser.search(sSearchText, i['name']):
+            continue
         sId = i['id']  # ID des Films / Serie für die weitere URL
         sName = i['name']  # Name des Films / Serie
         isTvshow = True if 'series' in i['id'] else False
@@ -107,7 +111,7 @@ def showEntries(entryUrl=False, sGui=False):
         params.setParam('sId', sId)
         params.setParam('sName', sName)
         oGui.addFolder(oGuiElement, params, isTvshow, total)
-    if not sGui:
+    if not sGui and not sSearchText:
         sNextUrl = URL_MAIN + 'api/list?id=' + sNextUrl
         params.setParam('sUrl', sNextUrl)
         oGui.addNextPage(SITE_IDENTIFIER, 'showEntries', params)
@@ -291,3 +295,7 @@ def showSearchSeries():
 
 def _searchSeries(oGui, sSearchText):
     showEntries(URL_SEARCH_SERIES % cParser().quotePlus(sSearchText), oGui)
+
+def _search(oGui, sSearchText):
+    showEntries(URL_SEARCH_MOVIES % cParser.quotePlus(sSearchText), oGui, sSearchText)
+    showEntries(URL_SEARCH_SERIES % cParser.quotePlus(sSearchText), oGui, sSearchText)
