@@ -163,12 +163,12 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         try:
             if sSearchText and not cParser().search(sSearchText, item['title']):
                 continue
-            oGuiElement = cGuiElement(item['title'], SITE_IDENTIFIER, 'showHosters')
-            oGuiElement.setThumbnail(item['thumbnail'])
-            oGuiElement.setDescription(item['content'])
-            oGuiElement.setFanart(item['custom_fields']['featured_img_all'][0])
-            oGuiElement.setYear(item['custom_fields']['Jahr'][0])
-            oGuiElement.setQuality(item['custom_fields']['Adaptives_Streaming'][0])
+            oGuiElement = cGuiElement(str(item['title']), SITE_IDENTIFIER, 'showHosters')
+            oGuiElement.setThumbnail(str(item['thumbnail']))
+            oGuiElement.setDescription(str(item['content']))
+            oGuiElement.setFanart(str(item['custom_fields']['featured_img_all'][0]))
+            oGuiElement.setYear(str(item['custom_fields']['Jahr'][0]))
+            oGuiElement.setQuality(str(item['custom_fields']['Adaptives_Streaming'][0]))
             oGuiElement.setMediaType('movie')
             if 'Duration' in item['custom_fields'] and item['custom_fields']['Duration'][0]:
                 oGuiElement.addItemValue('duration', item['custom_fields']['Duration'][0])

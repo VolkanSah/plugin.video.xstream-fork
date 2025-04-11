@@ -121,25 +121,25 @@ def showEntries(entryUrl=False, sGui=False):
         if not sGui: oGui.showInfo()
         return
     for i in aResults:
-        sId = i['id']  # ID des Films / Serie für die weitere URL
-        sName = i['name']  # Name des Films / Serie
+        sId = str(i['id'])  # ID des Films / Serie für die weitere URL
+        sName = str(i['name'])  # Name des Films / Serie
         if 'is_series' in i: isTvshow = i['is_series']  # Wenn True dann Serie
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showSeasons' if isTvshow else 'showHosters')
-        if 'release_date' in i and len(str(i['release_date'].split('-')[0].strip())) != '': oGuiElement.setYear(
-            str(i['release_date'].split('-')[0].strip()))
+        if 'release_date' in i and len(str(i['release_date'].split('-')[0].strip())) != '': 
+            oGuiElement.setYear(str(i['release_date'].split('-')[0].strip()))
         # sDesc = i['description']
-        if 'description' in i and i['description'] != '': oGuiElement.setDescription(
-            i['description'])  # Suche nach Desc wenn nicht leer dann setze GuiElement
+        if 'description' in i and i['description'] != '': 
+            oGuiElement.setDescription(str(i['description']))  # Suche nach Desc wenn nicht leer dann setze GuiElement
         # sThumbnail = i['poster']
-        if 'poster' in i and i['poster'] != '': oGuiElement.setThumbnail(
-            i['poster'])  # Suche nach Poster wenn nicht leer dann setze GuiElement
+        if 'poster' in i and i['poster'] != '': 
+            oGuiElement.setThumbnail(str(i['poster']))  # Suche nach Poster wenn nicht leer dann setze GuiElement
         # sFanart = i['backdrop']
-        if 'backdrop' in i and i['backdrop'] != '': oGuiElement.setFanart(
-            i['backdrop'])  # Suche nach Fanart wenn nicht leer dann setze GuiElement
-        if 'runtime' in i and i['runtime'] != None: oGuiElement.addItemValue('duration',
-            str(i['runtime']))  # Suche nach Runtime wenn nicht leer dann setze GuiElement
-        if 'rating' in i and i['rating'] != None: oGuiElement.addItemValue('rating',
-            str(i['rating']))  # Suche nach Rating wenn nicht leer dann setze GuiElement
+        if 'backdrop' in i and i['backdrop'] != '': 
+            oGuiElement.setFanart(str(i['backdrop']))  # Suche nach Fanart wenn nicht leer dann setze GuiElement
+        if 'runtime' in i and i['runtime'] != None: 
+            oGuiElement.addItemValue('duration', str(i['runtime']))  # Suche nach Runtime wenn nicht leer dann setze GuiElement
+        if 'rating' in i and i['rating'] != None: 
+            oGuiElement.addItemValue('rating', str(i['rating']))  # Suche nach Rating wenn nicht leer dann setze GuiElement
         oGuiElement.setMediaType('tvshow' if isTvshow else 'movie')
         # Parameter übergeben
         params.setParam('entryUrl', URL_HOSTER % sId)
@@ -181,13 +181,14 @@ def showSeasons(sGui=False):
         if not sGui: oGui.showInfo()
         return
     for i in aResults:
-        sId = i['title_id'] # ID ändert sich !!!
+        sId = str(i['title_id']) # ID ändert sich !!!
         sSeasonNr = str(i['number']) # Staffel Nummer
         oGuiElement = cGuiElement('Staffel ' + sSeasonNr, SITE_IDENTIFIER, 'showEpisodes')
         oGuiElement.setMediaType('season')
         oGuiElement.setSeason(sSeasonNr)
         oGuiElement.setThumbnail(sThumbnail)
-        if sDesc != '': oGuiElement.setDescription(sDesc)
+        if sDesc != '': 
+            oGuiElement.setDescription(str(sDesc))
         params.setParam('sSeasonNr', sSeasonNr)
         params.setParam('sId', sId)
         cGui().addFolder(oGuiElement, params, True, total)
@@ -222,17 +223,19 @@ def showEpisodes(sGui=False):
         return
     for i in aResults:
         if 'primary_video' in i and i['primary_video'] == None: continue # no video available (skip this entry)
-        sName = i['name'] # Episoden Titel
+        sName = str(i['name']) # Episoden Titel
         sEpisodeNr = str(i['episode_number']) # Episoden Nummer
-        sThumbnail = i['poster'] # Episoden Poster
+        sThumbnail = str(i['poster']) # Episoden Poster
         oGuiElement = cGuiElement('Episode ' + sEpisodeNr + ' - ' + sName, SITE_IDENTIFIER, 'showHosters')
         if 'description' in i and i['description'] != '': oGuiElement.setDescription(i['description']) # Suche nach Desc wenn nicht leer dann setze GuiElement
         oGuiElement.setEpisode(sEpisodeNr)
         oGuiElement.setSeason(sSeasonNr)
         oGuiElement.setMediaType('episode')
         oGuiElement.setThumbnail(sThumbnail)
-        if 'runtime' in i and i['runtime'] != None: oGuiElement.addItemValue('duration', str(i['runtime']))  # Suche nach Runtime wenn nicht leer dann setze GuiElement
-        if 'rating' in i and i['rating'] != None: oGuiElement.addItemValue('rating', str(i['rating']))  # Suche nach Rating wenn nicht leer dann setze GuiElement
+        if 'runtime' in i and i['runtime'] != None: 
+            oGuiElement.addItemValue('duration', str(i['runtime']))  # Suche nach Runtime wenn nicht leer dann setze GuiElement
+        if 'rating' in i and i['rating'] != None: 
+            oGuiElement.addItemValue('rating', str(i['rating']))  # Suche nach Rating wenn nicht leer dann setze GuiElement
         # Parameter setzen
         params.setParam('entryUrl', URL_MAIN + 'api/v1/titles/%s/seasons/%s/episodes/%s?load=videos,compactCredits,primaryVideo' % (sId, sSeasonNr, sEpisodeNr))
         oGui.addFolder(oGuiElement, params, False, total)
@@ -257,21 +260,27 @@ def showSearchEntries(entryUrl=False, sGui=False, sSearchText=''):
     isTvshow = False
     for i in aResults:
         if 'person' in i['model_type']: continue # Personen in der Suche ausblenden
-        sId = i['id']   # ID des Films / Serie für die weitere URL
-        sName = i['name'] # Name des Films / Serie
+        sId = str(i['id'])   # ID des Films / Serie für die weitere URL
+        sName = str(i['name']) # Name des Films / Serie
         sYear = str(i['release_date'].split('-')[0].strip())
         if sSearchText.lower() and not cParser.search(sSearchText, sName.lower()): continue
         if 'is_series' in i: isTvshow = i['is_series'] # Wenn True dann Serie
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showSeasons' if isTvshow else 'showHosters')
-        if sYear != '': oGuiElement.setYear(sYear) # Suche bei year nach 4 stelliger Zahl
+        if sYear != '': 
+            oGuiElement.setYear(sYear) # Suche bei year nach 4 stelliger Zahl
         #sDesc = i['description']
-        if 'description' in i and i['description'] != '': oGuiElement.setDescription(i['description']) # Suche nach Desc wenn nicht leer dann setze GuiElement
+        if 'description' in i and i['description'] != '': 
+            oGuiElement.setDescription(str(i['description'])) # Suche nach Desc wenn nicht leer dann setze GuiElement
         # sThumbnail = i['poster']
-        if 'poster' in i and i['poster'] != '': oGuiElement.setThumbnail(i['poster']) # Suche nach Poster wenn nicht leer dann setze GuiElement
+        if 'poster' in i and i['poster'] != '': 
+            oGuiElement.setThumbnail(str(i['poster'])) # Suche nach Poster wenn nicht leer dann setze GuiElement
         # sFanart = i['backdrop']
-        if 'backdrop' in i and i['backdrop'] != '': oGuiElement.setFanart(i['backdrop']) # Suche nach Fanart wenn nicht leer dann setze GuiElement
-        if 'runtime' in i and i['runtime'] != None: oGuiElement.addItemValue('duration', str(i['runtime']))  # Suche nach Runtime wenn nicht leer dann setze GuiElement
-        if 'rating' in i and i['rating'] != None: oGuiElement.addItemValue('rating', str(i['rating']))  # Suche nach Rating wenn nicht leer dann setze GuiElement
+        if 'backdrop' in i and i['backdrop'] != '': 
+            oGuiElement.setFanart(str(i['backdrop'])) # Suche nach Fanart wenn nicht leer dann setze GuiElement
+        if 'runtime' in i and i['runtime'] != None: 
+            oGuiElement.addItemValue('duration', str(i['runtime']))  # Suche nach Runtime wenn nicht leer dann setze GuiElement
+        if 'rating' in i and i['rating'] != None: 
+            oGuiElement.addItemValue('rating', str(i['rating']))  # Suche nach Rating wenn nicht leer dann setze GuiElement
         oGuiElement.setMediaType('tvshow' if isTvshow else 'movie')
         # Parameter setzen
         params.setParam('entryUrl', URL_HOSTER % sId)
@@ -302,12 +311,13 @@ def showHosters(sGui=False):
         return
     for i in aResults:
         sQuality = str(i['quality'])
-        if 'None' in sQuality: sQuality = '720p'
-        sUrl = i['src']
+        if 'None' in sQuality: 
+            sQuality = '720p'
+        sUrl = str(i['src'])
         if 'Mirror' in i['name']: # Wenn Mirror als sName hole realen Name aus der URL
             sName = cParser.urlparse(sUrl)
         else:
-            sName = i['name'].split('-')[0].strip()
+            sName = str(i['name'].split('-')[0].strip())
         if cConfig().isBlockedHoster(sUrl)[0]: continue  # Hoster aus settings.xml oder deaktivierten Resolver ausschließen
         if 'youtube' in sUrl: continue # Trailer ausblenden
         hoster = {'link': sUrl, 'name': sName, 'displayedName': '%s [I][%s][/I]' % (sName, sQuality), 'quality': sQuality}

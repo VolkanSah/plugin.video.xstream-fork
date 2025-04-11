@@ -185,13 +185,6 @@ class cRequestHandler:
             if sContent:
                 self._Status = '200'
                 return sContent
-            else:
-                if self.isMemoryCacheActive:
-                    sContent = self.__readPersistentCache(self.getRequestUri())
-                    if sContent:
-                        self._Status = '200'
-                        self.__writeVolatileCache(self.getRequestUri(), sContent)
-                        return sContent
 
         # nur ausführen wenn der übergabeparameter und die konfiguration passen
         if self._bypass_dns and self.bypassDNSlock:
