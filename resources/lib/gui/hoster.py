@@ -319,9 +319,9 @@ class cHosterGui:
                 return
 
             self.dialog.update(60, cConfig().getLocalizedString(30143))
-            # Für Sitplugin einfach.to mit in automatische Abspielliste aufnehmen (Da Links bei der Überprüfung der Verfügbarkeit gekickt werden)
+            # Sitplugins VOD mit in automatische Abspielliste aufnehmen (Da Links bei der Überprüfung der Verfügbarkeit gekickt werden)
             if (playMode != 'jd') and (playMode != 'jd2') and (playMode != 'pyload') and (cConfig().getSetting('presortHoster') == 'true') and (playMode != 'myjd'):
-            #if (siteName != 'einfach') and (playMode != 'jd') and (playMode != 'jd2') and (playMode != 'pyload') and (cConfig().getSetting('presortHoster') == 'true') and (playMode != 'myjd'):
+            #if (not siteName.startswith('vod_')) and (playMode != 'jd') and (playMode != 'jd2') and (playMode != 'pyload') and (cConfig().getSetting('presortHoster') == 'true') and (playMode != 'myjd'):
                 siteResult = self.__getPriorities(siteResult)
             if not siteResult:
                 self.dialog.close()
@@ -399,12 +399,11 @@ class cHosterGui:
             self.dialog.update(90, cConfig().getLocalizedString(30143))
             functionName = siteResult[-1]
             del siteResult[-1]
-            # Sitplugin einfach.to bei self.__getPriorities(siteResult) ausschliessen da sonst die Hoster gekickt werden.
-            if siteName == 'einfach':
+            # Sitplugins aus dem VOD Bereich bei self.__getPriorities(siteResult) ausschliessen da sonst die Hoster gekickt werden.
+            if siteName.startswith('dummy'): #Falls Servernamen im VOD sich ändern, hier vod_ eintragen
                 hosters = siteResult
             else:
                 hosters = self.__getPriorities(siteResult)
-            #hosters = self.__getPriorities(siteResult)
             if not hosters:
                 self.dialog.close()
                 cGui().showInfo('xStream', cConfig().getLocalizedString(30144))

@@ -1158,30 +1158,6 @@
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
-				<!-- Domain Überprüfung mit automatischer und manueller Anpassung -->
-				<setting id="plugin_vod_huhu_checkDomain" type="boolean" label="30410">
-					<level>3</level>
-					<default>False</default>
-					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_vod_huhu">false</dependency>
-						<dependency type="visible" operator="!is" setting="plugin_vod_huhu">false</dependency>
-					</dependencies>
-					<control type="toggle"/>
-				</setting>
-				<setting id="plugin_vod_huhu.domain" type="string" label="30278" help="">
-					<level>3</level>
-					<default/>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_vod_huhu">false</dependency>
-						<dependency type="visible" operator="!is" setting="plugin_vod_huhu">false</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>30278</heading>
-					</control>
-				</setting>
 				<setting id="plugin_vod_huhu_status" type="string" label="Dummy" help="">
 					<visible>false</visible>
 					<default>true</default>
@@ -1201,30 +1177,6 @@
 						<dependency type="enable" operator="!is" setting="plugin_vod_kool">false</dependency>
 					</dependencies>
 					<control type="toggle"/>
-				</setting>
-				<!-- Domain Überprüfung mit automatischer und manueller Anpassung -->
-				<setting id="plugin_vod_kool_checkDomain" type="boolean" label="30410">
-					<level>3</level>
-					<default>False</default>
-					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_vod_kool">false</dependency>
-						<dependency type="visible" operator="!is" setting="plugin_vod_kool">false</dependency>
-					</dependencies>
-					<control type="toggle"/>
-				</setting>
-				<setting id="plugin_vod_kool.domain" type="string" label="30278" help="">
-					<level>3</level>
-					<default/>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_vod_kool">false</dependency>
-						<dependency type="visible" operator="!is" setting="plugin_vod_kool">false</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>30278</heading>
-					</control>
 				</setting>
 				<setting id="plugin_vod_kool_status" type="string" label="Dummy" help="">
 					<visible>false</visible>
@@ -1246,30 +1198,6 @@
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
-				<!-- Domain Überprüfung mit automatischer und manueller Anpassung -->
-				<setting id="plugin_vod_oha_checkDomain" type="boolean" label="30410">
-					<level>3</level>
-					<default>False</default>
-					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_vod_oha">false</dependency>
-						<dependency type="visible" operator="!is" setting="plugin_vod_oha">false</dependency>
-					</dependencies>
-					<control type="toggle"/>
-				</setting>
-				<setting id="plugin_vod_oha.domain" type="string" label="30278" help="">
-					<level>3</level>
-					<default/>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_vod_oha">false</dependency>
-						<dependency type="visible" operator="!is" setting="plugin_vod_oha">false</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>30278</heading>
-					</control>
-				</setting>
 				<setting id="plugin_vod_oha_status" type="string" label="Dummy" help="">
 					<visible>false</visible>
 					<default>true</default>
@@ -1289,30 +1217,6 @@
 						<dependency type="enable" operator="!is" setting="plugin_vod_vavoo">false</dependency>
 					</dependencies>
 					<control type="toggle"/>
-				</setting>
-				<!-- Domain Überprüfung mit automatischer und manueller Anpassung -->
-				<setting id="plugin_vod_vavoo_checkDomain" type="boolean" label="30410">
-					<level>3</level>
-					<default>False</default>
-					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_vod_vavoo">false</dependency>
-						<dependency type="visible" operator="!is" setting="plugin_vod_vavoo">false</dependency>
-					</dependencies>
-					<control type="toggle"/>
-				</setting>
-				<setting id="plugin_vod_vavoo.domain" type="string" label="30278" help="">
-					<level>3</level>
-					<default/>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_vod_vavoo">false</dependency>
-						<dependency type="visible" operator="!is" setting="plugin_vod_vavoo">false</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>30278</heading>
-					</control>
 				</setting>
 				<setting id="plugin_vod_vavoo_status" type="string" label="Dummy" help="">
 					<visible>false</visible>
