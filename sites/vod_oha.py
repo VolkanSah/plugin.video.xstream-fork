@@ -33,11 +33,8 @@ if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'false':
 #cConfig().setSetting('global_search_' + SITE_IDENTIFIER, 'false')
 #logger.info('-> [SitePlugin]: globalSearch for %s is deactivated.' % SITE_NAME)
 
-# Domain Abfrage
-DOMAIN = cConfig().getSetting('plugin_' + SITE_IDENTIFIER + '.domain', 'www.oha.to') # Domain Auswahl über die xStream Einstellungen möglich
-STATUS = cConfig().getSetting('plugin_' + SITE_IDENTIFIER + '_status') # Status Code Abfrage der Domain
-ACTIVE = cConfig().getSetting('plugin_' + SITE_IDENTIFIER) # Ob Plugin aktiviert ist oder nicht
-
+# Globale Variablen
+DOMAIN = 'www.oha.to'
 URL_MAIN = 'https://' + DOMAIN + '/web-vod/'
 # URL_MAIN = 'https://www.oha.to/web-vod/'
 URL_VALUE = URL_MAIN + 'api/list?id=%s'
@@ -238,9 +235,9 @@ def showHosters(sGui=False):
         # sName = cParser.urlparse(sUrl) + ' - ' + sName
         if str('Server 31') in sName:
             sName = 'Streamtape'
-        elif str('Server 3') in sName:
-            sName = 'Supervideo'
-        elif str('Server 24') in sName:
+        elif str('Server W2') in sName:
+            sName = 'Doodstream'
+        elif str('Server C') in sName:
             sName = 'VOE'
         elif str('Server 6') in sName:
             sName = 'Mixdrop'

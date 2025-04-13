@@ -1,4 +1,10 @@
-[B]Version: 4.2.1.2[/B]
+[B]Version: 4.2.1.3[/B]
+
+13.04.2025
+
+- [VOD] Autoplay gefixt
+- [VOD] Ranking gefixt, Hosternamen korrigiert
+- [VOD] Globale Suche Settings gefixt
 
 11.04.2025
 
