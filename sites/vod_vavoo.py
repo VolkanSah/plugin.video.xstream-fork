@@ -85,22 +85,20 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     for i in aResults:
         if sSearchText and not cParser.search(sSearchText, i['name']):
             continue
-        sId = i['id']  # ID des Films / Serie für die weitere URL
-        sName = i['name']  # Name des Films / Serie
+        sId = str(i['id'])  # ID des Films / Serie für die weitere URL
+        sName = str(i['name'])  # Name des Films / Serie
         isTvshow = True if 'series' in i['id'] else False
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showSeasons' if isTvshow else 'showHosters')
         if 'releaseDate' in i and len(str(i['releaseDate'].split('-')[0].strip())) != '':
             oGuiElement.setYear(str(i['releaseDate'].split('-')[0].strip()))
         if 'description' in i and i['description'] != '':
-            oGuiElement.setDescription(i['description'])  # Suche nach Desc, wenn es nicht leer dann setze GuiElement.
-        # sThumbnail = i['poster']
+            oGuiElement.setDescription(str(i['description']))  # Suche nach Desc, wenn es nicht leer dann setze GuiElement.
         if 'poster' in i and i['poster'] != '':
-            oGuiElement.setThumbnail (i['poster']) # Suche nach Poster, wenn es nicht leer dann setze GuiElement.
+            oGuiElement.setThumbnail(str(i['poster'])) # Suche nach Poster, wenn es nicht leer dann setze GuiElement.
         else:
             oGuiElement.setThumbnail(os.path.join(ART, 'no_cover.png'))
-        # sFanart = i['backdrop']
         if 'backdrop' in i and i['backdrop'] != '':
-            oGuiElement.setFanart(i['backdrop'])  # Suche nach Fanart, wenn es nicht leer dann setze GuiElement.
+            oGuiElement.setFanart(str(i['backdrop']))  # Suche nach Fanart, wenn es nicht leer dann setze GuiElement.
         else:
             oGuiElement.setFanart('default.png')
         oGuiElement.setMediaType('tvshow' if isTvshow else 'movie')
@@ -133,14 +131,20 @@ def showSeasons(entryUrl=False, sGui=False):
     jSearch = json.loads(oRequest.request()) # Lade JSON aus dem Request der URL
     if not jSearch: return # Wenn Suche erfolglos - Abbruch
     # Abfrage Poster
-    if 'poster' in jSearch: sThumbnail = jSearch['poster']
-    else: sThumbnail = os.path.join(ART, 'no_cover.png')
+    if 'poster' in jSearch: 
+        sThumbnail = str(jSearch['poster'])
+    else: 
+        sThumbnail = os.path.join(ART, 'no_cover.png')
     # Abfrage Beschreibung
-    if 'description' in jSearch: sDesc = jSearch['description']
-    else: sDesc = ' '
+    if 'description' in jSearch: 
+        sDesc = str(jSearch['description'])
+    else: 
+        sDesc = ' '
     #Abfrage Fanart
-    if 'backdrop' in jSearch: sFanart = jSearch['backdrop']
-    else: sFanart = 'default.png'
+    if 'backdrop' in jSearch: 
+        sFanart = str(jSearch['backdrop'])
+    else: 
+        sFanart = 'default.png'
     aResults = sorted(jSearch['seasons'], key=lambda reverse:True) # Sortiert die Staffeln
     total = len(aResults)
     if len(aResults) == 0:
@@ -190,8 +194,8 @@ def showEpisodes(sGui=False):
         return
     for i in aResults:
         sEpisodeNr = str(i['episode'])  # Episoden Nummer
-        sId = i['id']  # Episoden Id
-        sName = i['name'] # Episoden Name
+        sId = str(i['id'])  # Episoden Id
+        sName = str(i['name']) # Episoden Name
         oGuiElement = cGuiElement('Episode ' + sEpisodeNr + ' - ' + sName, SITE_IDENTIFIER, 'showHosters')
         oGuiElement.setEpisode(sEpisodeNr)
         oGuiElement.setSeason(sSeasonNr)
@@ -223,10 +227,10 @@ def showHosters(sGui=False):
         if not sGui: oGui.showInfo()
         return
     for i in aResults:
-        hUrl = i['url']
-        sName = i['name'].split('(')[0].strip()
+        hUrl = str(i['url'])
+        sName = str(i['name'].split('(')[0].strip())
         if '(' in i['name']: # Wenn Qualität in Klammern angegeben (1080p)
-            sQuality = i['name'].split('(')[1].strip()
+            sQuality = str(i['name'].split('(')[1].strip())
             sQuality = sQuality.replace ('p)','')
         else:
             sQuality = '720'
@@ -240,7 +244,7 @@ def showHosters(sGui=False):
             sName = 'VOE'
         elif str('Server 6') in sName:
             sName = 'Mixdrop'
-        sLang = i['language'].split('(')[0].strip()
+        sLang = str(i['language'].split('(')[0].strip())
         if sLanguage == '1':  # Voreingestellte Sprache Deutsch in settings.xml
             if 'en' in sLang:
                 continue

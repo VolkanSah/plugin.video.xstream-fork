@@ -112,13 +112,21 @@ class cHosterGui:
             vtag = list_item.getVideoInfoTag()
             vtag.setMediaType('video')
             if 'Title' in info:
-                vtag.setTitle(info['Title'])
+                try:
+                    vtag.setTitle(str(info['Title']))
+                except: pass
             if 'Season' in info:
-                vtag.setSeason(int(info['Season']))
+                try:
+                    vtag.setSeason(int(info['Season']))
+                except: pass
             if 'Episode' in info:
-                vtag.setEpisode(int(info['Episode']))
+                try:
+                    vtag.setEpisode(int(info['Episode']))
+                except: pass
             if 'TVShowTitle' in info:
-                vtag.setTvShowTitle(info['TVShowTitle'])
+                try:
+                    vtag.setTvShowTitle(info['TVShowTitle'])
+                except: pass
 
         list_item.setProperty('IsPlayable', 'true')
         if cGui().pluginHandle > 0:
