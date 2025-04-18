@@ -204,7 +204,7 @@ def showHosters():
     hosters = []
     params = ParameterHandler()
     sUrl = params.getValue('entryUrl')
-    sHtmlContent = cRequestHandler(sUrl).request()
+    sHtmlContent = cRequestHandler(sUrl, caching=False).request()
     isMatch, aResult = cParser().parse(sHtmlContent, 'itemprop="embedUrl".*?href="([^"]+)')
     if isMatch:
         for sUrl in aResult:

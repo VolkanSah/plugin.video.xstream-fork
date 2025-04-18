@@ -1,4 +1,11 @@
-[B]Version: 4.2.1.3[/B]
+[B]Version: 4.2.1.4[/B]
+
+18.04.2025
+
+- [Bugfix] RAM-Cache und str() fix
+- Einstellung für den Cache standardisiert auf 6h
+- [TMDb] TMDb Ansicht in xStream optimiert, sollte nun schneller laden
+- [VOD] Cacheing aktiviert
 
 13.04.2025
 

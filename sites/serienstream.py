@@ -301,7 +301,7 @@ def showEpisodes():
 def showHosters():
     hosters = []
     sUrl = ParameterHandler().getValue('sUrl')
-    sHtmlContent = cRequestHandler(sUrl).request()
+    sHtmlContent = cRequestHandler(sUrl, caching=False).request()
     if cConfig().getSetting('plugin_' + SITE_IDENTIFIER + '.domain') == 'serienstream.stream':
         pattern = '<li[^>]*episodeLink([^"]+)"\sdata-lang-key="([^"]+).*?data-link-target=([^"]+).*?<h4>([^<]+)<([^>]+)'
         pattern2 = 'itemprop="keywords".content=".*?Season...([^"]+).S.*?'  # HD Kennzeichen

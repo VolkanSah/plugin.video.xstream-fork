@@ -4,10 +4,10 @@
 #Always pay attention to the translations in the menu!
 # Sprachauswahl für Hoster enthalten.
 # Ajax Suchfunktion enthalten.
-# HTML LangzeitCache hinzugefügt
+# HTML LangzeitCache für hinzugefügt
 # showValue:     24 Stunden
 # showAllSeries: 24 Stunden
-# showEpisodes:   4 Stunden
+# showEpisodes:   6 Stunden
 # SSsearch:      24 Stunden
     
 import xbmcgui
@@ -119,6 +119,8 @@ def showNewEpisodes(entryUrl=False, sGui=False):
     if not entryUrl:
         entryUrl = params.getValue('sUrl')
     oRequest = cRequestHandler(entryUrl, ignoreErrors=(sGui is not False))
+    if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
+        oRequest.cacheTime = 60 * 60 * 6 # HTML Cache Zeit 6 Stunden
     sHtmlContent = oRequest.request()
     pattern = '<div[^>]*class="col-md-[^"]*"[^>]*>\s*<a[^>]*href="([^"]*)"[^>]*>\s*<strong>([^<]+)</strong>\s*<span[^>]*>([^<]+)</span>'
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
@@ -147,7 +149,7 @@ def showEntries(entryUrl=False, sGui=False):
         entryUrl = params.getValue('sUrl')
     oRequest = cRequestHandler(entryUrl, ignoreErrors=(sGui is not False))
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
-        oRequest.cacheTime = 60 * 60 * 6  # 6 Stunden
+        oRequest.cacheTime = 60 * 60 * 6 # HTML Cache Zeit 6 Stunden
     sHtmlContent = oRequest.request()
     #Aufbau pattern
     #'<div[^>]*class="col-md-[^"]*"[^>]*>.*?'  # start element
@@ -235,7 +237,7 @@ def showEpisodes():
     isMovieList = sUrl.endswith('filme')
     oRequest = cRequestHandler(sUrl)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
-        oRequest.cacheTime = 60 * 60 * 4  # HTML Cache Zeit 4 Stunden
+        oRequest.cacheTime = 60 * 60 * 6  # HTML Cache Zeit 6 Stunden
     sHtmlContent = oRequest.request()
     pattern = '<table[^>]*class="seasonEpisodesList"[^>]*>(.*?)</table>'
     isMatch, sContainer = cParser.parseSingleResult(sHtmlContent, pattern)
@@ -280,7 +282,7 @@ def showEpisodes():
 def showHosters():
     hosters = []
     sUrl = ParameterHandler().getValue('sUrl')
-    sHtmlContent = cRequestHandler(sUrl).request()
+    sHtmlContent = cRequestHandler(sUrl, caching=False).request()
     if cConfig().getSetting('plugin_' + SITE_IDENTIFIER + '.domain') == 'www.aniworld.info':
         pattern = '<li[^>]*episodeLink([^"]+)"\sdata-lang-key="([^"]+).*?data-link-target="([^"]+).*?<h4>([^<]+)<([^>]+)'
         pattern2 = 'itemprop="keywords".content=".*?Season...([^"]+).S.*?'  # HD Kennzeichen

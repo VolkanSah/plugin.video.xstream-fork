@@ -95,7 +95,7 @@ class cRequestHandler:
         self.ignoreErrors = ignoreErrors
         self.compression = compression
         self.jspost = jspost
-        self.cacheTime = int(cConfig().getSetting('cacheTime', 600))
+        self.cacheTime = int(cConfig().getSetting('cacheTime', 21600)) # 21600 Sekunden = 6 Stunden Cachetime
         self.requestTimeout = int(cConfig().getSetting('requestTimeout', 10))
         self.bypassDNSlock = (cConfig().getSetting('bypassDNSlock', 'false') == 'true')
         self.removeBreakLines(True)

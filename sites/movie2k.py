@@ -249,7 +249,7 @@ def showHosters():
     sUrl = params.getValue('entryUrl')
     sEpisode = params.getValue('episode')
     try:
-        oRequest = cRequestHandler(sUrl)
+        oRequest = cRequestHandler(sUrl, caching=False)
         oRequest.addHeaderEntry('Referer', REFERER)
         oRequest.addHeaderEntry('Origin', ORIGIN)
         sJson = oRequest.request()

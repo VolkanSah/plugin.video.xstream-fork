@@ -158,7 +158,7 @@ def showHosters():
     hosters = []
     params = ParameterHandler()
     sUrl = params.getValue('entryUrl')
-    sHtmlContent = cRequestHandler(sUrl).request()
+    sHtmlContent = cRequestHandler(sUrl, caching=False).request()
     isMatch, sUrl = cParser().parse(sHtmlContent, 'class="link"[^>]href="([^"]+)')
     if isMatch:
         sHtmlContent2 = cRequestHandler(sUrl[0]).request()

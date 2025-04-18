@@ -297,7 +297,7 @@ def showHosters(sGui=False):
     oGui = sGui if sGui else cGui()
     hosters = []
     sUrl = ParameterHandler().getValue('entryUrl')
-    oRequest = cRequestHandler(sUrl)
+    oRequest = cRequestHandler(sUrl, caching=False)
     oRequest.addHeaderEntry('Referer', sUrl)
     jSearch = json.loads(oRequest.request())  # Lade JSON aus dem Request der URL
     if not jSearch: return  # Wenn Suche erfolglos - Abbruch

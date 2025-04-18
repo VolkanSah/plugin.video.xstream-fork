@@ -269,7 +269,7 @@ def showHosters():
         isMatch, aResult = cParser().parse(sUrl, "(http[^']+)")
     else:
         sUrl = params.getValue('entryUrl')
-        sHtmlContent = cRequestHandler(sUrl, ignoreErrors=True).request()
+        sHtmlContent = cRequestHandler(sUrl, ignoreErrors=True, caching=False).request()
         pattern = "show[^>]\d,[^>][^>]'([^']+)"
         isMatch, aResult = cParser().parse(sHtmlContent, pattern)
     if isMatch:

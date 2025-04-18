@@ -67,7 +67,9 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     # Parameter laden
     if not entryUrl:
         entryUrl = params.getValue('sUrl')
-    oRequest = cRequestHandler(entryUrl, caching=False, ignoreErrors=True)
+    oRequest = cRequestHandler(entryUrl, ignoreErrors=True)
+    if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
+        oRequest.cacheTime = 60 * 60 * 6  # 6 Stunden
     oRequest.addHeaderEntry('Referer', URL_MAIN)
     oRequest.addHeaderEntry('Origin', 'https://' + DOMAIN)
     oRequest.removeNewLines(False)
@@ -122,7 +124,7 @@ def showSeasons(entryUrl=False, sGui=False):
     sId = params.getValue('sId')
     if not entryUrl:
         entryUrl = URL_MAIN + 'api/info?id=' + sId
-    oRequest = cRequestHandler(entryUrl, caching=False, ignoreErrors=True)
+    oRequest = cRequestHandler(entryUrl, ignoreErrors=True)
     oRequest.addHeaderEntry('Referer', URL_MAIN)
     oRequest.addHeaderEntry('Origin', 'https://' + DOMAIN)
     oRequest.removeNewLines(False)
@@ -179,7 +181,9 @@ def showEpisodes(sGui=False):
     sThumbnail = params.getValue('sThumbnail')
     sDesc = params.getValue('sDesc')
     sFanart = params.getValue('sFanart')
-    oRequest = cRequestHandler(entryUrl, caching=False, ignoreErrors=True)
+    oRequest = cRequestHandler(entryUrl, ignoreErrors=True)
+    if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
+        oRequest.cacheTime = 60 * 60 * 6  # 6 Stunden
     oRequest.addHeaderEntry('Referer', URL_MAIN)
     oRequest.addHeaderEntry('Origin', 'https://' + DOMAIN)
     oRequest.removeNewLines(False)

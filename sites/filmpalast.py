@@ -242,7 +242,7 @@ def showHosters():
     sUrl = params.getValue('entryUrl')
     if '-english' in sUrl: sLang = '(EN)'
     else: sLang = ''
-    sHtmlContent = cRequestHandler(sUrl, bypass_dns=True).request()
+    sHtmlContent = cRequestHandler(sUrl, caching=False, bypass_dns=True).request()
     pattern = 'hostName">([^<]+).*?(http[^"]+)' # Hoster Link
     releaseQuality = 'class="rb">.*?(\d\d\d+)p\.' # Release Qualität
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)

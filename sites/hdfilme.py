@@ -173,7 +173,7 @@ def showEpisodes():
 
 def showHosters():
     hosters = []
-    sHtmlContent = cRequestHandler(ParameterHandler().getValue('entryUrl')).request()
+    sHtmlContent = cRequestHandler(ParameterHandler().getValue('entryUrl'), caching=False).request()
     if ParameterHandler().getValue('episode'):
         pass
         pattern = '%s<.*?</ul>' % ParameterHandler().getValue('episode')

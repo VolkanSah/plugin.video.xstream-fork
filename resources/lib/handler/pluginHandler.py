@@ -274,7 +274,7 @@ class cPluginHandler:
                 wrongDomain = 'site-maps.cc', 'www.drei.at', 'notice.cuii.info'
                 if domain in wrongDomain:  # Falsche Umleitung ausschliessen
                     xbmcaddon.Addon().setSetting('plugin_' + provider + '.domain', '')  # Falls doch dann lösche Settings Eintrag
-                    xbmcaddon.Addon().setSetting('plugin_' + provider + '_status', '')  # lösche Status Code in die settings
+                    xbmcaddon.Addon().setSetting('plugin_' + provider + '_status', '')  # lösche Status Code in den Settings
                     continue
                 try:
                     if xbmcaddon.Addon().getSetting('plugin_' + provider) == 'false':  # Wenn SitePlugin deaktiviert
@@ -302,23 +302,23 @@ class cPluginHandler:
                             url = oRequest.getRealUrl()
                             # cConfig().setSetting('plugin_'+ provider +'.base_link', url)
                             cConfig().setSetting('plugin_' + provider + '.domain', urlparse(url).hostname)  # setze Domain in die settings.xml
-                            if 'vod_' in provider:
-                                cConfig().setSetting('global_search_' + provider, 'false')  # deaktiviere Globale Suche
-                                log(LOGMESSAGE + ' -> [checkDomain]: globalSearch for ' + provider + ' is deactivated.', LOGNOTICE)
-                            else:
-                                cConfig().setSetting('global_search_' + provider, 'true')  # aktiviere Globale Suche
-                                log(LOGMESSAGE + ' -> [checkDomain]: globalSearch for ' + provider + ' is activated.', LOGNOTICE)
+                            #if 'vod_' in provider:     # Deaktiviert da VoD aus der automatischen GS ausgegliedert wurde - 18.04.25 Hep
+                            #    cConfig().setSetting('global_search_' + provider, 'false')  # deaktiviere Globale Suche
+                            #    log(LOGMESSAGE + ' -> [checkDomain]: globalSearch for ' + provider + ' is deactivated.', LOGNOTICE)
+                            #else:
+                            cConfig().setSetting('global_search_' + provider, 'true')  # aktiviere Globale Suche
+                            log(LOGMESSAGE + ' -> [checkDomain]: globalSearch for ' + provider + ' is activated.', LOGNOTICE)
 
                         # Status 200 - Dieser Code wird vom Server zurückgegeben, wenn er den Request eines Browsers korrekt zurückgeben kann. Für die Ausgabe des Codes und des Inhalts der Seite muss der Server die Anfrage zunächst akzeptieren.
                         elif status_code == 200:  # Domain erreichbar
                             # cConfig().setSetting('plugin_' + provider + '.base_link', base_link)
                             cConfig().setSetting('plugin_' + provider + '.domain', urlparse(base_link).hostname)  # setze URL_MAIN in die settings.xml
-                            if 'vod_' in provider:
-                                cConfig().setSetting('global_search_' + provider, 'false')  # deaktiviere Globale Suche
-                                log(LOGMESSAGE + ' -> [checkDomain]: globalSearch for ' + provider + ' is deactivated.', LOGNOTICE)
-                            else:
-                                cConfig().setSetting('global_search_' + provider, 'true')  # aktiviere Globale Suche
-                                log(LOGMESSAGE + ' -> [checkDomain]: globalSearch for ' + provider + ' is activated.', LOGNOTICE)
+                            #if 'vod_' in provider:     # Deaktiviert da VoD aus der automatischen GS ausgegliedert wurde - 18.04.25 Hep
+                            #    cConfig().setSetting('global_search_' + provider, 'false')  # deaktiviere Globale Suche
+                            #    log(LOGMESSAGE + ' -> [checkDomain]: globalSearch for ' + provider + ' is deactivated.', LOGNOTICE)
+                            #else:
+                            cConfig().setSetting('global_search_' + provider, 'true')  # aktiviere Globale Suche
+                            log(LOGMESSAGE + ' -> [checkDomain]: globalSearch for ' + provider + ' is activated.', LOGNOTICE)
                         # Wenn keiner der Statuse oben greift
                         else:
                             log(LOGMESSAGE + ' -> [checkDomain]: Error ' + provider + ' not available.', LOGNOTICE)

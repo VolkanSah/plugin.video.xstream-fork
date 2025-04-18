@@ -253,7 +253,7 @@ def showEpisodes():
 def showHosters():
     hosters = []
     sUrl = ParameterHandler().getValue('entryUrl')
-    sHtmlContent = cRequestHandler(sUrl).request()
+    sHtmlContent = cRequestHandler(sUrl, caching=False).request()
     if ParameterHandler().exist('episode'): #kommt aus showSeries
         episode = ParameterHandler().getValue('episode')
         pattern = 'data-num="{0}".*?allowfull'.format(episode)

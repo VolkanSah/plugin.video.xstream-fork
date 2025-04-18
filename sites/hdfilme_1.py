@@ -218,7 +218,7 @@ def showEpisodeHosters():
     sUrl = params.getValue('entryUrl')
     sSeason = params.getValue('season')
     sEpisode = params.getValue('episode')
-    sHtmlContent = cRequestHandler(sUrl).request()
+    sHtmlContent = cRequestHandler(sUrl, caching=False).request()
     pattern = '#se-ac-%s(.*?)</div></div>' % sSeason
     isMatch, sHtmlContainer = cParser.parseSingleResult(sHtmlContent, pattern)
     if isMatch:
@@ -246,7 +246,7 @@ def showHosters():
     hosters = []
     params = ParameterHandler()
     sUrl = params.getValue('entryUrl')
-    sHtmlContent = cRequestHandler(sUrl).request()
+    sHtmlContent = cRequestHandler(sUrl, caching=False).request()
     pattern = '<iframe\sw.*?src="([^"]+)'
     isMatch, hUrl = cParser.parseSingleResult(sHtmlContent, pattern)
     if isMatch:

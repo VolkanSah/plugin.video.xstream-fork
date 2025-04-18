@@ -214,7 +214,7 @@ def showEpisodes():
 def showHosters():
     hosters = []
     sUrl = ParameterHandler().getValue('entryUrl')
-    sHtmlContent = cRequestHandler(sUrl, bypass_dns=True).request()
+    sHtmlContent = cRequestHandler(sUrl, bypass_dns=True, caching=False).request()
     pattern = '<iframe.*?src=([^\s]+)'
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
     if isMatch:
@@ -236,7 +236,7 @@ def showEpisodeHosters():
     hosters = []
     sUrl = ParameterHandler().getValue('entryUrl')
     episodeId = 'ep' + ParameterHandler().getValue('episodeId')
-    sHtmlContent = cRequestHandler(sUrl, bypass_dns=True).request()
+    sHtmlContent = cRequestHandler(sUrl, bypass_dns=True, caching=False).request()
     pattern = '<select\s+name="pmovie__select-items"\s+class="[^"]+"\s+style="[^"]+"\s+id="%s">\s*(.*?)\s*</select>' % episodeId
     isMatch, sContainer = cParser.parseSingleResult(sHtmlContent, pattern)
     if isMatch:

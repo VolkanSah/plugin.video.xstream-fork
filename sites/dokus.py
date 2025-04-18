@@ -114,7 +114,7 @@ def showEntries_1(entryUrl=False, sGui=False, sSearchText=False):
 def showHosters_1():
     hosters = []
     sUrl = ParameterHandler().getValue('entryUrl')
-    sHtmlContent = cRequestHandler(sUrl).request()
+    sHtmlContent = cRequestHandler(sUrl, caching=False).request()
     isMatch, aResult = cParser.parse(sHtmlContent, 'src="([^"]+)" f')
     if isMatch:
         for sUrl in aResult:
@@ -315,7 +315,7 @@ def showEntries_3(entryUrl=False, sGui=False, sSearchText=False):
 def showHosters_3():
     hosters = []
     sUrl = ParameterHandler().getValue('entryUrl')
-    sHtmlContent = cRequestHandler(sUrl).request()
+    sHtmlContent = cRequestHandler(sUrl, caching=False).request()
     isMatch, aResult = cParser.parse(sHtmlContent, 'src="([^"]+)" f')
     if isMatch:
         for sUrl in aResult:
@@ -420,7 +420,7 @@ def showEntries_6(entryUrl=False, sGui=False, sSearchText=False):
 def showHosters_6():
     hosters = []
     sUrl = ParameterHandler().getValue('entryUrl')
-    sHtmlContent = cRequestHandler(sUrl).request()
+    sHtmlContent = cRequestHandler(sUrl, caching=False).request()
     isMatch, aResult = cParser.parse(sHtmlContent, '<noscript><a\shref="([^"]+)')
 
     if isMatch:

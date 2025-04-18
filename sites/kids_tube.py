@@ -141,7 +141,7 @@ def showEntries_1(entryUrl=False, sGui=False, sSearchText=False):
 def showHosters_1():
     hosters = []
     sUrl = ParameterHandler().getValue('entryUrl')
-    sHtmlContent = cRequestHandler(sUrl).request()
+    sHtmlContent = cRequestHandler(sUrl, caching=False).request()
     isMatch, aResult = cParser.parse(sHtmlContent, 'src="([^"]+)" f')
     if isMatch:
         for sUrl in aResult:

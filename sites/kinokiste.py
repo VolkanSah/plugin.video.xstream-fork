@@ -190,7 +190,7 @@ def showEpisodes():
 def showHosters():
     hosters = []
     sUrl = ParameterHandler().getValue('entryUrl')
-    sHtmlContent = cRequestHandler(sUrl).request()
+    sHtmlContent = cRequestHandler(sUrl, caching=False).request()
     pattern = '<li>\s*<a\s+href="#"\s+data-link="([^"]+)">\s*<i>\s*</i>\s*([^<]+)</a>\s*</li>'
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
     if isMatch:
@@ -208,7 +208,7 @@ def showEpisodeHosters():
     hosters = []
     sUrl = ParameterHandler().getValue('entryUrl')
     episodeId = ParameterHandler().getValue('episodeId')
-    sHtmlContent = cRequestHandler(sUrl).request()
+    sHtmlContent = cRequestHandler(sUrl, caching=False).request()
     pattern = '<li>\s*<a\s+href="#"\s+id="[^"]+-%s"\s+data-link="([^"]+)">\s*([^<]+)</a>\s*</li>' % episodeId
     isMatch, aResult = cParser.parse(sHtmlContent, pattern)
     if isMatch:

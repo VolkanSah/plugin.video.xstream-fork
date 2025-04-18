@@ -4,7 +4,7 @@
 
 # Always pay attention to the translations in the menu!
 # HTML LangzeitCache hinzugefügt
-# showValue:     48 Stunden
+# showGenre:     48 Stunden
 # showEntries:    6 Stunden
 # showEpisodes:   4 Stunden
 
@@ -198,7 +198,7 @@ def showHosters():
     entryUrl = params.getValue('entryUrl')
     hosters = []
     sUrl = URL_MAIN + '/api' + entryUrl + '/watch'
-    sHtmlContent = cRequestHandler(sUrl).request()
+    sHtmlContent = cRequestHandler(sUrl, caching=False).request()
     pattern = 'streamUrl":"([^"]+)'
     isMatch, aResult = cParser().parse(sHtmlContent, pattern)
     if not isMatch: return
