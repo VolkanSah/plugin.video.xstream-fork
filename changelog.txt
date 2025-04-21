@@ -1,4 +1,12 @@
-[B]Version: 4.2.1.4[/B]
+[B]Version: 4.2.1.5[/B]
+
+21.04.2025
+
+- [Megakino] Fix für aktuelle Filme im Kino THX @ Mr. Evil
+- [Megakino] Fix für Dokumentationen
+- [HDFilme] Menü erweitert: Land hinzugefügt
+- [Kinokiste] Menüeintrag Filme für Kinder korrigiert
+
 
 18.04.2025
 
@@ -7,11 +15,13 @@
 - [TMDb] TMDb Ansicht in xStream optimiert, sollte nun schneller laden
 - [VOD] Cacheing aktiviert
 
+
 13.04.2025
 
 - [VOD] Autoplay gefixt
 - [VOD] Ranking gefixt, Hosternamen korrigiert
 - [VOD] Globale Suche Settings gefixt
+
 
 11.04.2025
 
