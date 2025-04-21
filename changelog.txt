@@ -1,4 +1,9 @@
-[B]Version: 4.2.1.5[/B]
+[B]Version: 4.2.1.6[/B]
+
+21.04.2025
+
+- Fix für TMDb Helper, Titel mit Sonderzeichen wurden nicht immer gefunden
+
 
 21.04.2025
 
