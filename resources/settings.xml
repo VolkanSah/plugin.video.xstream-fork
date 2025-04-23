@@ -1142,6 +1142,45 @@
 					<control type="toggle"/>
 				</setting>
 			</group>
+			<group id="plugin_xcine" label="30716">
+				<setting id="plugin_xcine" type="boolean" label="30050" help="30411">
+					<level>0</level>
+                    <default>True</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="global_search_xcine" type="boolean" label="30052">
+					<level>0</level>
+					<default>True</default>
+					<dependencies>
+						<dependency type="enable" operator="!is" setting="plugin_xcine">False</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<!-- Domain Überprüfung mit automatischer und manueller Anpassung -->
+				<setting id="plugin_xcine_checkDomain" type="boolean" label="30277">
+					<level>3</level>
+					<default>True</default>
+					<dependencies>
+						<dependency type="enable" operator="!is" setting="plugin_xcine">false</dependency>
+						<dependency type="visible" operator="!is" setting="plugin_xcine">false</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<setting id="plugin_xcine.domain" type="string" label="30278" help="">
+					<level>3</level>
+					<default/>
+					<constraints>
+						<allowempty>true</allowempty>
+					</constraints>
+					<dependencies>
+						<dependency type="enable" operator="!is" setting="plugin_xcine">false</dependency>
+						<dependency type="visible" operator="!is" setting="plugin_xcine">false</dependency>
+					</dependencies>
+					<control type="edit" format="string">
+						<heading>30278</heading>
+					</control>
+				</setting>
+			</group>
 		</category>
 		<category id="indexsiteVoD" label="30407" help="">
 			<group id="plugin_vod_huhu" label="30790">
