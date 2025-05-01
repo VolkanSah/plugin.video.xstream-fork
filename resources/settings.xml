@@ -290,13 +290,13 @@
 					<level>0</level>
 					<default>True</default>
 					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_aniworld">False</dependency>
+						<dependency type="enable" operator="!is" setting="plugin_api_all">False</dependency>
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
 				<setting id="plugin_api_all.domain" type="string" label="30278" help="">
 					<level>3</level>
-					<default>aniworld.to</default>
+					<default>api.hdfilme.de</default>
 					<constraints>
 						<options>
 							<option label="HDFilme">api.hdfilme.me</option>
