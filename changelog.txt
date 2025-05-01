@@ -1,4 +1,12 @@
-[B]Version: 4.2.1.7[/B]
+[B]Version: 4.2.2[/B]
+
+01.05.2025
+
+- [XCine] Anpassungen Caching
+- [Settings] Resolver Update per default aktiv, XCine Settings Suche im
+  Standard deaktiviert
+- [API Suche] Neuer Scraper der über eine API nach Filmen und Serien sucht
+
 
 23.04.2025
 

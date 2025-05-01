@@ -1,4 +1,13 @@
 # -*- coding: utf-8 -*-
+# Python 3
+
+# Always pay attention to the translations in the menu!
+# HTML LangzeitCache hinzugefügt
+# showGenre:     48 Stunden
+# showEntries:    6 Stunden
+# showEpisodes:   4 Stunden
+
+
 from resources.lib.handler.ParameterHandler import ParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.tools import logger, cParser
@@ -40,8 +49,8 @@ def load():
     params.setParam('sUrl', URL_MAIN)
     cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30524), SITE_IDENTIFIER, 'showYears'), params)
     params.setParam('sUrl', URL_MAIN)
-    cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30506), SITE_IDENTIFIER, 'showGenre'), params)    
-    cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30520), SITE_IDENTIFIER, 'showSearch'))
+    #cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30506), SITE_IDENTIFIER, 'showGenre'), params)    #Suche ausgeblendet da diese auf der Site nicht funktioniert
+    #cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30520), SITE_IDENTIFIER, 'showSearch'))
     cGui().setEndOfDirectory()
 
 
@@ -190,7 +199,7 @@ def showEpisodes():
 def showHosters():
     hosters = []
     sUrl = ParameterHandler().getValue('entryUrl')
-    sHtmlContent = cRequestHandler(sUrl).request()
+    sHtmlContent = cRequestHandler(sUrl, caching=False).request()
     if ParameterHandler().exist('episode'):
         episode = ParameterHandler().getValue('episode')
         pattern = '>{0}<.*?</ul></li>'.format(episode)

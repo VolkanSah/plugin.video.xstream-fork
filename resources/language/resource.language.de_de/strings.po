@@ -1573,7 +1573,7 @@ msgid "SerienHD"
 msgstr ""
 
 msgctxt "#30727"
-msgid ""
+msgid "API Suchmaschine"
 msgstr ""
 
 msgctxt "#30728"
