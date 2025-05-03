@@ -14,6 +14,7 @@ from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.config import cConfig
 from resources.lib.gui.gui import cGui
 from json import loads
+from datetime import datetime
 
 # Domain Abfrage ###
 
@@ -59,13 +60,13 @@ def load():
         return
     params.setParam('sLanguage', sLang)
 
-    cGui().addFolder(cGuiElement('Filme', SITE_IDENTIFIER, 'showMovieMenu'), params) # Movies
-    cGui().addFolder(cGuiElement('Film Genre', SITE_IDENTIFIER, 'showGenreMMenu'), params) # Movies Genre
-    cGui().addFolder(cGuiElement('Serien', SITE_IDENTIFIER, 'showSeriesMenu'), params) # Series
-    cGui().addFolder(cGuiElement('Serien Genre', SITE_IDENTIFIER, 'showGenreSMenu'), params) # Series Genre
-    cGui().addFolder(cGuiElement('Jahre', SITE_IDENTIFIER, 'showYearsMenu'), params) # Years
-    cGui().addFolder(cGuiElement('Schauspieler', SITE_IDENTIFIER, 'showCastMenu'), params) # Cast
-    cGui().addFolder(cGuiElement('Suche', SITE_IDENTIFIER, 'showSearch')) # Search
+    cGui().addFolder(cGuiElement('Movies', SITE_IDENTIFIER, 'showMovieMenu'), params)
+    cGui().addFolder(cGuiElement('Movies genre', SITE_IDENTIFIER, 'showGenreMMenu'), params)
+    cGui().addFolder(cGuiElement('Series', SITE_IDENTIFIER, 'showSeriesMenu'), params)
+    cGui().addFolder(cGuiElement('Series genre', SITE_IDENTIFIER, 'showGenreSMenu'), params)
+    cGui().addFolder(cGuiElement('Years', SITE_IDENTIFIER, 'showYearsMenu'), params)
+    cGui().addFolder(cGuiElement('Actors', SITE_IDENTIFIER, 'showCastMenu'), params)
+    cGui().addFolder(cGuiElement('Search', SITE_IDENTIFIER, 'showSearch'))
     cGui().setEndOfDirectory()
 
 
@@ -88,39 +89,63 @@ def _getQuality(sQuality):
         return sQuality
 
 
+def _addGenres(sLanguage, sType, sMenu):
+    params = ParameterHandler()
+    genres = [
+        "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
+        "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
+        "Geschichte", "Horror", "Musik", "Mystery", "Romantik",
+        "Reality-TV", "Sci-Fi", "Sport", "Thriller", "Krieg", "Western"
+    ]
+
+    for genre in genres:
+        params.setParam('sUrl', URL_GENRE % (sLanguage, sType, sMenu, genre, '1'))
+        cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
+    cGui().setEndOfDirectory()
+
+
+def _showGenreMenu():
+    params = ParameterHandler()
+    sLanguage = params.getValue('sLanguage')
+    sType = params.getValue('sType')
+    sMenu = params.getValue('sMenu')
+
+    _addGenres(sLanguage, sType, sMenu)
+
+
 def showMovieMenu():
     params = ParameterHandler()
     sLanguage = params.getValue('sLanguage')
 
-    params.setParam('sUrl', URL_MAIN % (sLanguage, 'movies', 'Trending', '1')) ### Trending Filme trending1
-    cGui().addFolder(cGuiElement('Derzeit Beliebt', SITE_IDENTIFIER, 'showEntries'), params) ### Trending Filme trending1
+    params.setParam('sUrl', URL_MAIN % (sLanguage, 'movies', 'Trending', '1'))
+    cGui().addFolder(cGuiElement('Trending', SITE_IDENTIFIER, 'showEntries'), params)
 
-    params.setParam('sUrl', URL_MAIN % (sLanguage, 'movies', 'new', '1')) ### neue filme neu1
-    cGui().addFolder(cGuiElement('Neue Filme', SITE_IDENTIFIER, 'showEntries'), params) ### neue filme neu1
+    params.setParam('sUrl', URL_MAIN % (sLanguage, 'movies', 'new', '1'))
+    cGui().addFolder(cGuiElement('New movies', SITE_IDENTIFIER, 'showEntries'), params)
 
-    params.setParam('sUrl', URL_MAIN % (sLanguage, 'movies', 'views', '1')) ### Views filme views1
-    cGui().addFolder(cGuiElement('Meist Gesehen', SITE_IDENTIFIER, 'showEntries'), params) ### Views filme views1
+    params.setParam('sUrl', URL_MAIN % (sLanguage, 'movies', 'views', '1'))
+    cGui().addFolder(cGuiElement('Most viewed', SITE_IDENTIFIER, 'showEntries'), params)
 
-    params.setParam('sUrl', URL_MAIN % (sLanguage, 'movies', 'rating', '1')) ### Rating Filme rating1
-    cGui().addFolder(cGuiElement('Top IMDb', SITE_IDENTIFIER, 'showEntries'), params) ### Rating Filme rating1
+    params.setParam('sUrl', URL_MAIN % (sLanguage, 'movies', 'rating', '1'))
+    cGui().addFolder(cGuiElement('Top IMDb', SITE_IDENTIFIER, 'showEntries'), params)
 
-    params.setParam('sUrl', URL_MAIN % (sLanguage, 'movies', 'votes', '1')) ### votes filme votes 1
-    cGui().addFolder(cGuiElement('Votes Filme', SITE_IDENTIFIER, 'showEntries'), params) ###
+    params.setParam('sUrl', URL_MAIN % (sLanguage, 'movies', 'votes', '1'))
+    cGui().addFolder(cGuiElement('Voted movies', SITE_IDENTIFIER, 'showEntries'), params)
 
-    params.setParam('sUrl', URL_MAIN % (sLanguage, 'movies', 'updates', '1')) ### updates filme updates 1
-    cGui().addFolder(cGuiElement('Updates Filme', SITE_IDENTIFIER, 'showEntries'), params) ###
+    params.setParam('sUrl', URL_MAIN % (sLanguage, 'movies', 'updates', '1'))
+    cGui().addFolder(cGuiElement('Updated movies', SITE_IDENTIFIER, 'showEntries'), params)
 
-    params.setParam('sUrl', URL_MAIN % (sLanguage, 'movies', 'name', '1')) ### name filme
-    cGui().addFolder(cGuiElement('Name Filme', SITE_IDENTIFIER, 'showEntries'), params) ###
+    params.setParam('sUrl', URL_MAIN % (sLanguage, 'movies', 'name', '1'))
+    cGui().addFolder(cGuiElement('Named movies', SITE_IDENTIFIER, 'showEntries'), params)
 
-    params.setParam('sUrl', URL_MAIN % (sLanguage, 'movies', 'featured', '1')) ### featured filme features1
-    cGui().addFolder(cGuiElement('Featured Filme', SITE_IDENTIFIER, 'showEntries'), params) ###
+    params.setParam('sUrl', URL_MAIN % (sLanguage, 'movies', 'featured', '1'))
+    cGui().addFolder(cGuiElement('Featured movies', SITE_IDENTIFIER, 'showEntries'), params)
 
-    params.setParam('sUrl', URL_MAIN % (sLanguage, 'movies', 'requested', '1')) ### requested filme
-    cGui().addFolder(cGuiElement('Requested Filme', SITE_IDENTIFIER, 'showEntries'), params) ###
+    params.setParam('sUrl', URL_MAIN % (sLanguage, 'movies', 'requested', '1'))
+    cGui().addFolder(cGuiElement('Requested movies', SITE_IDENTIFIER, 'showEntries'), params)
 
-    params.setParam('sUrl', URL_MAIN % (sLanguage, 'movies', 'releases', '1')) ### releases filme
-    cGui().addFolder(cGuiElement('Releases Filme', SITE_IDENTIFIER, 'showEntries'), params) ### Filme releases 1
+    params.setParam('sUrl', URL_MAIN % (sLanguage, 'movies', 'releases', '1'))
+    cGui().addFolder(cGuiElement('Released movies', SITE_IDENTIFIER, 'showEntries'), params)
     cGui().setEndOfDirectory()
 
 # show movie genre menue
@@ -128,205 +153,27 @@ def showGenreMMenu():
     params = ParameterHandler()
     sLanguage = params.getValue('sLanguage')
 
-    cGui().addFolder(cGuiElement('Film Genre Trending', SITE_IDENTIFIER, 'showGenreMTMenu'), params) # Movies Genre Trending
-    cGui().addFolder(cGuiElement('Film Genre New', SITE_IDENTIFIER, 'showGenreMNEMenu'), params) # Movies Genre New
-    cGui().addFolder(cGuiElement('Film Genre Views', SITE_IDENTIFIER, 'showGenreMVIMenu'), params) # Movies Genre Views
-    cGui().addFolder(cGuiElement('Film Genre Votes', SITE_IDENTIFIER, 'showGenreMVMenu'), params) # Movies Genre Votes
-    cGui().addFolder(cGuiElement('Film Genre Updates', SITE_IDENTIFIER, 'showGenreMUMenu'), params) # Movies Genre Updates
-    cGui().addFolder(cGuiElement('Film Genre Rating', SITE_IDENTIFIER, 'showGenreMRMenu'), params) # Movies Genre Rating
-    cGui().addFolder(cGuiElement('Film Genre Name', SITE_IDENTIFIER, 'showGenreMNAMenu'), params) # Movies Genre Name
-    cGui().addFolder(cGuiElement('Film Genre Requested', SITE_IDENTIFIER, 'showGenreMREMenu'), params) # Movies Genre Requested
-    cGui().addFolder(cGuiElement('Film Genre Featured', SITE_IDENTIFIER, 'showGenreMFEMenu'), params) # Movies Genre Featured
-    cGui().addFolder(cGuiElement('Film Genre Releases', SITE_IDENTIFIER, 'showGenreMRAMenu'), params) # Movies Genre Releases
-    cGui().setEndOfDirectory()
-
-# Genre Movie Trending Menu
-def showGenreMTMenu():
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-
-    genres = [
-        "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
-        "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
-        "Geschichte", "Horror", "Musik", "Mystery", "Romantik",
-        "Reality-TV", "Sci-Fi", "Sport", "Thriller", "Krieg", "Western"
-    ]
-
-    for genre in genres:
-        params.setParam('sUrl', URL_GENRE % (sLanguage, 'movies', 'Trending', genre, '1'))
-        cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
-
-    cGui().setEndOfDirectory()
-
-
-# Genre Movie Neu Menu
-def showGenreMNEMenu():
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-
-    genres = [
-        "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
-        "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
-        "Geschichte", "Horror", "Musik", "Mystery", "Romantik",
-        "Reality-TV", "Sci-Fi", "Sport", "Thriller", "Krieg", "Western"
-    ]
-
-    for genre in genres:
-        params.setParam('sUrl', URL_GENRE % (sLanguage, 'movies', 'Neu', genre, '1'))
-        cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
-
-    cGui().setEndOfDirectory()
-
-
-# Genre Movie Views Menu
-def showGenreMVIMenu():
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-
-    genres = [
-        "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
-        "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
-        "Geschichte", "Horror", "Musik", "Mystery", "Romantik",
-        "Reality-TV", "Sci-Fi", "Sport", "Thriller", "Krieg", "Western"
-    ]
-
-    for genre in genres:
-        params.setParam('sUrl', URL_GENRE % (sLanguage, 'movies', 'Views', genre, '1'))
-        cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
-
-    cGui().setEndOfDirectory()
-
-
-# Genre Movie Votes Menu
-def showGenreMVMenu():
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-
-    genres = [
-        "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
-        "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
-        "Geschichte", "Horror", "Musik", "Mystery", "Romantik",
-        "Reality-TV", "Sci-Fi", "Sport", "Thriller", "Krieg", "Western"
-    ]
-
-    for genre in genres:
-        params.setParam('sUrl', URL_GENRE % (sLanguage, 'movies', 'Votes', genre, '1'))
-        cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
-
-    cGui().setEndOfDirectory()
-
-
-# Genre Movie Updates Menu
-def showGenreMUMenu():
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-
-    genres = [
-        "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
-        "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
-        "Geschichte", "Horror", "Musik", "Mystery", "Romantik",
-        "Reality-TV", "Sci-Fi", "Sport", "Thriller", "Krieg", "Western"
-    ]
-
-    for genre in genres:
-        params.setParam('sUrl', URL_GENRE % (sLanguage, 'movies', 'Updates', genre, '1'))
-        cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
-
-    cGui().setEndOfDirectory()
-
-
-# Genre Movie Rating Menu
-def showGenreMRMenu():
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-
-    genres = [
-        "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
-        "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
-        "Geschichte", "Horror", "Musik", "Mystery", "Romantik",
-        "Reality-TV", "Sci-Fi", "Sport", "Thriller", "Krieg", "Western"
-    ]
-
-    for genre in genres:
-        params.setParam('sUrl', URL_GENRE % (sLanguage, 'movies', 'Rating', genre, '1'))
-        cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
-
-    cGui().setEndOfDirectory()
-
-
-# Genre Movie Name Menu
-def showGenreMNAMenu():
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-
-    genres = [
-        "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
-        "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
-        "Geschichte", "Horror", "Musik", "Mystery", "Romantik",
-        "Reality-TV", "Sci-Fi", "Sport", "Thriller", "Krieg", "Western"
-    ]
-
-    for genre in genres:
-        params.setParam('sUrl', URL_GENRE % (sLanguage, 'movies', 'Name', genre, '1'))
-        cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
-
-    cGui().setEndOfDirectory()
-
-
-# Genre Movie Requested Menu
-def showGenreMREMenu():
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-
-    genres = [
-        "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
-        "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
-        "Geschichte", "Horror", "Musik", "Mystery", "Romantik",
-        "Reality-TV", "Sci-Fi", "Sport", "Thriller", "Krieg", "Western"
-    ]
-
-    for genre in genres:
-        params.setParam('sUrl', URL_GENRE % (sLanguage, 'movies', 'requested', genre, '1'))
-        cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
-
-    cGui().setEndOfDirectory()
-
-
-# Genre Movie Featured Menu
-def showGenreMFEMenu():
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-
-    genres = [
-        "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
-        "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
-        "Geschichte", "Horror", "Musik", "Mystery", "Romantik",
-        "Reality-TV", "Sci-Fi", "Sport", "Thriller", "Krieg", "Western"
-    ]
-
-    for genre in genres:
-        params.setParam('sUrl', URL_GENRE % (sLanguage, 'movies', 'featured', genre, '1'))
-        cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
-
-    cGui().setEndOfDirectory()
-
-
-# Genre Movie Releases Menu
-def showGenreMRAMenu():
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-
-    genres = [
-        "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
-        "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
-        "Geschichte", "Horror", "Musik", "Mystery", "Romantik",
-        "Reality-TV", "Sci-Fi", "Sport", "Thriller", "Krieg", "Western"
-    ]
-
-    for genre in genres:
-        params.setParam('sUrl', URL_GENRE % (sLanguage, 'movies', 'releases', genre, '1'))
-        cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
-
+    params.setParam('sType', 'movies')
+    params.setParam('sMenu', 'Trending')
+    cGui().addFolder(cGuiElement('Movie genre trending', SITE_IDENTIFIER, '_showGenreMenu'), params)
+    params.setParam('sMenu', 'Neu')
+    cGui().addFolder(cGuiElement('Movie genre new', SITE_IDENTIFIER, '_showGenreMenu'), params)
+    params.setParam('sMenu', 'Views')
+    cGui().addFolder(cGuiElement('Movie genre viewed', SITE_IDENTIFIER, '_showGenreMenu'), params)
+    params.setParam('sMenu', 'Votes')
+    cGui().addFolder(cGuiElement('Movie genre voted', SITE_IDENTIFIER, '_showGenreMenu'), params)
+    params.setParam('sMenu', 'Updates')
+    cGui().addFolder(cGuiElement('Movie genre updated', SITE_IDENTIFIER, '_showGenreMenu'), params)
+    params.setParam('sMenu', 'Rating')
+    cGui().addFolder(cGuiElement('Movie genre rated', SITE_IDENTIFIER, '_showGenreMenu'), params)
+    params.setParam('sMenu', 'Name')
+    cGui().addFolder(cGuiElement('Movie genre named', SITE_IDENTIFIER, '_showGenreMenu'), params)
+    params.setParam('sMenu', 'requested')
+    cGui().addFolder(cGuiElement('Movie genre requested', SITE_IDENTIFIER, '_showGenreMenu'), params)
+    params.setParam('sMenu', 'featured')
+    cGui().addFolder(cGuiElement('Movie genre featured', SITE_IDENTIFIER, '_showGenreMenu'), params)
+    params.setParam('sMenu', 'releases')
+    cGui().addFolder(cGuiElement('Movie genre released', SITE_IDENTIFIER, '_showGenreMenu'), params)
     cGui().setEndOfDirectory()
 
 
@@ -335,32 +182,32 @@ def showSeriesMenu():
     params = ParameterHandler()
     sLanguage = params.getValue('sLanguage')
 
-    params.setParam('sUrl', URL_MAIN % (sLanguage, 'tvseries', 'neu', '1')) ### serien neu 1
-    cGui().addFolder(cGuiElement('Neue Serien', SITE_IDENTIFIER, 'showEntries'), params) ###
+    params.setParam('sUrl', URL_MAIN % (sLanguage, 'tvseries', 'neu', '1'))
+    cGui().addFolder(cGuiElement('New series', SITE_IDENTIFIER, 'showEntries'), params)
 
-    params.setParam('sUrl', URL_MAIN % (sLanguage, 'tvseries', 'views', '1')) ### serien views 1
-    cGui().addFolder(cGuiElement('Views Serien', SITE_IDENTIFIER, 'showEntries'), params) ###
+    params.setParam('sUrl', URL_MAIN % (sLanguage, 'tvseries', 'views', '1'))
+    cGui().addFolder(cGuiElement('Viewed series', SITE_IDENTIFIER, 'showEntries'), params)
 
-    params.setParam('sUrl', URL_MAIN % (sLanguage, 'tvseries', 'votes', '1')) ### serien votes 1
-    cGui().addFolder(cGuiElement('Votes Serien', SITE_IDENTIFIER, 'showEntries'), params) ###
+    params.setParam('sUrl', URL_MAIN % (sLanguage, 'tvseries', 'votes', '1'))
+    cGui().addFolder(cGuiElement('Voted series', SITE_IDENTIFIER, 'showEntries'), params)
 
-    params.setParam('sUrl', URL_MAIN % (sLanguage, 'tvseries', 'updates', '1')) ### serien updates 1
-    cGui().addFolder(cGuiElement('Updates Serien', SITE_IDENTIFIER, 'showEntries'), params) ###
+    params.setParam('sUrl', URL_MAIN % (sLanguage, 'tvseries', 'updates', '1'))
+    cGui().addFolder(cGuiElement('Updated series', SITE_IDENTIFIER, 'showEntries'), params)
 
-    params.setParam('sUrl', URL_MAIN % (sLanguage, 'tvseries', 'name', '1')) ### serien name 1
-    cGui().addFolder(cGuiElement('Name Serien', SITE_IDENTIFIER, 'showEntries'), params) ###
+    params.setParam('sUrl', URL_MAIN % (sLanguage, 'tvseries', 'name', '1'))
+    cGui().addFolder(cGuiElement('Named series', SITE_IDENTIFIER, 'showEntries'), params)
 
-    params.setParam('sUrl', URL_MAIN % (sLanguage, 'tvseries', 'featured', '1')) ###
-    cGui().addFolder(cGuiElement('Featured Serien', SITE_IDENTIFIER, 'showEntries'), params) ###
+    params.setParam('sUrl', URL_MAIN % (sLanguage, 'tvseries', 'featured', '1'))
+    cGui().addFolder(cGuiElement('Featured series', SITE_IDENTIFIER, 'showEntries'), params)
 
-    params.setParam('sUrl', URL_MAIN % (sLanguage, 'tvseries', 'requested', '1')) ### serien requested
-    cGui().addFolder(cGuiElement('Requested Serien', SITE_IDENTIFIER, 'showEntries'), params) ###
+    params.setParam('sUrl', URL_MAIN % (sLanguage, 'tvseries', 'requested', '1'))
+    cGui().addFolder(cGuiElement('Requested series', SITE_IDENTIFIER, 'showEntries'), params)
 
-    params.setParam('sUrl', URL_MAIN % (sLanguage, 'tvseries', 'releases', '1')) ### serien releases 1
-    cGui().addFolder(cGuiElement('Releases Serien', SITE_IDENTIFIER, 'showEntries'), params) ###
+    params.setParam('sUrl', URL_MAIN % (sLanguage, 'tvseries', 'releases', '1'))
+    cGui().addFolder(cGuiElement('Released series', SITE_IDENTIFIER, 'showEntries'), params)
 
-    params.setParam('sUrl', URL_MAIN % (sLanguage, 'tvseries', 'rating', '1')) ### serien rating 1
-    cGui().addFolder(cGuiElement('Rating Serien', SITE_IDENTIFIER, 'showEntries'), params) ###
+    params.setParam('sUrl', URL_MAIN % (sLanguage, 'tvseries', 'rating', '1'))
+    cGui().addFolder(cGuiElement('Rated series', SITE_IDENTIFIER, 'showEntries'), params)
 
     #params.setParam('sUrl', URL_MAIN % (sLanguage, 'tvseries', 'Jahr', '1'))  # ##
     #cGui().addFolder(cGuiElement('Jahr', SITE_IDENTIFIER, 'showEntries'), params) ##
@@ -375,206 +222,27 @@ def showGenreSMenu():
     params = ParameterHandler()
     sLanguage = params.getValue('sLanguage')
 
-    cGui().addFolder(cGuiElement('Serien Genre Trending', SITE_IDENTIFIER, 'showGenreSTMenu'), params) # Movies Genre Trending
-    cGui().addFolder(cGuiElement('Serien Genre New', SITE_IDENTIFIER, 'showGenreSNEMenu'), params) # Movies Genre New
-    cGui().addFolder(cGuiElement('Serien Genre Views', SITE_IDENTIFIER, 'showGenreSVIMenu'), params) # Movies Genre Views
-    cGui().addFolder(cGuiElement('Serien Genre Votes', SITE_IDENTIFIER, 'showGenreSVMenu'), params) # Movies Genre Votes
-    cGui().addFolder(cGuiElement('Serien Genre Updates', SITE_IDENTIFIER, 'showGenreSUMenu'), params) # Movies Genre Updates
-    cGui().addFolder(cGuiElement('Serien Genre Rating', SITE_IDENTIFIER, 'showGenreSRMenu'), params) # Movies Genre Rating
-    cGui().addFolder(cGuiElement('Serien Genre Name', SITE_IDENTIFIER, 'showGenreSNAMenu'), params) # Movies Genre Name
-    cGui().addFolder(cGuiElement('Serien Genre Requested', SITE_IDENTIFIER, 'showGenreSREMenu'), params) # Movies Genre Requested
-    cGui().addFolder(cGuiElement('Serien Genre Featured', SITE_IDENTIFIER, 'showGenreSFEMenu'), params) # Movies Genre Featured
-    cGui().addFolder(cGuiElement('Serien Genre Releases', SITE_IDENTIFIER, 'showGenreSRAMenu'), params) # Movies Genre Releases
-
-    cGui().setEndOfDirectory()
-
-
-# Genre Series Trending Menu
-def showGenreSTMenu():
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-
-    genres = [
-        "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
-        "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
-        "Geschichte", "Horror", "Musik", "Mystery", "Romantik",
-        "Reality-TV", "Sci-Fi", "Sport", "Thriller", "Krieg", "Western"
-    ]
-
-    for genre in genres:
-        params.setParam('sUrl', URL_GENRE % (sLanguage, 'tvseries', 'Trending', genre, '1'))
-        cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
-
-    cGui().setEndOfDirectory()
-
-
-# Genre Series Neu Menu
-def showGenreSNEMenu():
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-
-    genres = [
-        "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
-        "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
-        "Geschichte", "Horror", "Musik", "Mystery", "Romantik",
-        "Reality-TV", "Sci-Fi", "Sport", "Thriller", "Krieg", "Western"
-    ]
-
-    for genre in genres:
-        params.setParam('sUrl', URL_GENRE % (sLanguage, 'tvseries', 'Neu', genre, '1'))
-        cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
-
-    cGui().setEndOfDirectory()
-
-
-# Genre Series Views Menu
-def showGenreSVIMenu():
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-
-    genres = [
-        "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
-        "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
-        "Geschichte", "Horror", "Musik", "Mystery", "Romantik",
-        "Reality-TV", "Sci-Fi", "Sport", "Thriller", "Krieg", "Western"
-    ]
-
-    for genre in genres:
-        params.setParam('sUrl', URL_GENRE % (sLanguage, 'tvseries', 'Views', genre, '1'))
-        cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
-
-    cGui().setEndOfDirectory()
-
-
-# Genre Series Votes Menu ###
-def showGenreSVMenu():
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-
-    genres = [
-        "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
-        "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
-        "Geschichte", "Horror", "Musik", "Mystery", "Romantik",
-        "Reality-TV", "Sci-Fi", "Sport", "Thriller", "Krieg", "Western"
-    ]
-
-    for genre in genres:
-        params.setParam('sUrl', URL_GENRE % (sLanguage, 'tvseries', 'Votes', genre, '1'))
-        cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
-
-    cGui().setEndOfDirectory()
-
-
-# Genre Series Updates Menu
-def showGenreSUMenu():
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-
-    genres = [
-        "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
-        "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
-        "Geschichte", "Horror", "Musik", "Mystery", "Romantik",
-        "Reality-TV", "Sci-Fi", "Sport", "Thriller", "Krieg", "Western"
-    ]
-
-    for genre in genres:
-        params.setParam('sUrl', URL_GENRE % (sLanguage, 'tvseries', 'Updates', genre, '1'))
-        cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
-
-    cGui().setEndOfDirectory()
-
-
-# Genre Series Rating Menu
-def showGenreSRMenu():
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-
-    genres = [
-        "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
-        "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
-        "Geschichte", "Horror", "Musik", "Mystery", "Romantik",
-        "Reality-TV", "Sci-Fi", "Sport", "Thriller", "Krieg", "Western"
-    ]
-
-    for genre in genres:
-        params.setParam('sUrl', URL_GENRE % (sLanguage, 'tvseries', 'Rating', genre, '1'))
-        cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
-
-    cGui().setEndOfDirectory()
-
-
-# Genre Series Name Menu
-def showGenreSNAMenu():
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-
-    genres = [
-        "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
-        "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
-        "Geschichte", "Horror", "Musik", "Mystery", "Romantik",
-        "Reality-TV", "Sci-Fi", "Sport", "Thriller", "Krieg", "Western"
-    ]
-
-    for genre in genres:
-        params.setParam('sUrl', URL_GENRE % (sLanguage, 'tvseries', 'Name', genre, '1'))
-        cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
-
-    cGui().setEndOfDirectory()
-
-
-# Genre Series Requested Menu
-def showGenreSREMenu():
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-
-    genres = [
-        "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
-        "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
-        "Geschichte", "Horror", "Musik", "Mystery", "Romantik",
-        "Reality-TV", "Sci-Fi", "Sport", "Thriller", "Krieg", "Western"
-    ]
-
-    for genre in genres:
-        params.setParam('sUrl', URL_GENRE % (sLanguage, 'tvseries', 'requested', genre, '1'))
-        cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
-
-    cGui().setEndOfDirectory()
-
-
-# Genre Series Featured Menu
-def showGenreSFEMenu():
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-
-    genres = [
-        "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
-        "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
-        "Geschichte", "Horror", "Musik", "Mystery", "Romantik",
-        "Reality-TV", "Sci-Fi", "Sport", "Thriller", "Krieg", "Western"
-    ]
-
-    for genre in genres:
-        params.setParam('sUrl', URL_GENRE % (sLanguage, 'tvseries', 'featured', genre, '1'))
-        cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
-
-    cGui().setEndOfDirectory()
-
-
-# Genre Series Releases Menu
-def showGenreSRAMenu():
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-
-    genres = [
-        "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
-        "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
-        "Geschichte", "Horror", "Musik", "Mystery", "Romantik",
-        "Reality-TV", "Sci-Fi", "Sport", "Thriller", "Krieg", "Western"
-    ]
-
-    for genre in genres:
-        params.setParam('sUrl', URL_GENRE % (sLanguage, 'tvseries', 'releases', genre, '1'))
-        cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
+    params.setParam('sType', 'tvseries')
+    params.setParam('sMenu', 'Trending')
+    cGui().addFolder(cGuiElement('Series genre trending', SITE_IDENTIFIER, '_showGenreMenu'), params)
+    params.setParam('sMenu', 'Neu')
+    cGui().addFolder(cGuiElement('Series genre new', SITE_IDENTIFIER, '_showGenreMenu'), params)
+    params.setParam('sMenu', 'Views')
+    cGui().addFolder(cGuiElement('Series genre viewed', SITE_IDENTIFIER, '_showGenreMenu'), params)
+    params.setParam('sMenu', 'Votes')
+    cGui().addFolder(cGuiElement('Series genre voted', SITE_IDENTIFIER, '_showGenreMenu'), params)
+    params.setParam('sMenu', 'Updates')
+    cGui().addFolder(cGuiElement('Series genre updated', SITE_IDENTIFIER, '_showGenreMenu'), params)
+    params.setParam('sMenu', 'Rating')
+    cGui().addFolder(cGuiElement('Series genre rated', SITE_IDENTIFIER, '_showGenreMenu'), params)
+    params.setParam('sMenu', 'Name')
+    cGui().addFolder(cGuiElement('Series genre named', SITE_IDENTIFIER, '_showGenreMenu'), params)
+    params.setParam('sMenu', 'requested')
+    cGui().addFolder(cGuiElement('Series genre requested', SITE_IDENTIFIER, '_showGenreMenu'), params)
+    params.setParam('sMenu', 'featured')
+    cGui().addFolder(cGuiElement('Series genre featured', SITE_IDENTIFIER, '_showGenreMenu'), params)
+    params.setParam('sMenu', 'releases')
+    cGui().addFolder(cGuiElement('Series genre releases', SITE_IDENTIFIER, '_showGenreMenu'), params)
 
     cGui().setEndOfDirectory()
 
@@ -585,9 +253,10 @@ def showYearsMenu():
 
     # Anfangs- und Endjahr für das menü eintragen
     start_jahr = 1931
-    end_jahr = 2025
+    end_jahr = datetime.now().year
 
-    for jahr in range(start_jahr, end_jahr + 1):
+    # show the current year first
+    for jahr in range(end_jahr, start_jahr - 1, -1):
         params.setParam('sUrl', URL_YEAR % (sLanguage, 'movies', 'views', str(jahr), '1'))
         cGui().addFolder(cGuiElement(str(jahr), SITE_IDENTIFIER, 'showEntries'), params)
 
@@ -597,6 +266,8 @@ def showYearsMenu():
 def showCastMenu():
     params = ParameterHandler()
     sLanguage = params.getValue('sLanguage')
+
+    # TODO: let the user enter an actor name
 
     def addActor(name, name_url, mode='views'):
         encoded_name = cParser.quotePlus(name_url)
@@ -656,24 +327,28 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         if '_id' in movie:
             total += 1
     for movie in aJson['movies']:
-        sTitle = movie['title']
+        if '_id' not in movie:
+            continue
+
+        sTitle = str(movie['title'])
         if sSearchText and not cParser().search(sSearchText, sTitle):
             continue
-        if 'Staffel' in sTitle:
+        if 'Staffel' in sTitle or 'Season' in sTitle:
             isTvshow = True
         oGuiElement = cGuiElement(sTitle, SITE_IDENTIFIER, 'showEpisodes' if isTvshow else 'showHosters')
         if 'poster_path_season' in movie:
-            sThumbnail = URL_THUMBNAIL % movie['poster_path_season']
+            sThumbnail = URL_THUMBNAIL % str(movie['poster_path_season'])
         elif 'poster_path' in movie:
-            sThumbnail = URL_THUMBNAIL % movie['poster_path']
+            sThumbnail = URL_THUMBNAIL % str(movie['poster_path'])
         elif 'backdrop_path' in movie:
-            sThumbnail = URL_THUMBNAIL % movie['backdrop_path']
-        oGuiElement.setThumbnail(sThumbnail)
+            sThumbnail = URL_THUMBNAIL % str(movie['backdrop_path'])
+        if sThumbnail:
+            oGuiElement.setThumbnail(sThumbnail)
         if 'storyline' in movie:
-            oGuiElement.setDescription(movie['storyline'])
+            oGuiElement.setDescription(str(movie['storyline']))
         elif 'overview' in movie:
-            oGuiElement.setDescription(movie['overview'])
-        if 'year' in movie:
+            oGuiElement.setDescription(str(movie['overview']))
+        if 'year' in movie and len(str(movie['year'])) == 4:
             oGuiElement.setYear(movie['year'])
         if 'quality' in movie:
             oGuiElement.setQuality(_getQuality(movie['quality']))
@@ -689,7 +364,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
             isMatch, sRuntime = cParser.parseSingleResult(movie['runtime'], '\d+')
             if isMatch:
                 oGuiElement.addItemValue('duration', sRuntime)
-        params.setParam('entryUrl', URL_WATCH % movie['_id'])
+        params.setParam('entryUrl', URL_WATCH % str(movie['_id']))
         params.setParam('sName', sTitle)
         params.setParam('sThumbnail', sThumbnail)
         oGui.addFolder(oGuiElement, params, isTvshow, total)
@@ -767,7 +442,7 @@ def showHosters():
                     isMatch, aName = cParser.parse(stream['stream'], '//([^/]+)/')
                     if isMatch:
 #                        sName = cParser.urlparse(sUrl) ### angezeigter hostername api
-                        
+
                         sName = aName[0][:aName[0].rindex('.')] ### angezeigte hosternamen, jedoch "substring" nicht ausreichend für den film "DUNE teil2"..
                         if cConfig().isBlockedHoster(sName)[0]: continue  # Hoster aus settings.xml oder deaktivierten Resolver ausschließen
                         sHoster = sHoster + ' ' + sName
