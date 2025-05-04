@@ -313,11 +313,11 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         if 'Staffel' in sTitle or 'Season' in sTitle:
             isTvshow = True
         oGuiElement = cGuiElement(sTitle, SITE_IDENTIFIER, 'showEpisodes' if isTvshow else 'showHosters')
-        if 'poster_path_season' in movie:
+        if 'poster_path_season' in movie and movie['poster_path_season']:
             sThumbnail = URL_THUMBNAIL % str(movie['poster_path_season'])
-        elif 'poster_path' in movie:
+        elif 'poster_path' in movie and movie['poster_path']:
             sThumbnail = URL_THUMBNAIL % str(movie['poster_path'])
-        elif 'backdrop_path' in movie:
+        elif 'backdrop_path' in movie and movie['backdrop_path']:
             sThumbnail = URL_THUMBNAIL % str(movie['backdrop_path'])
         if sThumbnail:
             oGuiElement.setThumbnail(sThumbnail)
