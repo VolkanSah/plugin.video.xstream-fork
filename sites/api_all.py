@@ -419,14 +419,23 @@ def getHosterUrl(sUrl=False):
 
 def showSearchActor():
     oGui = cGui()
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-
-    name = oGui.showKeyBoard()
-    if not name: return
-
-    showEntries(URL_CAST % (sLanguage, 'movies', 'views', cParser.urlEncode(name), '1'), oGui)
+    sName = oGui.showKeyBoard()
+    if not sName: return
+    _searchActor(False, sName)
     oGui.setEndOfDirectory()
+
+
+def _searchActor(oGui, sName):
+    params = ParameterHandler()
+    sLanguage = cConfig().getSetting('prefLanguage')
+    if sLanguage == '0':  # prefLang Alle Sprachen
+        sLang = 'all'
+    if sLanguage == '1':  # prefLang Deutsch
+        sLang = '2'
+    if sLanguage == '2':  # prefLang Englisch
+        sLang = '3'
+    showEntries(URL_CAST % (sLanguage, 'movies', 'views', cParser.urlEncode(sName), '1'), oGui)
+
 
 def showSearch():
     oGui = cGui()
