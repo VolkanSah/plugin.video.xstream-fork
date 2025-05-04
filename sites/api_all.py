@@ -66,7 +66,7 @@ def load():
     cGui().addFolder(cGuiElement('Series genre', SITE_IDENTIFIER, 'showGenreSMenu'), params)
     cGui().addFolder(cGuiElement('Years', SITE_IDENTIFIER, 'showYearsMenu'), params)
     cGui().addFolder(cGuiElement('Search (Actor)', SITE_IDENTIFIER, 'showSearchActor'), params)
-    cGui().addFolder(cGuiElement('Search', SITE_IDENTIFIER, 'showSearch'))
+    cGui().addFolder(cGuiElement('Search', SITE_IDENTIFIER, 'showSearch'), params)
     cGui().setEndOfDirectory()
 
 
