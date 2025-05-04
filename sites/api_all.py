@@ -65,7 +65,7 @@ def load():
     cGui().addFolder(cGuiElement('Series', SITE_IDENTIFIER, 'showSeriesMenu'), params)
     cGui().addFolder(cGuiElement('Series genre', SITE_IDENTIFIER, 'showGenreSMenu'), params)
     cGui().addFolder(cGuiElement('Years', SITE_IDENTIFIER, 'showYearsMenu'), params)
-    cGui().addFolder(cGuiElement('Actors', SITE_IDENTIFIER, 'showCastMenu'), params)
+    cGui().addFolder(cGuiElement('Search (Actor)', SITE_IDENTIFIER, 'showSearchActor'), params)
     cGui().addFolder(cGuiElement('Search', SITE_IDENTIFIER, 'showSearch'))
     cGui().setEndOfDirectory()
 
@@ -89,8 +89,12 @@ def _getQuality(sQuality):
         return sQuality
 
 
-def _addGenres(sLanguage, sType, sMenu):
+def _showGenreMenu():
     params = ParameterHandler()
+    sLanguage = params.getValue('sLanguage')
+    sType = params.getValue('sType')
+    sMenu = params.getValue('sMenu')
+
     genres = [
         "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
         "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
@@ -102,15 +106,6 @@ def _addGenres(sLanguage, sType, sMenu):
         params.setParam('sUrl', URL_GENRE % (sLanguage, sType, sMenu, genre, '1'))
         cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
     cGui().setEndOfDirectory()
-
-
-def _showGenreMenu():
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-    sType = params.getValue('sType')
-    sMenu = params.getValue('sMenu')
-
-    _addGenres(sLanguage, sType, sMenu)
 
 
 def showMovieMenu():
@@ -263,40 +258,6 @@ def showYearsMenu():
     cGui().setEndOfDirectory()
 
 
-def showCastMenu():
-    params = ParameterHandler()
-    sLanguage = params.getValue('sLanguage')
-
-    # TODO: let the user enter an actor name
-
-    def addActor(name, name_url, mode='views'):
-        encoded_name = cParser.quotePlus(name_url)
-        params.setParam('sUrl', URL_CAST % (sLanguage, 'movies', mode, encoded_name, '1'))
-        re.sub(name, '%20', ' ')
-        cGui().addFolder(cGuiElement(name, SITE_IDENTIFIER, 'showEntries'), params)
-
-    addActor('Leo Fitzpatrick', 'Leo%20Fitzpatrick')
-    addActor('Ice-T', 'Ice-T')
-    addActor('Vincent Cassel', 'Vincent%20Cassel')
-    addActor('Jonathan Velasquez', 'Jonathan%20Velasquez')
-    addActor('AlPacino', 'Al%20Pacino')
-    addActor('Sean Penn', 'Sean%20Penn')
-    addActor('Jason Statham', 'Jason%20Statham')
-    addActor('Ryan Reynolds', 'Ryan%20Reynolds')
-    addActor('Tom Hardy', 'Tom%20Hardy')
-    addActor('Nicolas Cage','Nicolas%20Cage')
-    addActor('Liam Neeson', 'Liam%20Neeson')
-    addActor('Morgan Freeman', 'Morgan%20Freeman')
-    addActor('Josh Hartnett', 'Josh%20Hartnett')
-    addActor('Kevin Hart', 'Kevin%20Hart')
-    addActor('Jack Nicholson', 'Jack%20Nicholson')
-    addActor('Clint Eastwood', 'Clint%20Eastwood')
-    addActor('Stacy Peralta', 'Stacy%20Peralta', mode='releases')
-    addActor('EmileHirsch', 'Emile%20Hirsch')
-
-    cGui().setEndOfDirectory()
-
-
 def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     oGui = sGui if sGui else cGui()
     params = ParameterHandler()
@@ -315,10 +276,9 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
     except:
         if not sGui: oGui.showInfo()
         return
-    if 'movies' not in aJson or len(aJson['movies']) == 0: ### LEN funktioniert noch nicht richtig anhand der api.
-        #if not sGui: oGui.showInfo()
-        #    return
-        cGui().showInfo()
+
+    if 'movies' not in aJson or not isinstance(aJson.get('movies'), list) or len(aJson['movies']) == 0:
+        if not sGui: oGui.showInfo()
         return
 
     total = 0
@@ -327,7 +287,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         if '_id' in movie:
             total += 1
     for movie in aJson['movies']:
-        if '_id' not in movie:
+        if not '_id' in movie:
             continue
 
         sTitle = str(movie['title'])
@@ -377,7 +337,6 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
             oGui.addNextPage(SITE_IDENTIFIER, 'showEntries', params)
         oGui.setView('tvshows' if isTvshow else 'movies')
         oGui.setEndOfDirectory()
-
 
 
 def showEpisodes():
@@ -441,8 +400,6 @@ def showHosters():
                     sHoster = str(i) + ':'
                     isMatch, aName = cParser.parse(stream['stream'], '//([^/]+)/')
                     if isMatch:
-#                        sName = cParser.urlparse(sUrl) ### angezeigter hostername api
-
                         sName = aName[0][:aName[0].rindex('.')] ### angezeigte hosternamen, jedoch "substring" nicht ausreichend für den film "DUNE teil2"..
                         if cConfig().isBlockedHoster(sName)[0]: continue  # Hoster aus settings.xml oder deaktivierten Resolver ausschließen
                         sHoster = sHoster + ' ' + sName
@@ -459,6 +416,17 @@ def showHosters():
 def getHosterUrl(sUrl=False):
     return [{'streamUrl': sUrl, 'resolved': False}]
 
+
+def showSearchActor():
+    oGui = cGui()
+    params = ParameterHandler()
+    sLanguage = params.getValue('sLanguage')
+
+    name = oGui.showKeyBoard()
+    if not name: return
+
+    showEntries(URL_CAST % (sLanguage, 'movies', 'views', cParser.urlEncode(name), '1'), oGui)
+    oGui.setEndOfDirectory()
 
 def showSearch():
     oGui = cGui()
