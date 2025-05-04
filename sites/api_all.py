@@ -95,15 +95,32 @@ def _showGenreMenu():
     sType = params.getValue('sType')
     sMenu = params.getValue('sMenu')
 
-    genres = [
-        "Action", "Abenteuer", "Animation", "Biographie", "Komödie",
-        "Krimi", "Dokumentation", "Drama", "Familie", "Fantasy",
-        "Geschichte", "Horror", "Musik", "Mystery", "Romantik",
-        "Reality-TV", "Sci-Fi", "Sport", "Thriller", "Krieg", "Western"
-    ]
-
-    for genre in genres:
-        params.setParam('sUrl', URL_GENRE % (sLanguage, sType, sMenu, genre, '1'))
+    genres = {
+        'Action': 'Action',
+        'Adventure': 'Abenteuer',
+        'Animation': 'Animation',
+        'Biography': 'Biographie',
+        'Comedy': 'Komödie',
+        'Crime': 'Krimi',
+        'Documentation': 'Dokumentation',
+        'Drama': 'Drama',
+        'Family': 'Familie',
+        'Fantasy': 'Fantasy',
+        'History': 'Geschichte',
+        'Horror': 'Horror',
+        'Music': 'Musik',
+        'Mystery': 'Mystery',
+        'Romance': 'Romantik',
+        'Reality-TV': 'Reality-TV',
+        'Sci-Fi': 'Sci-Fi',
+        'Sports': 'Sport',
+        'Thriller': 'Thriller',
+        'War': 'Krieg',
+        'Western': 'Western'
+    }
+    
+    for genre, searchGenre in genres.items():
+        params.setParam('sUrl', URL_GENRE % (sLanguage, sType, sMenu, searchGenre, '1'))
         cGui().addFolder(cGuiElement(genre, SITE_IDENTIFIER, 'showEntries'), params)
     cGui().setEndOfDirectory()
 
