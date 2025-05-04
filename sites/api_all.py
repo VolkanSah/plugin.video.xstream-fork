@@ -403,7 +403,7 @@ def showHosters():
                         sName = aName[0][:aName[0].rindex('.')] ### angezeigte hosternamen, jedoch "substring" nicht ausreichend für den film "DUNE teil2"..
                         if cConfig().isBlockedHoster(sName)[0]: continue  # Hoster aus settings.xml oder deaktivierten Resolver ausschließen
                         sHoster = sHoster + ' ' + sName
-                    if 'release' in stream:
+                    if 'release' in stream and str(stream['release']) != '':
                         sHoster = sHoster + ' [I][' + _getQuality(stream['release']) + '][/I]'
                     hoster = {'link': stream['stream'], 'name': sHoster}
                     hosters.append(hoster)
