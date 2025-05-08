@@ -262,6 +262,7 @@ class cPluginHandler:
 
     # Überprüfung des Domain Namens. Leite um und hole neue URL und schreibe in die settings.xml. Bei nicht erreichen der Seite deaktiviere Globale Suche bis zum nächsten Start und überprüfe erneut.
     def checkDomain(self):
+        import threading
         log(LOGMESSAGE + ' -> [checkDomain]: Query status code of the provider', LOGNOTICE)
         fileNames = self.__getFileNamesFromFolder(self.defaultFolder)
         threads = []
@@ -285,7 +286,7 @@ class cPluginHandler:
                     cConfig().setSetting('plugin_' + provider + '_status', '')  # lösche Settings Eintrag
                     
                 if xbmcaddon.Addon().getSetting('plugin_' + provider + '_checkdomain') == 'true':  # aut. Domainüberprüfung an ist überprüfe Status der Sitplugins
-                    t = threading.Thread(target=_checkdomain, args=(provider, base_link), name=fileName)
+                    t = threading.Thread(target=self._checkdomain, args=(provider, base_link), name=fileName)
                     threads += [t]
                     t.start()
             except Exception:
@@ -296,7 +297,7 @@ class cPluginHandler:
 
         log(LOGMESSAGE + ' -> [checkDomain]: Domains for all available Plugins updated', LOGNOTICE)
         
-    def _checkdomain(provider, base_link):
+    def _checkdomain(self, provider, base_link):
         try:
             oRequest = cRequestHandler(base_link, caching=False, ignoreErrors=True)
             oRequest.request()
