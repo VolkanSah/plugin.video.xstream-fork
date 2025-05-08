@@ -308,9 +308,8 @@ class cPluginHandler:
             # Status 403 - bedeutet, dass der Zugriff auf eine angeforderte Ressource blockiert ist.
             # Status 404 - Seite nicht gefunden. Diese Meldung zeigt an, dass die Seite oder der Ordner auf dem Server, die aufgerufen werden sollten, nicht unter der angegebenen URL zu finden sind.
             if 403 <= status_code <= 503:  # Domain Interner Server Error und nicht erreichbar
-                cConfig().setSetting('plugin_' + provider + '_status', str(status_code))  # setzte Status Code in die settings
                 cConfig().setSetting('global_search_' + provider, 'false')  # deaktiviere Globale Suche
-                log(LOGMESSAGE + ' -> [checkDomain]: Internal Server Error (DDOS Guard, HTTP Error, Cloudflare or BlazingFast active)', LOGNOTICE)
+                log(LOGMESSAGE + ' -> [checkDomain]: Internal Server Error for ' + provider + ' (DDOS Guard, HTTP Error, Cloudflare or BlazingFast active)', LOGNOTICE)
 
             # Status 301 - richtet Ihr auf Eurem Server ein, wenn sich die URL geändert hat, Eure Domain umgezogen ist oder sich ein Inhalt anderweitig verschoben hat.
             elif 300 <= status_code <= 400:  # Domain erreichbar mit Umleitung
