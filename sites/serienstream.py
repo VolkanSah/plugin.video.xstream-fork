@@ -474,7 +474,7 @@ def SSsearch(sGui=False, sSearchText=False):
 
     total = len(aResult[1])
     for link, title in aResult[1]:
-        if not sst in title.lower() and not cUtil.isSimilar(sst, title.lower()):
+        if not sst in title.lower() and not cUtil.isSimilarByToken(sst, title.lower()):
             continue
         else:
             #get images thumb / descr pro call. (optional)
