@@ -17,7 +17,7 @@ import xbmcaddon
 
 from resources.lib.handler.ParameterHandler import ParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
-from resources.lib.tools import logger, cParser
+from resources.lib.tools import logger, cParser, cUtil
 from resources.lib.gui.guiElement import cGuiElement
 from resources.lib.config import cConfig
 from resources.lib.gui.gui import cGui
@@ -474,7 +474,7 @@ def SSsearch(sGui=False, sSearchText=False):
 
     total = len(aResult[1])
     for link, title in aResult[1]:
-        if not sst in title.lower():
+        if not sst in title.lower() and not cUtil.isSimilar(sst, title.lower()):
             continue
         else:
             #get images thumb / descr pro call. (optional)
