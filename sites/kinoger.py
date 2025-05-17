@@ -105,14 +105,18 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False, sSearchPageText =
         if sSearchText and not cParser().search(sSearchText, sName):
             continue
         isTvshow = True if 'staffel' in sName.lower() or 'serie' in entryUrl or ';">S0' in sDummy else False
-        isYear, sYear = cParser.parse(sName, '(.*?)\((\d*)\)') # Jahr und Name trennen
-        for name, year in sYear:
-            sName = name
-            sYear = year
-            break
-        isDesc, sDesc = cParser.parseSingleResult(sDummy, '</b>([^<]+)') # Beschreibung
+        isYear, sYear = cParser.parse(sName, '(.*?)\s+\((\d+)\)') # Jahr und Name trennen
+        if isYear:
+            for name, year in sYear:
+                sName = name
+                sYear = year
+                break
+        if sThumbnail.startswith('/'):
+            sThumbnail = URL_MAIN + sThumbnail
+        isDesc, sDesc = cParser.parseSingleResult(sDummy, '</b></div>([^<]+)') # Beschreibung
         isDuration, sDuration = cParser.parseSingleResult(sDummy, '(?:Laufzeit|Spielzeit).*?([\d]+)') # Laufzeit
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showSeasons' if isTvshow else 'showHosters')
+        oGuiElement.setMediaType('tvshow' if isTvshow else 'movie')
         oGuiElement.setThumbnail(sThumbnail)
         if isYear:
             oGuiElement.setYear(sYear)
@@ -120,7 +124,6 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False, sSearchPageText =
             oGuiElement.setDescription(sDesc)
         if isDuration:
             oGuiElement.addItemValue('duration', sDuration)
-        oGuiElement.setMediaType('tvshow' if isTvshow else 'movie')
         # Parameter übergeben
         params.setParam('sThumbnail', sThumbnail)
         params.setParam('TVShowTitle', sName)
