@@ -161,20 +161,20 @@ class cRequestHandler:
     @staticmethod
     def __cleanupUrl(url):
         # für Leerzeichen und Umlaute in der sUrl
-        for t in (('²', '&#xB2;'), ('³', '&#xB3;'), ('´', '&#xB4;'), ("'", "&#x27;"),('`', '&#x60;'), ('Ä', '&#xC4;'), ('ä', '&#xE4;'),
-                  ('Ö', '&#xD6;'), ('ö', '&#xF6;'), ('Ü', '&#xDC;'), ('ü', '&#xFC;'), ('ß', '&#xDF;'), ('¼', '&#xBC;'), ('½', '&#xBD;'),
-                  ('¾', '&#xBE;'), ('⅓', '&#8531;'), ('*', '%2a'),
-                  ('⭐', '%E2%AD%90'), ('✨', '%E2%9C%A8'), ('❄', '%e2%9d%84'), ('⛄', '%e2%9b%84')):
-            url = url.replace(*t)
-        return url
-        #p = urlparse(url)      #Funktioniert nicht mit TMDb Suche wenn zB Komma oder () enthalten sind
-        #if p.query:
-        #    query = quote_plus(p.query).replace('%3D', '=').replace('%26', '&')
-        #    p = p._replace(query=p.query.replace(p.query, query))
-        #else:
-        #    path = quote_plus(p.path).replace('%2F', '/').replace('%26', '&').replace('%3D', '=')
-        #    p = p._replace(path=p.path.replace(p.path, path))
-        #return p.geturl()
+        #for t in (('²', '&#xB2;'), ('³', '&#xB3;'), ('´', '&#xB4;'), ("'", "&#x27;"),('`', '&#x60;'), ('Ä', '&#xC4;'), ('ä', '&#xE4;'),
+        #          ('Ö', '&#xD6;'), ('ö', '&#xF6;'), ('Ü', '&#xDC;'), ('ü', '&#xFC;'), ('ß', '&#xDF;'), ('¼', '&#xBC;'), ('½', '&#xBD;'),
+        #          ('¾', '&#xBE;'), ('⅓', '&#8531;'), ('*', '%2a'),
+        #          ('⭐', '%E2%AD%90'), ('✨', '%E2%9C%A8'), ('❄', '%e2%9d%84'), ('⛄', '%e2%9b%84')):
+        #    url = url.replace(*t)
+        #return url
+        p = urlparse(url)      #ToDo: Neuer Test nach Änderung Sucheparameter
+        if p.query:
+            query = quote_plus(p.query).replace('%3D', '=').replace('%26', '&')
+            p = p._replace(query=p.query.replace(p.query, query))
+        else:
+            path = quote_plus(p.path).replace('%2F', '/').replace('%26', '&').replace('%3D', '=')
+            p = p._replace(path=p.path.replace(p.path, path))
+        return p.geturl()
     
     def request(self):
         if self.caching and self.cacheTime > 0:

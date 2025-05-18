@@ -1,4 +1,15 @@
-[B]Version: 4.2.2.1[/B]
+[B]Version: 4.2.2.2[/B]
+
+18.05.2025
+
+- [PluginHandler] Checkdomain - Ablauf optimiert und beschleunigt
+- [API_Suche] Noch mehr aufgeräumt, Suche nach Schauspieler über Eingabemaske, Lokalisierung Deutsch/Englisch
+- [tmdb] Fix Request Jahr
+- [Kinoger] Diverse Fixes
+- [Serienstream] Suche überarbeitet, sollte jetzt noch mehr finden, auch mit dem TMDb Helper
+- [Alle Scraper] Domains aktualisiert
+- [Flimmerstube] Good bye my friend :(
+
 
 01.05.2025
 

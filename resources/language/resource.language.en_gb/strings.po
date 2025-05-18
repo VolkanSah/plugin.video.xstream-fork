@@ -1384,35 +1384,35 @@ msgid "Series Genre"
 msgstr ""
 
 msgctxt "#30530"
-msgid " (featured)"
+msgid " featured"
 msgstr ""
 
 msgctxt "#30531"
-msgid " (releases)"
+msgid " releases"
 msgstr ""
 
 msgctxt "#30532"
-msgid " (trending)"
+msgid " trending"
 msgstr ""
 
 msgctxt "#30533"
-msgid " (updates)"
+msgid " updates"
 msgstr ""
 
 msgctxt "#30534"
-msgid " (requested)"
+msgid " requested"
 msgstr ""
 
 msgctxt "#30535"
-msgid " (rating)"
+msgid " rating"
 msgstr ""
 
 msgctxt "#30536"
-msgid " (votes)"
+msgid " votes"
 msgstr ""
 
 msgctxt "#30537"
-msgid " (views)"
+msgid " views"
 msgstr ""
 
 msgctxt "#30538"
@@ -1465,6 +1465,18 @@ msgstr ""
 
 msgctxt "#30550"
 msgid "Movies of the week"
+msgstr ""
+
+msgctxt "#30551"
+msgid "Movies Genre"
+msgstr ""
+
+msgctxt "#30552"
+msgid "Most watched"
+msgstr ""
+
+msgctxt "#30553"
+msgid "Actors"
 msgstr ""
 
 ############### Site Plugins ###############

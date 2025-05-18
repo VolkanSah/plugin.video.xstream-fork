@@ -280,6 +280,55 @@
 		</category>
 		<!-- Kategorie Indexseiten 1 (30094) und Indexseiten 2 (30095) werden vom PluginHandler gesetzt und sind somit kein fester Bestandteil der settings.xml -->
 		<category id="indexsite1" label="30094">
+			<group id="aniworld" label="30700">
+				<setting id="plugin_aniworld" type="boolean" label="30050" help="30411">
+					<level>0</level>
+					<default>True</default>
+					<control type="toggle"/>
+				</setting>
+				<setting id="global_search_aniworld" type="boolean" label="30052">
+					<level>0</level>
+					<default>True</default>
+					<dependencies>
+						<dependency type="enable" operator="!is" setting="plugin_aniworld">False</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<!-- Domain Überprüfung mit automatischer und manueller Anpassung -->
+				<setting id="plugin_aniworld_checkDomain" type="boolean" label="30277">
+					<level>3</level>
+					<default>True</default>
+					<dependencies>
+						<dependency type="enable" operator="!is" setting="plugin_aniworld">false</dependency>
+						<dependency type="visible" operator="!is" setting="plugin_aniworld">false</dependency>
+					</dependencies>
+					<control type="toggle"/>
+				</setting>
+				<setting id="plugin_aniworld.domain" type="string" label="30278" help="">
+					<level>3</level>
+					<default>aniworld.to</default>
+					<constraints>
+						<options>
+							<option label="Aniworld.to">aniworld.to</option>
+							<option label="Aniworld.info(VPN)">www.aniworld.info</option>
+							<option label="Anicloud.io">anicloud.io</option>
+							<allowempty>true</allowempty>
+						</options>
+					</constraints>
+					<dependencies>
+						<dependency type="enable" operator="!is" setting="plugin_aniworld">false</dependency>
+						<dependency type="visible" operator="!is" setting="plugin_aniworld">false</dependency>
+					</dependencies>
+					<control type="spinner" format="string">
+						<heading>30278</heading>
+					</control>
+				</setting>
+				<setting id="plugin_aniworld_status" type="string" label="Dummy" help="">
+					<visible>false</visible>
+					<default>true</default>
+					<control type="toggle"/>
+				</setting>
+			</group>
 			<group id="api_all" label="30727">
 				<setting id="plugin_api_all" type="boolean" label="30050" help="30411">
 					<level>0</level>
@@ -319,55 +368,6 @@
 					</control>
 				</setting>
 				<setting id="plugin_api_all_status" type="string" label="Dummy" help="">
-					<visible>false</visible>
-					<default>true</default>
-					<control type="toggle"/>
-				</setting>
-			</group>
-			<group id="aniworld" label="30700">
-				<setting id="plugin_aniworld" type="boolean" label="30050" help="30411">
-					<level>0</level>
-					<default>True</default>
-					<control type="toggle"/>
-				</setting>
-				<setting id="global_search_aniworld" type="boolean" label="30052">
-					<level>0</level>
-					<default>True</default>
-					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_aniworld">False</dependency>
-					</dependencies>	
-					<control type="toggle"/>
-				</setting>
-				<!-- Domain Überprüfung mit automatischer und manueller Anpassung -->
-				<setting id="plugin_aniworld_checkDomain" type="boolean" label="30277">
-					<level>3</level>
-					<default>True</default>
-					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_aniworld">false</dependency>
-						<dependency type="visible" operator="!is" setting="plugin_aniworld">false</dependency>
-					</dependencies>
-					<control type="toggle"/>
-				</setting>
-				<setting id="plugin_aniworld.domain" type="string" label="30278" help="">
-					<level>3</level>
-					<default>aniworld.to</default>
-					<constraints>
-						<options>
-							<option label="Aniworld.to">aniworld.to</option>
-							<option label="Aniworld.info(VPN)">www.aniworld.info</option>
-							<option label="Anicloud.io">anicloud.io</option>
-							<allowempty>true</allowempty>
-						</options>
-					</constraints>
-					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_aniworld">false</dependency>
-						<dependency type="visible" operator="!is" setting="plugin_aniworld">false</dependency>
-					</dependencies>
-					<control type="spinner" format="string">
-						<heading>30278</heading>
-					</control>
-				</setting>
-				<setting id="plugin_aniworld_status" type="string" label="Dummy" help="">
 					<visible>false</visible>
 					<default>true</default>
 					<control type="toggle"/>
@@ -481,50 +481,6 @@
 					</control>
 				</setting>
 				<setting id="plugin_filmpalast_status" type="string" label="Dummy" help="">
-					<visible>false</visible>
-					<default>true</default>
-					<control type="toggle"/>
-				</setting>
-			</group>
-			<group id="plugin_flimmerstube" label="30703">
-				<setting id="plugin_flimmerstube" type="boolean" label="30050" help="30411">
-					<level>0</level>
-                    <default>True</default>
-					<control type="toggle"/>
-				</setting>				
-				<setting id="global_search_flimmerstube" type="boolean" label="30052">
-					<level>0</level>
-					<default>False</default>
-					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_flimmerstube">False</dependency>
-					</dependencies>
-					<control type="toggle"/>
-				</setting>
-				<!-- Domain Überprüfung mit automatischer und manueller Anpassung -->
-				<setting id="plugin_flimmerstube_checkDomain" type="boolean" label="30277">
-					<level>3</level>
-					<default>True</default>
-					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_flimmerstube">false</dependency>
-						<dependency type="visible" operator="!is" setting="plugin_flimmerstube">false</dependency>
-					</dependencies>
-					<control type="toggle"/>
-				</setting>
-				<setting id="plugin_flimmerstube.domain" type="string" label="30278" help="">
-					<level>3</level>
-					<default/>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<dependencies>
-						<dependency type="enable" operator="!is" setting="plugin_flimmerstube">false</dependency>
-						<dependency type="visible" operator="!is" setting="plugin_flimmerstube">false</dependency>
-					</dependencies>
-					<control type="edit" format="string">
-						<heading>30278</heading>
-					</control>
-				</setting>
-				<setting id="plugin_flimmerstube_status" type="string" label="Dummy" help="">
 					<visible>false</visible>
 					<default>true</default>
 					<control type="toggle"/>
