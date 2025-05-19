@@ -94,15 +94,15 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False, sSearchPageText =
         oRequest.addParameters('set_new_sort', 'dle_sort_main')
         oRequest.addParameters('set_direction_sort', 'dle_direction_main')
     sHtmlContent = oRequest.request()
-    pattern = 'class="title".*?href="([^"]+)">([^<]+).*?src="([^"]+)(.*?)</span>'
-    isMatch, aResult = cParser().parse(sHtmlContent, pattern)
+    pattern = 'class="title".*?href="([^"]+)">([^<]+).*?src="([^"]+)(.*?)</a> </span>'
+    isMatch, aResult = cParser.parse(sHtmlContent, pattern)
     if not isMatch:
         if not sGui: oGui.showInfo()
         return
 
     total = len(aResult)
     for sUrl, sName, sThumbnail, sDummy in aResult:
-        if sSearchText and not cParser().search(sSearchText, sName):
+        if sSearchText and not cParser.search(sSearchText, sName):
             continue
         isTvshow = True if 'staffel' in sName.lower() or 'serie' in entryUrl or ';">S0' in sDummy else False
         isYear, sYear = cParser.parse(sName, '(.*?)\s+\((\d+)\)') # Jahr und Name trennen
@@ -113,7 +113,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False, sSearchPageText =
                 break
         if sThumbnail.startswith('/'):
             sThumbnail = URL_MAIN + sThumbnail
-        isDesc, sDesc = cParser.parseSingleResult(sDummy, '</b></div>([^<]+)') # Beschreibung
+        isDesc, sDesc = cParser.parseSingleResult(sDummy, '(?:</b></div>|</div></b>|</b>)([^<]+)') # Beschreibung
         isDuration, sDuration = cParser.parseSingleResult(sDummy, '(?:Laufzeit|Spielzeit).*?([\d]+)') # Laufzeit
         oGuiElement = cGuiElement(sName, SITE_IDENTIFIER, 'showSeasons' if isTvshow else 'showHosters')
         oGuiElement.setMediaType('tvshow' if isTvshow else 'movie')
@@ -130,7 +130,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False, sSearchPageText =
         params.setParam('entryUrl', sUrl)
         oGui.addFolder(oGuiElement, params, isTvshow, total)
     if not sGui and not sSearchText and not sSearchPageText:
-        isMatchNextPage, sNextUrl = cParser().parseSingleResult(sHtmlContent, '<a[^>]href="([^"]+)">vorw')
+        isMatchNextPage, sNextUrl = cParser.parseSingleResult(sHtmlContent, '<a[^>]href="([^"]+)">vorw')
         # Start Page Function
         isMatchSiteSearch, sHtmlContainer = cParser.parseSingleResult(sHtmlContent, 'class="navigation(.*?)</a></div>')
         if isMatchSiteSearch:
@@ -269,12 +269,12 @@ def showHosters():
     params = ParameterHandler()
     if params.exist('sLinks'):
         sUrl = params.getValue('sLinks')
-        isMatch, aResult = cParser().parse(sUrl, "(http[^']+)")
+        isMatch, aResult = cParser.parse(sUrl, "(http[^']+)")
     else:
         sUrl = params.getValue('entryUrl')
         sHtmlContent = cRequestHandler(sUrl, ignoreErrors=True, caching=False).request()
         pattern = "show[^>]\d,[^>][^>]'([^']+)"
-        isMatch, aResult = cParser().parse(sHtmlContent, pattern)
+        isMatch, aResult = cParser.parse(sHtmlContent, pattern)
     if isMatch:
         for sUrl in aResult:
             try:

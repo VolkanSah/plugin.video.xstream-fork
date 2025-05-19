@@ -110,7 +110,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False, sSearchPageText =
             sName = name
             sYear = year
             break
-        if sSearchText and not cParser().search(sSearchText, sName):
+        if sSearchText and not cParser.search(sSearchText, sName):
             continue
         if sThumbnail.startswith('/'):
             sThumbnail = URL_MAIN + sThumbnail
@@ -132,7 +132,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False, sSearchPageText =
         isMatchSiteSearch, sHtmlContainer = cParser.parseSingleResult(sHtmlContent, """pagesBlockuz(.*?)<hr\s/>""")
         if isMatchSiteSearch:
             isMatch, aResult = cParser.parse(sHtmlContainer, """swchItemA"><span>([\d]+)</span>.*?class="swchItem".*?([\d]+)</span></a><a class="swchItem\sswchItem-next.*?spages[^>][^>]([^']+)""")
-            aResult2 = cParser().parse(sHtmlContent, "<span>&raquo;.*?location.href = '([^']+)")
+            aResult2 = cParser.parse(sHtmlContent, "<span>&raquo;.*?location.href = '([^']+)")
             if aResult2[0] and aResult2[1][0]:
                 for Url in aResult2[1]:
                     sNextPage = URL_MAIN + Url
@@ -144,7 +144,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False, sSearchPageText =
                 params.setParam('sPageLast', sPageLast)
                 oGui.searchNextPage(sPageName, SITE_IDENTIFIER, 'showSearchPage', params)
         # End Page Function
-        aResult = cParser().parse(sHtmlContent, "spages[^>][^>]([^']+)[^>][^>];return[^>]false;[^>]><span>&raquo;.*?location.href = '([^']+)")
+        aResult = cParser.parse(sHtmlContent, "spages[^>][^>]([^']+)[^>][^>];return[^>]false;[^>]><span>&raquo;.*?location.href = '([^']+)")
         if aResult[0] and aResult[1][0]:
             for sNr, Url in aResult[1]:
                 params.setParam('sUrl', URL_MAIN + Url + sNr)
@@ -159,13 +159,13 @@ def showHosters():
     params = ParameterHandler()
     sUrl = params.getValue('entryUrl')
     sHtmlContent = cRequestHandler(sUrl, caching=False).request()
-    isMatch, sUrl = cParser().parse(sHtmlContent, 'class="link"[^>]href="([^"]+)')
+    isMatch, sUrl = cParser.parse(sHtmlContent, 'class="link"[^>]href="([^"]+)')
     if isMatch:
         sHtmlContent2 = cRequestHandler(sUrl[0]).request()
-        isMatch, aResult = cParser().parse(sHtmlContent2, 'p><iframe.*?src="([^"]+)')
+        isMatch, aResult = cParser.parse(sHtmlContent2, 'p><iframe.*?src="([^"]+)')
         if 'bowfile' in aResult[0]: #Wenn Hoster bowfile ist, dann in Container nach dem HD File suchen und direkt ohne Resolver abspielen, siehe getHosterUrl
             sHtmlContent3 = cRequestHandler(aResult[0]).request()
-            isMatch, aResult = cParser().parse(sHtmlContent3, 'mp4HD:.?"([^"]+)')
+            isMatch, aResult = cParser.parse(sHtmlContent3, 'mp4HD:.?"([^"]+)')
 
     if isMatch:
         for sUrl in aResult:

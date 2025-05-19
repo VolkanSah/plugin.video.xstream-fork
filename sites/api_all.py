@@ -333,7 +333,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         if not '_id' in movie:
             continue
         sTitle = str(movie['title'])
-        if sSearchText and not cParser().search(sSearchText, sTitle):
+        if sSearchText and not cParser.search(sSearchText, sTitle):
             continue
         if 'Staffel' in sTitle or 'Season' in sTitle:
             isTvshow = True
@@ -499,4 +499,4 @@ def _search(oGui, sSearchText):
         sLang = '2'
     if sLanguage == '2':  # prefLang Englisch
         sLang = '3'
-    showEntries(URL_SEARCH % (sLang, cParser().quotePlus(sSearchText), '1'), oGui, sSearchText)
+    showEntries(URL_SEARCH % (sLang, cParser.quotePlus(sSearchText), '1'), oGui, sSearchText)

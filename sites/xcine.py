@@ -148,11 +148,11 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False, sSearchPageText =
         oGui.addFolder(oGuiElement, params, isTvshow, total)
 
     if not sGui and not sSearchText and not sSearchPageText:
-        isMatchNextPage, sNextUrl = cParser().parseSingleResult(sHtmlContent, 'class="pagination.*?<span>[^>]</span>\s<a\shref="([^"]+)')
+        isMatchNextPage, sNextUrl = cParser.parseSingleResult(sHtmlContent, 'class="pagination.*?<span>[^>]</span>\s<a\shref="([^"]+)')
         if not isMatchNextPage:
-            isMatchNextPage, sNextUrl = cParser().parseSingleResult(sHtmlContent, 'class="pagination.*?<span>[^>][^>]</span>\s<a\shref="([^"]+)')
+            isMatchNextPage, sNextUrl = cParser.parseSingleResult(sHtmlContent, 'class="pagination.*?<span>[^>][^>]</span>\s<a\shref="([^"]+)')
         if not isMatchNextPage:
-            isMatchNextPage, sNextUrl = cParser().parseSingleResult(sHtmlContent, 'class="pagination.*?<span>[^>][^>][^>]</span>\s<a\shref="([^"]+)')
+            isMatchNextPage, sNextUrl = cParser.parseSingleResult(sHtmlContent, 'class="pagination.*?<span>[^>][^>][^>]</span>\s<a\shref="([^"]+)')
         isMatchSiteSearch, sHtmlContainer = cParser.parseSingleResult(sHtmlContent, 'class="pagination(.*?)</main>')
         if isMatchSiteSearch:
             isMatch, aResult = cParser.parse(sHtmlContainer,'<span>([\d]+)</span>.*?href="([^"]+).*?nav_ext">.*?">([\d]+)')
@@ -204,7 +204,7 @@ def showHosters():
         episode = ParameterHandler().getValue('episode')
         pattern = '>{0}<.*?</ul></li>'.format(episode)
         isMatch, sHtmlContent = cParser.parseSingleResult(sHtmlContent, pattern)
-    isMatch, aResult = cParser().parse(sHtmlContent, 'link="([^"]+)')
+    isMatch, aResult = cParser.parse(sHtmlContent, 'link="([^"]+)')
     if isMatch:
         sQuality = '720'
         for sUrl in aResult:
