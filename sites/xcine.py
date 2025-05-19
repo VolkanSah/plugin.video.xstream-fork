@@ -228,7 +228,7 @@ def getHosterUrl(sUrl=False):
 
 
 def showSearch():
-    sSearchText = cGui().showKeyBoard()
+    sSearchText = cGui().showKeyBoard(sHeading=cConfig().getLocalizedString(30281))
     if not sSearchText: return
     _search(False, sSearchText)
     cGui().setEndOfDirectory()

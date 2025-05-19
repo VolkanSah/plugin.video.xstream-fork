@@ -66,7 +66,7 @@ def load():
     cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30511), SITE_IDENTIFIER, 'showSeriesMenu'), params)  # Series
     cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30529), SITE_IDENTIFIER, 'showGenreSMenu'), params)  # Series Genre
     cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30508), SITE_IDENTIFIER, 'showYearsMenu'), params)  # Years
-    cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30553), SITE_IDENTIFIER, 'showSearchActor'), params)  # Cast
+    cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30553), SITE_IDENTIFIER, 'showSearchActor'))  # Cast
     cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30520), SITE_IDENTIFIER, 'showSearch'))  # Search
     cGui().setEndOfDirectory()
 
@@ -463,11 +463,10 @@ def getHosterUrl(sUrl=False):
 
 
 def showSearchActor():
-    oGui = cGui()
-    sName = oGui.showKeyBoard()
+    sName = cGui().showKeyBoard(sHeading=cConfig().getLocalizedString(30281))
     if not sName: return
     _searchActor(False, sName)
-    oGui.setEndOfDirectory()
+    cGui().setEndOfDirectory()
 
 
 def _searchActor(oGui, sName):
@@ -483,11 +482,10 @@ def _searchActor(oGui, sName):
 
 
 def showSearch():
-    oGui = cGui()
-    sSearchText = oGui.showKeyBoard()
+    sSearchText = cGui().showKeyBoard(sHeading=cConfig().getLocalizedString(30281))
     if not sSearchText: return
     _search(False, sSearchText)
-    oGui.setEndOfDirectory()
+    cGui().setEndOfDirectory()
 
 
 def _search(oGui, sSearchText):
