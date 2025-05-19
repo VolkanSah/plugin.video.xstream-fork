@@ -463,7 +463,7 @@ def getHosterUrl(sUrl=False):
 
 
 def showSearchActor():
-    sName = cGui().showKeyBoard(sHeading=cConfig().getLocalizedString(30281))
+    sName = cGui().showKeyBoard(sHeading=cConfig().getLocalizedString(30280))
     if not sName: return
     _searchActor(False, sName)
     cGui().setEndOfDirectory()
