@@ -1489,7 +1489,7 @@ msgid "FilmPalast"
 msgstr ""
 
 msgctxt "#30703"
-msgid "Flimmerstube"
+msgid ""
 msgstr ""
 
 msgctxt "#30704"

@@ -231,29 +231,6 @@
 					</control>
 				</setting>
 			</group>
-			<group id="flimmerstubeacc" label="30703">
-				<setting id="flimmerstube.user" type="string" label="30083" help="">
-					<level>0</level>
-					<default/>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<control type="edit" format="string">
-						<heading>30083</heading>
-					</control>
-				</setting>
-				<setting id="flimmerstube.pass" type="string" label="30084" help="">
-					<level>0</level>
-					<default/>
-					<constraints>
-						<allowempty>true</allowempty>
-					</constraints>
-					<control type="edit" format="string">
-						<heading>30084</heading>
-						<hidden>true</hidden>
-					</control>
-				</setting>
-			</group>
 			<group id="serienstreamacc" label="30714">
 				<setting id="serienstream.user" type="string" label="30083" help="">
 					<level>0</level>

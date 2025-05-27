@@ -1,4 +1,11 @@
-[B]Version: 4.2.2.2[/B]
+[B]Version: 4.2.2.3[/B]
+
+27.05.2025
+
+- [intern] Settings angepasst, Änderung an Suchparametern, Typos korrigiert
+- [Kinoger] diverse fixes
+- [Api_Suche] Korrekturen im Suchdialog
+
 
 18.05.2025
 
