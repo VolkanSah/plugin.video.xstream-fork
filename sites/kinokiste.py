@@ -127,7 +127,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False, sSearchPageText =
         oGui.addFolder(oGuiElement, params, isTvshow, total)
 
     if not sGui and not sSearchText and not sSearchPageText:
-        isMatchNextPage, sNextUrl = cParser().parseSingleResult(sHtmlContent, '<span\s+class="swchItem">\s*<a\s+href="([^"]+)">&raquo;</a>\s*</span>')
+        isMatchNextPage, sNextUrl = cParser.parseSingleResult(sHtmlContent, '<span\s+class="swchItem">\s*<a\s+href="([^"]+)">&raquo;</a>\s*</span>')
         # Start Page Function
         isMatchSiteSearch, sHtmlContainer = cParser.parseSingleResult(sHtmlContent, 'class="pagesBlockuz1">(.*?)</article>')
         if isMatchSiteSearch:
