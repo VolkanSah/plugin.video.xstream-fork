@@ -66,7 +66,7 @@ def load():
     cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30511), SITE_IDENTIFIER, 'showSeriesMenu'), params)  # Series
     cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30529), SITE_IDENTIFIER, 'showGenreSMenu'), params)  # Series Genre
     cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30508), SITE_IDENTIFIER, 'showYearsMenu'), params)  # Years
-    cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30553), SITE_IDENTIFIER, 'showSearchActor'), params)  # Cast
+    cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30553), SITE_IDENTIFIER, 'showSearchActor'))  # Cast
     cGui().addFolder(cGuiElement(cConfig().getLocalizedString(30520), SITE_IDENTIFIER, 'showSearch'))  # Search
     cGui().setEndOfDirectory()
 
@@ -333,7 +333,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False):
         if not '_id' in movie:
             continue
         sTitle = str(movie['title'])
-        if sSearchText and not cParser().search(sSearchText, sTitle):
+        if sSearchText and not cParser.search(sSearchText, sTitle):
             continue
         if 'Staffel' in sTitle or 'Season' in sTitle:
             isTvshow = True
@@ -463,11 +463,10 @@ def getHosterUrl(sUrl=False):
 
 
 def showSearchActor():
-    oGui = cGui()
-    sName = oGui.showKeyBoard()
+    sName = cGui().showKeyBoard(sHeading=cConfig().getLocalizedString(30280))
     if not sName: return
     _searchActor(False, sName)
-    oGui.setEndOfDirectory()
+    cGui().setEndOfDirectory()
 
 
 def _searchActor(oGui, sName):
@@ -483,11 +482,10 @@ def _searchActor(oGui, sName):
 
 
 def showSearch():
-    oGui = cGui()
-    sSearchText = oGui.showKeyBoard()
+    sSearchText = cGui().showKeyBoard(sHeading=cConfig().getLocalizedString(30281))
     if not sSearchText: return
     _search(False, sSearchText)
-    oGui.setEndOfDirectory()
+    cGui().setEndOfDirectory()
 
 
 def _search(oGui, sSearchText):
@@ -499,4 +497,4 @@ def _search(oGui, sSearchText):
         sLang = '2'
     if sLanguage == '2':  # prefLang Englisch
         sLang = '3'
-    showEntries(URL_SEARCH % (sLang, cParser().quotePlus(sSearchText), '1'), oGui, sSearchText)
+    showEntries(URL_SEARCH % (sLang, cParser.quotePlus(sSearchText), '1'), oGui, sSearchText)

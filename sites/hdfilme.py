@@ -118,7 +118,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False, sSearchPageText =
 
     total = len(aResult)
     for sInfo, sUrl, sName, sDummy in aResult:
-        if sSearchText and not cParser().search(sSearchText, sName):
+        if sSearchText and not cParser.search(sSearchText, sName):
             continue
         # Abfrage der voreingestellten Sprache
         sLanguage = cConfig().getSetting('prefLanguage')
@@ -149,7 +149,7 @@ def showEntries(entryUrl=False, sGui=False, sSearchText=False, sSearchPageText =
         oGui.addFolder(oGuiElement, params, isTvshow, total)
 
     if not sGui and not sSearchText and not sSearchPageText:
-        isMatchNextPage, sNextUrl = cParser().parseSingleResult(sHtmlContent, 'href="([^"]+)">›</a></div>')
+        isMatchNextPage, sNextUrl = cParser.parseSingleResult(sHtmlContent, 'href="([^"]+)">›</a></div>')
         # Start Page Function
         isMatchSiteSearch, sHtmlContainer = cParser.parseSingleResult(sHtmlContent, 'class="pagination(.*?)</div></div>')
         if isMatchSiteSearch:
@@ -203,7 +203,7 @@ def showHosters():
         pass
         pattern = '%s<.*?</ul>' % ParameterHandler().getValue('episode')
         isMatch, sHtmlContent = cParser.parseSingleResult(sHtmlContent, pattern)
-    isMatch, aResult = cParser().parse(sHtmlContent, 'link="([^"]+)')
+    isMatch, aResult = cParser.parse(sHtmlContent, 'link="([^"]+)')
     if isMatch:
         sQuality = '720'
         for sUrl in aResult:
