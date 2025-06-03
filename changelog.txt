@@ -1,4 +1,17 @@
-[B]Version: 4.2.2.3[/B]
+[B]Version: 4.2.2.4[/B]
+
+03.06.2025
+
+!!!WICHTIG!!! Ab diesem Release wird nur noch der Resolver in Version 5.1.173 und höher unterstützt!
+
+- [HDFilme] Fakehoster entfernt, Domain Update
+- [Movie2k] Domain Fix
+- [API_Suche] Domain Fix, Cache leeren und Kodi Neustart nötig
+- [Kinokiste] Domain Update
+- [KKiste] Domain Update
+- [Megakino] Domain Update
+- [Movie4k] Domain Update
+
 
 27.05.2025
 

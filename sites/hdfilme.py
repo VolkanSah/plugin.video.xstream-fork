@@ -23,7 +23,7 @@ if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'false':
     logger.info('-> [SitePlugin]: globalSearch for %s is deactivated.' % SITE_NAME)
 
 # Domain Abfrage
-DOMAIN = cConfig().getSetting('plugin_' + SITE_IDENTIFIER + '.domain', 'hdfilme.beer') # Domain Auswahl über die xStream Einstellungen möglich
+DOMAIN = cConfig().getSetting('plugin_' + SITE_IDENTIFIER + '.domain', 'hdfilme-to.my') # Domain Auswahl über die xStream Einstellungen möglich
 STATUS = cConfig().getSetting('plugin_' + SITE_IDENTIFIER + '_status') # Status Code Abfrage der Domain
 ACTIVE = cConfig().getSetting('plugin_' + SITE_IDENTIFIER) # Ob Plugin aktiviert ist oder nicht
 
@@ -207,7 +207,7 @@ def showHosters():
     if isMatch:
         sQuality = '720'
         for sUrl in aResult:
-            if 'youtube' in sUrl:
+            if 'youtube' in sUrl or 'dropload' in sUrl:
                 continue
             elif sUrl.startswith('//'):
                 sUrl = 'https:' + sUrl

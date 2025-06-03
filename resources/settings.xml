@@ -322,17 +322,17 @@
 				</setting>
 				<setting id="plugin_api_all.domain" type="string" label="30278" help="">
 					<level>3</level>
-					<default>api.hdfilme.de</default>
+					<default>kinokiste.eu</default>
 					<constraints>
 						<options>
-							<option label="HDFilme">api.hdfilme.me</option>
-							<option label="Kinokiste">api.kinokiste.eu</option>
-							<option label="Kinoz">api.kinoz.org</option>
-							<option label="KKiste">api.kkiste.eu</option>
-							<option label="Movie2k">api.movie2k.ch</option>
-							<option label="Movie4k">api.movie4k.sx</option>
-							<option label="Streamcloud">api.streamcloud.sx</option>
-							<option label="XCine">api.xcine.io</option>
+							<option label="HDFilme">hdfilme.me</option>
+							<option label="Kinokiste">kinokiste.eu</option>
+							<option label="Kinoz">kinoz.org</option>
+							<option label="KKiste">kkiste.eu</option>
+							<option label="Movie2k">movie2k.ch</option>
+							<option label="Movie4k">movie4k.sx</option>
+							<option label="Streamcloud">streamcloud.sx</option>
+							<option label="XCine">xcine.io</option>
 							<allowempty>true</allowempty>
 						</options>
 					</constraints>
