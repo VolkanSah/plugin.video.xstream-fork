@@ -22,7 +22,7 @@ SITE_NAME = 'API Suchmaschine'
 SITE_ICON = 'api.png'
 SITE_IDENTIFIER = 'api_all'
 
-DOMAIN = cConfig().getSetting('plugin_' + SITE_IDENTIFIER + '.domain', 'api.streamkiste.sx')
+DOMAIN = cConfig().getSetting('plugin_' + SITE_IDENTIFIER + '.domain', 'kinokiste.eu')
 STATUS = cConfig().getSetting('plugin_' + SITE_IDENTIFIER + '_status') # Status Code Abfrage der Domain
 ACTIVE = cConfig().getSetting('plugin_' + SITE_IDENTIFIER) # Ob Plugin aktiviert ist oder nicht
 ORIGIN = 'https://' + DOMAIN + '/'
@@ -478,7 +478,7 @@ def _searchActor(oGui, sName):
         sLang = '2'
     if sLanguage == '2':  # prefLang Englisch
         sLang = '3'
-    showEntries(URL_CAST % (sLanguage, 'movies', 'views', cParser.urlEncode(sName), '1'), oGui)
+    showEntries(URL_CAST % (sLanguage, 'movies', 'views', cParser.quotePlus(sName), '1'), oGui)
 
 
 def showSearch():

@@ -1,4 +1,13 @@
-[B]Version: 4.2.2.4[/B]
+[B]Version: 4.2.2.5[/B]
+
+
+08.06.2025
+- [Settings] Einige Defaultwerte überarbeitet
+- [Requesthandler] Neue UserAgents hinzugefügt und aktualisiert für bessere Kompatibilität
+- [Requesthandler] Randomizer für Auswahl User Agents erstellt, sollte Kompatibilität mit
+  einigen Hostern verbessern
+- [Api_Suche] Ein Fehler in der Schauspielersuche wurde behoben, nun kann man auch nach mehr als
+  einem Wort suchen
 
 03.06.2025
 

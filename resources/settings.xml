@@ -314,14 +314,14 @@
 				</setting>
 				<setting id="global_search_api_all" type="boolean" label="30052">
 					<level>0</level>
-					<default>True</default>
+					<default>False</default>
 					<dependencies>
 						<dependency type="enable" operator="!is" setting="plugin_api_all">False</dependency>
 					</dependencies>
 					<control type="toggle"/>
 				</setting>
 				<setting id="plugin_api_all.domain" type="string" label="30278" help="">
-					<level>3</level>
+					<level>0</level>
 					<default>kinokiste.eu</default>
 					<constraints>
 						<options>
@@ -332,6 +332,7 @@
 							<option label="Movie2k">movie2k.ch</option>
 							<option label="Movie4k">movie4k.sx</option>
 							<option label="Streamcloud">streamcloud.sx</option>
+							<option label="StreamKiste">streamkiste.sx</option>
 							<option label="XCine">xcine.io</option>
 							<allowempty>true</allowempty>
 						</options>
@@ -554,7 +555,7 @@
 			<group id="internetarchive" label="30712">
 				<setting id="plugin_internetarchive" type="boolean" label="30050" help="30411">
 					<level>0</level>
-					<default>True</default>
+					<default>False</default>
 					<control type="toggle"/>
 				</setting>
 				<setting id="global_search_internetarchive" type="boolean" label="30052">
