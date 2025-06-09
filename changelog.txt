@@ -1,13 +1,21 @@
-[B]Version: 4.2.2.5[/B]
+[B]Version: 4.2.2.6[/B]
+
+
+09.06.2025
+
+- [Alle VoDs] Kaputte Hoster (quasi alle) repariert
+- [Alle Sites] Fehlende Icons nachgebessert
 
 
 08.06.2025
+
 - [Settings] Einige Defaultwerte überarbeitet
 - [Requesthandler] Neue UserAgents hinzugefügt und aktualisiert für bessere Kompatibilität
 - [Requesthandler] Randomizer für Auswahl User Agents erstellt, sollte Kompatibilität mit
   einigen Hostern verbessern
 - [Api_Suche] Ein Fehler in der Schauspielersuche wurde behoben, nun kann man auch nach mehr als
   einem Wort suchen
+
 
 03.06.2025
 
