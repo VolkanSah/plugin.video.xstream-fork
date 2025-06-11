@@ -1,0 +1,46 @@
+name: Build and Zip Addon
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump_version:
+        description: 'Bump version in addon.xml before zipping?'
+        required: false
+        default: 'true'
+  push:
+    branches:
+      - main
+    paths:
+      - '**'
+  pull_request:
+    types: [synchronize]
+
+jobs:
+  build-zip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Bump version in addon.xml (if manual trigger)
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.bump_version == 'true'
+        run: |
+          python3 .github/scripts/bump_version.py
+
+      - name: Run zip_repo.py
+        run: |
+          python3 zip_repo.py
+
+      - name: Push changes (zip and optionally addon.xml)
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'Automated: Build and zip addon [skip ci]'
+          branch: ${{ github.ref_name }}
+          file_pattern: 'zips/*.zip addon.xml'
