@@ -119,8 +119,8 @@ def checkVersion(xs='xstream'):
                 xbmc.executebuiltin('SendClick(11)')
             try: addonInfo = Addon(addonId).getAddonInfo
             except: return
-            url = 'https://raw.githubusercontent.com/streamxstream/xStreamRepo/refs/heads/repo/zips/plugin.video.xstream/addon.xml'
-            url2 = 'https://github.com/streamxstream/xstreamRepo/raw/refs/heads/repo/zips/plugin.video.xstream/%s'
+            url = 'https://raw.githubusercontent.com/alexanderkasten/plugin.video.xstream/refs/heads/public/addon.xml'
+            url2 = 'https://github.com/alexanderkasten/plugin.video.xstream/tree/public/zips/%s'
         else: return
 
         addonVersion = addonInfo('version')
