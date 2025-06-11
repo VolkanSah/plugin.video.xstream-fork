@@ -1,4 +1,34 @@
-[B]Version: 4.2.2.3[/B]
+[B]Version: 4.2.2.6[/B]
+
+
+09.06.2025
+
+- [Alle VoDs] Kaputte Hoster (quasi alle) repariert
+- [Alle Sites] Fehlende Icons nachgebessert
+
+
+08.06.2025
+
+- [Settings] Einige Defaultwerte überarbeitet
+- [Requesthandler] Neue UserAgents hinzugefügt und aktualisiert für bessere Kompatibilität
+- [Requesthandler] Randomizer für Auswahl User Agents erstellt, sollte Kompatibilität mit
+  einigen Hostern verbessern
+- [Api_Suche] Ein Fehler in der Schauspielersuche wurde behoben, nun kann man auch nach mehr als
+  einem Wort suchen
+
+
+03.06.2025
+
+!!!WICHTIG!!! Ab diesem Release wird nur noch der Resolver in Version 5.1.173 und höher unterstützt!
+
+- [HDFilme] Fakehoster entfernt, Domain Update
+- [Movie2k] Domain Fix
+- [API_Suche] Domain Fix, Cache leeren und Kodi Neustart nötig
+- [Kinokiste] Domain Update
+- [KKiste] Domain Update
+- [Megakino] Domain Update
+- [Movie4k] Domain Update
+
 
 27.05.2025
 

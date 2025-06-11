@@ -65,7 +65,7 @@ def load(): # Menu structure of the site plugin
     oGui.addFolder(cGuiElement(cConfig().getLocalizedString(30505), SITE_IDENTIFIER, 'showDocuMenu'), parms)    # Documentations
     parms.setParam('sUrl', URL_SEARCH)
     parms.setParam('mediaType', '')
-    oGui.addFolder(cGuiElement(cConfig().getLocalizedString(30520), SITE_IDENTIFIER, 'showSearch'))  # Search
+    oGui.addFolder(cGuiElement(cConfig().getLocalizedString(30520), SITE_IDENTIFIER, 'showSearch'), parms)  # Search
     oGui.setEndOfDirectory()
 
 
