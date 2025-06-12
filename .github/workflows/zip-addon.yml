@@ -36,7 +36,7 @@ jobs:
 
       - name: Run zip_repo.py
         run: |
-          python3 zip_repo.py
+          python3 .github/scripts/zip_repo.py
 
       - name: Push changes (zip and optionally addon.xml)
         uses: stefanzweifel/git-auto-commit-action@v5
