@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
 
-ZIPS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'zips')
+ZIPS_DIR = 'zips'
 INDEX_HTML = os.path.join(ZIPS_DIR, 'index.html')
 
 zip_files = [f for f in os.listdir(ZIPS_DIR) if f.endswith('.zip')]

@@ -4,7 +4,7 @@ import zipfile
 import xml.etree.ElementTree as ET
 
 # Paths
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = ''
 ADDON_XML = os.path.join(BASE_DIR, 'addon.xml')
 ZIPS_DIR = os.path.join(BASE_DIR, 'zips')
 
