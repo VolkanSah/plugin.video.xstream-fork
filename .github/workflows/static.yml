@@ -38,6 +38,12 @@ jobs:
       #   run: python3 .github/scripts/gen_index.py
       # - name: Copy addon.xml to zips folder for static site
       #   run: cp addon.xml zips/
+
+      - name: Zip content of zips directory
+        run: |
+          zip -r repository.xstream-4.2.3.zip zips/*
+          mv repository.xstream-4.2.3.zip zips/
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
