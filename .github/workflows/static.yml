@@ -34,10 +34,10 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
-      - name: Generate index.html for zip downloads
-        run: python3 .github/scripts/gen_index.py
-      - name: Copy addon.xml to zips folder for static site
-        run: cp addon.xml zips/
+      # - name: Generate index.html for zip downloads
+      #   run: python3 .github/scripts/gen_index.py
+      # - name: Copy addon.xml to zips folder for static site
+      #   run: cp addon.xml zips/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
