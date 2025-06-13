@@ -38,9 +38,16 @@ jobs:
         run: |
           python3 .github/scripts/zip_repo.py
 
+      - name: Generate index.html for zip downloads
+        run: python3 .github/scripts/gen_index.py
+
+      - name: Generate repository
+        run: |
+          ./create_repository.py . . -n -d zips
+
       - name: Push changes (zip and optionally addon.xml)
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: 'Automated: Build and zip addon [skip ci]'
           branch: ${{ github.ref_name }}
-          file_pattern: 'zips/*.zip addon.xml'
+          file_pattern: 'zips/* addon.xml'
