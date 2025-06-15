@@ -19,6 +19,9 @@ from urllib.parse import quote, unquote, quote_plus, unquote_plus, urlparse
 from html.entities import name2codepoint
 from difflib import SequenceMatcher
 
+# xStream = xbmcaddon.Addon().getAddonInfo('id')
+AddonName = xbmcaddon.Addon().getAddonInfo('name')
+
 # Aufgeführte Plattformen zum Anzeigen der Systemplattform
 def platform():
     if xbmc.getCondVisibility('system.platform.android'):
@@ -103,6 +106,15 @@ def textBox(heading, announce):
     TextBox()
     while xbmc.getCondVisibility('Window.IsVisible(10147)'):
         xbmc.sleep(500)
+
+
+# Info Meldung im Kodi
+def infoDialog(message, heading=AddonName, icon='', time=5000, sound=False):
+    if icon == '': icon = xbmcaddon.Addon().getAddonInfo('icon')
+    elif icon == 'INFO': icon = xbmcgui.NOTIFICATION_INFO
+    elif icon == 'WARNING': icon = xbmcgui.NOTIFICATION_WARNING
+    elif icon == 'ERROR': icon = xbmcgui.NOTIFICATION_ERROR
+    xbmcgui.Dialog().notification(heading, message, icon, time, sound=sound)
 
 
 class cParser:
@@ -376,7 +388,7 @@ class cCache(object):
 
         if cachedata:
             cachedata = eval(cachedata)
-            if time.time() - cachedata[0] < cache_time:
+            if time.time() - cachedata[0] < cache_time or cache_time < 0:
                 return cachedata[1]
             else:
                 self._win.clearProperty(key)

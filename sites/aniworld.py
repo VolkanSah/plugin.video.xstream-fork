@@ -13,7 +13,6 @@
 # 2022-12-06 Heptamer - Suchfunktion überarbeitet
 
 import xbmcgui
-import xbmcaddon
 
 from resources.lib.handler.ParameterHandler import ParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler

@@ -1,4 +1,20 @@
-[B]Version: 4.2.2.6[/B]
+[B]Version: 4.2.2.7[/B]
+
+
+15.06.2025
+
+- [Settings] Cachetime wird nun in Minuten angezeigt zur besseren Lesbarkeit
+- [Kinokiste] fix für Suche
+- [Pluginhandler] DNS Server 1 + 2 in den Supportinformationen hinzugefügt
+- [Service] Kein Zugriff aufs Menü während Domainprüfung. Damit werden diverse
+  Probleme umgangen wenn xStream zu früh aufgerufen wird
+- [Api_Suche] Suchfunktion erfolgt jetzt offline über die ganze Datenbank
+- [intern] infoDialog nach tools verschoben
+- [intern] Optimierungen an CheckDomain (startet nun schneller)
+- [movie2k] Anpassungen und Anzeigeoptimierungen
+- [Api_Suche] Diverse Fehlerbehebungen
+- [Requesthandler] CleanupUrl deaktiviert
+- [Einschalten] Scraper gefixt
 
 
 09.06.2025

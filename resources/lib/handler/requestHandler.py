@@ -109,7 +109,7 @@ class cRequestHandler:
         self.ignoreErrors = ignoreErrors
         self.compression = compression
         self.jspost = jspost
-        self.cacheTime = int(cConfig().getSetting('cacheTime', 21600)) # 21600 Sekunden = 6 Stunden Cachetime
+        self.cacheTime = int(cConfig().getSetting('cacheTime', 360)) *60 # 360 Minuten * 60 = 6 Stunden Cachetime
         self.requestTimeout = int(cConfig().getSetting('requestTimeout', 10))
         self.bypassDNSlock = (cConfig().getSetting('bypassDNSlock', 'false') == 'true')
         self.removeBreakLines(True)
@@ -174,14 +174,15 @@ class cRequestHandler:
 
     @staticmethod
     def __cleanupUrl(url):
-        p = urlparse(url)
-        if p.query:
-            query = quote_plus(p.query).replace('%3D', '=').replace('%26', '&')
-            p = p._replace(query=p.query.replace(p.query, query))
-        else:
-            path = quote_plus(p.path).replace('%2F', '/').replace('%26', '&').replace('%3D', '=')
-            p = p._replace(path=p.path.replace(p.path, path))
-        return p.geturl()
+        #p = urlparse(url)
+        #if p.query:
+        #    query = quote_plus(p.query).replace('%3D', '=').replace('%26', '&')
+        #    p = p._replace(query=p.query.replace(p.query, query))
+        #else:
+        #    path = quote_plus(p.path).replace('%2F', '/').replace('%26', '&').replace('%3D', '=')
+        #    p = p._replace(path=p.path.replace(p.path, path))
+        #return p.geturl()
+        return url
     
     def request(self):
         if self.caching and self.cacheTime > 0:

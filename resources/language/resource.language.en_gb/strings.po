@@ -32,7 +32,7 @@ msgid "Hoster selection"
 msgstr ""
 
 msgctxt "#30006"
-msgid "Cachetime for websites in seconds"
+msgid "Cachetime for websites in minutes"
 msgstr ""
 
 msgctxt "#30007"
@@ -1259,6 +1259,10 @@ msgstr ""
 
 msgctxt "#30433"
 msgid "Update disabled"
+msgstr ""
+
+msgctxt "#30434"
+msgid "actual DNS Nameserver"
 msgstr ""
 
 ############### Scaper Language ###############
