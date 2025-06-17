@@ -18,6 +18,7 @@ from xbmcvfs import translatePath
 from urllib.parse import quote, unquote, quote_plus, unquote_plus, urlparse
 from html.entities import name2codepoint
 from difflib import SequenceMatcher
+from functools import lru_cache
 
 # xStream = xbmcaddon.Addon().getAddonInfo('id')
 AddonName = xbmcaddon.Addon().getAddonInfo('name')
@@ -350,21 +351,23 @@ class cUtil:
         return (SequenceMatcher(None, sSearch, sText).ratio() >= threshold)
     
     @staticmethod
+    @lru_cache(maxsize=200000)
+    def get_seq_match_ratio(token1, token2):
+        return SequenceMatcher(None, token1, token2).ratio()
+    
+    @staticmethod
     def isSimilarByToken(sSearch, sText, threshold=0.9):
         tokens_sSearch = sSearch.split()
         tokens_sText = sText.split()
-        total_ratio = 0.0
+        if not tokens_sSearch:
+            return False
 
-        for token_sSearch in tokens_sSearch:
-            best_ratio = 0.0
-            for token_sText in tokens_sText:
-                ratio = SequenceMatcher(None, token_sSearch, token_sText).ratio()
-                best_ratio = max(best_ratio, ratio)
-            total_ratio += best_ratio
-
-        if tokens_sSearch:
-            return (total_ratio / len(tokens_sSearch) >= threshold)
-        return False
+        #get_ratio = lambda a, b: SequenceMatcher(None, a, b).ratio()
+        best_ratios = [
+            max(cUtil.get_seq_match_ratio(token, token2) for token2 in tokens_sText)
+            for token in tokens_sSearch
+        ]
+        return (sum(best_ratios) / len(best_ratios)) >= threshold
 
 def valid_email(email): #ToDo: Funktion in Settings / Konten aktivieren
     # Überprüfen der EMail-Adresse mit dem Muster

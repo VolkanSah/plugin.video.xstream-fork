@@ -28,6 +28,27 @@ except ImportError:
     xbmcgui.Dialog().ok(cConfig().getLocalizedString(30119), cConfig().getLocalizedString(30120))
 
 
+def prevent_multiple_calls(func):
+    import threading
+    import functools
+    lock = threading.Lock()
+    in_progress = False 
+     
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs): 
+        nonlocal in_progress 
+        with lock:
+            if in_progress: 
+                # function is already running 
+                return 
+            in_progress = True 
+        try:
+            return func(*args, **kwargs)
+        finally:
+            with lock:
+                in_progress = False     
+    return wrapper 
+
 def viewInfo(params):
     from resources.lib.tmdbinfo import WindowsBoxes
     parms = ParameterHandler()
@@ -37,6 +58,7 @@ def viewInfo(params):
     WindowsBoxes(sCleanTitle, sCleanTitle, sMeta, sYear)
 
 
+@prevent_multiple_calls
 def parseUrl():
     if xbmc.getInfoLabel('Container.PluginName') == 'plugin.video.osmosis':
         sys.exit()
