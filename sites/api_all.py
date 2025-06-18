@@ -512,8 +512,9 @@ def SSsearch(sGui=False, sSearchText=False):
 
     sst = sSearchText.lower()
 
-    dialog = xbmcgui.DialogProgress()
-    dialog.create(cConfig().getLocalizedString(30122), cConfig().getLocalizedString(30123))
+    if not sGui:
+        dialog = xbmcgui.DialogProgress()
+        dialog.create(cConfig().getLocalizedString(30122), cConfig().getLocalizedString(30123))
     
     total = len(aJson['movies'])
     position = 0
@@ -521,7 +522,7 @@ def SSsearch(sGui=False, sSearchText=False):
         position += 1
         if not '_id' in movie:
             continue
-        if position % 128 == 0:  # Update progress every 128 items
+        if not sGui and position % 128 == 0:  # Update progress every 128 items
             if dialog.iscanceled(): break
             dialog.update(position, str(position) + cConfig().getLocalizedString(30128) + str(total))
         sTitle = movie['title']
@@ -568,7 +569,8 @@ def SSsearch(sGui=False, sSearchText=False):
         params.setParam('sName', sTitle)
         params.setParam('sThumbnail', sThumbnail)
         oGui.addFolder(oGuiElement, params, isTvshow, total)
-    dialog.close()
+    if not sGui:
+        dialog.close()
 
 def loadMoviesData():
     global aJson
