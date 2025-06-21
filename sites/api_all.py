@@ -7,6 +7,7 @@
 # showEpisodes:   4 Stunden
 
 import re
+import xbmcgui
 from resources.lib.handler.ParameterHandler import ParameterHandler
 from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.tools import logger, cParser, cUtil
@@ -499,6 +500,7 @@ def SSsearch(sGui=False, sSearchText=False):
     global aJson
     oGui = sGui if sGui else cGui()
     params = ParameterHandler()
+    sLanguage = cConfig().getSetting('prefLanguage')
     
     # Falls die Daten noch nicht geladen wurden oder neu geladen werden sollen
     if aJson is None or 'movies' not in aJson:
@@ -510,19 +512,23 @@ def SSsearch(sGui=False, sSearchText=False):
 
     sst = sSearchText.lower()
 
-    total = int(len(aJson['movies']))
+    if not sGui:
+        dialog = xbmcgui.DialogProgress()
+        dialog.create(cConfig().getLocalizedString(30122), cConfig().getLocalizedString(30123))
+    
+    total = len(aJson['movies'])
     position = 0
     for movie in aJson['movies']:
-        position = position + 1
+        position += 1
         if not '_id' in movie:
             continue
-        if position >= total:
-            break
-        sThumbnail = ''
-        sTitle = str(movie['title'])
+        if not sGui and position % 128 == 0:  # Update progress every 128 items
+            if dialog.iscanceled(): break
+            dialog.update(position, str(position) + cConfig().getLocalizedString(30128) + str(total))
+        sTitle = movie['title']
         if 'Staffel' in sTitle or 'Season' in sTitle:
             isTvshow = True
-            sSearch = sTitle.split('-')[0].replace(' ', '').lower()
+            sSearch = sTitle.rsplit('-', 1)[0].replace(' ', '').lower()
         else:
             isTvshow = False
             sSearch = sTitle.lower()
@@ -530,6 +536,7 @@ def SSsearch(sGui=False, sSearchText=False):
             continue
         #logger.info('-> [DEBUG]: %s' % str(movie))
         oGuiElement = cGuiElement(sTitle, SITE_IDENTIFIER, 'showEpisodes' if isTvshow else 'showHosters')
+        sThumbnail = ''
         if 'poster_path_season' in movie and movie['poster_path_season']:
             sThumbnail = URL_THUMBNAIL % str(movie['poster_path_season'])
         elif 'poster_path' in movie and movie['poster_path']:
@@ -553,7 +560,7 @@ def SSsearch(sGui=False, sSearchText=False):
                 oGuiElement.setLanguage('DE')
             if (sLanguage != '2' and movie['lang'] == 3):  # Englisch
                 oGuiElement.setLanguage('EN')
-        oGuiElement.setMediaType('tvshows' if isTvshow else 'movie')
+        oGuiElement.setMediaType('tvshow' if isTvshow else 'movie')
         if 'runtime' in movie:
             isMatch, sRuntime = cParser.parseSingleResult(movie['runtime'], '\d+')
             if isMatch:
@@ -562,6 +569,8 @@ def SSsearch(sGui=False, sSearchText=False):
         params.setParam('sName', sTitle)
         params.setParam('sThumbnail', sThumbnail)
         oGui.addFolder(oGuiElement, params, isTvshow, total)
+    if not sGui:
+        dialog.close()
 
 def loadMoviesData():
     global aJson
