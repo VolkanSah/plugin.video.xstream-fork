@@ -1,5 +1,13 @@
-[B]Version: 4.2.2.7[/B]
+[B]Version: 4.2.2.8[/B]
 
+
+21.06.2025
+
+- [API_Suche] Cache Zeiten für die Offline Suche angepasst, Suche beschleunigt und Treffer verbessert,
+  Fortschritts-Dialog für Offline Suche hinzugefügt
+- [intern] Zwei ziemlich fiese Bugs wurden behoben
+- [intern] Supportinfos korrigiert/erweitert (nun auch DNS Anzeige und aus welcher Repo xStream
+  installiert wurde
 
 15.06.2025
 

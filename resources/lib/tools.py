@@ -19,6 +19,7 @@ from urllib.parse import quote, unquote, quote_plus, unquote_plus, urlparse
 from html.entities import name2codepoint
 from difflib import SequenceMatcher
 from functools import lru_cache
+from os import path, chdir
 
 # xStream = xbmcaddon.Addon().getAddonInfo('id')
 AddonName = xbmcaddon.Addon().getAddonInfo('name')
@@ -349,7 +350,7 @@ class cUtil:
     @staticmethod
     def isSimilar(sSearch, sText, threshold=0.9):
         return (SequenceMatcher(None, sSearch, sText).ratio() >= threshold)
-    
+
     @staticmethod
     @lru_cache(maxsize=200000)
     def get_seq_match_ratio(token1, token2):
@@ -359,10 +360,11 @@ class cUtil:
     def isSimilarByToken(sSearch, sText, threshold=0.9):
         tokens_sSearch = sSearch.split()
         tokens_sText = sText.split()
+
         if not tokens_sSearch:
             return False
 
-        #get_ratio = lambda a, b: SequenceMatcher(None, a, b).ratio()
+            # get_ratio = lambda a, b: SequenceMatcher(None, a, b).ratio()
         best_ratios = [
             max(cUtil.get_seq_match_ratio(token, token2) for token2 in tokens_sText)
             for token in tokens_sSearch
@@ -375,6 +377,35 @@ def valid_email(email): #ToDo: Funktion in Settings / Konten aktivieren
         return True
     else:
         return False
+
+def getDNS(dns):
+    status = 'Beschäftigt'
+    loop = 1
+    while status == 'Beschäftigt':
+        if loop == 20:
+            break
+        status = xbmc.getInfoLabel(dns)
+        xbmc.sleep(20)
+        loop += 1
+    return status
+
+def getRepofromAddonsDB(addonID):
+    from sqlite3 import dbapi2 as database
+    from glob import glob
+    chdir(path.join(translatePath('special://database/')))
+    addonsDB = path.join(translatePath('special://database/'), sorted(glob("Addons*.db"), reverse=True)[0])
+    dbcon = database.connect(addonsDB)
+    dbcur = dbcon.cursor()
+    select = ("SELECT origin FROM installed WHERE addonID = '%s'") % addonID
+    dbcur.execute(select)
+    match = dbcur.fetchone()
+    dbcon.close()
+    if match and len(match) > 0:
+         repo = match[0]
+    else:
+        repo = ''
+    return repo
+
 
 class cCache(object):
     _win = None

@@ -1265,6 +1265,10 @@ msgctxt "#30434"
 msgid "actual DNS Nameserver"
 msgstr ""
 
+msgctxt "#30435"
+msgid "Installed from repository:"
+msgstr ""
+
 ############### Scaper Language ###############
 
 msgctxt "#30500"

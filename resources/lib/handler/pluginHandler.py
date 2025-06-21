@@ -15,8 +15,7 @@ from urllib.parse import urlparse
 from xbmcgui import Dialog
 from xbmcaddon import Addon
 from xbmcvfs import translatePath
-from resources.lib.tools import platform
-from resources.lib.tools import infoDialog
+from resources.lib.tools import platform, infoDialog, getDNS, getRepofromAddonsDB
 
 
 ADDON_PATH = translatePath(os.path.join('special://home/addons/', '%s'))
@@ -249,11 +248,12 @@ class cPluginHandler:
             + Addon().getAddonInfo('name') + ' Version:  ' + Addon().getAddonInfo('id') + ' - ' + Addon().getAddonInfo('version') + '\n'  # xStream ID und Version
             + Addon('script.module.resolveurl').getAddonInfo('name') + ' Version:  ' + Addon('script.module.resolveurl').getAddonInfo('id') + ' - ' + Addon('script.module.resolveurl').getAddonInfo('version') + '\n'  # Resolver ID und Version
             + Addon('script.module.resolveurl').getAddonInfo('name') + ' Status:  ' + UPDATERU + Addon().getSettingString('resolver.branch') + '\n'  # Resolver Update Status und Branch
+            + cConfig().getLocalizedString(30435) + ' ' + getRepofromAddonsDB(Addon().getAddonInfo('id')) + '\n' # Repo-Info
             + '\n'  # Absatz
             + cConfig().getLocalizedString(30420) + '\n'  # DNS Informationen
             + cConfig().getLocalizedString(30417) + ' ' + BYPASS + '\n'  # xStream DNS Bypass aktiv/inaktiv
-            + cConfig().getLocalizedString(30434) + '1' + ' ' + xbmc.getInfoLabel('Network.DNS1Address') + '\n'
-            + cConfig().getLocalizedString(30434) + '2' + ' ' + xbmc.getInfoLabel('Network.DNS2Address') + '\n'
+            + cConfig().getLocalizedString(30434) + '1' + ' ' + getDNS('Network.DNS1Address') + '\n' # DNS Nameserver 1
+            + cConfig().getLocalizedString(30434) + '2' + ' ' + getDNS('Network.DNS2Address') + '\n' # DNS Nameserver 2
             + '\n'  # Absatz
             + cConfig().getLocalizedString(30421) + '\n'  # Repo Informationen
             + Addon('repository.xstream').getAddonInfo('name') + ':  ' + Addon('repository.xstream').getAddonInfo('id') + ' - ' + Addon('repository.xstream').getAddonInfo('version') + '\n'  # xStream Repository ID und Version

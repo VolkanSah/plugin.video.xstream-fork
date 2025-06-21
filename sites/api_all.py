@@ -18,7 +18,7 @@ from json import loads
 from datetime import datetime
 
 # Globale Variable für die JSON-Daten
-aJson = None
+apiJson = None
 
 # Domain Abfrage ###
 
@@ -449,7 +449,7 @@ def showHosters():
                     if isMatch:
 #                        sName = cParser.urlparse(sUrl) ### angezeigter hostername api
                         
-                        sName = aName[0][:aName[0].rindex('.')] ### angezeigte hosternamen, jedoch "substring" nicht ausreichend für den film "DUNE teil2"..
+                        sName = aName[0][:aName[0].rindex('.')]
                         if cConfig().isBlockedHoster(sName)[0]: continue  # Hoster aus settings.xml oder deaktivierten Resolver ausschließen
                         sHoster = sHoster + ' ' + sName
                     if 'release' in stream and str(stream['release']) != '':
@@ -497,16 +497,16 @@ def _search(oGui, sSearchText):
 
     
 def SSsearch(sGui=False, sSearchText=False):
-    global aJson
+    global apiJson
     oGui = sGui if sGui else cGui()
     params = ParameterHandler()
     sLanguage = cConfig().getSetting('prefLanguage')
     
     # Falls die Daten noch nicht geladen wurden oder neu geladen werden sollen
-    if aJson is None or 'movies' not in aJson:
+    if apiJson is None or 'movies' not in apiJson:
         loadMoviesData()
         
-    if 'movies' not in aJson or not isinstance(aJson.get('movies'), list) or len(aJson['movies']) == 0:
+    if 'movies' not in apiJson or not isinstance(apiJson.get('movies'), list) or len(apiJson['movies']) == 0:
         oGui.showInfo()
         return
 
@@ -515,10 +515,10 @@ def SSsearch(sGui=False, sSearchText=False):
     if not sGui:
         dialog = xbmcgui.DialogProgress()
         dialog.create(cConfig().getLocalizedString(30122), cConfig().getLocalizedString(30123))
-    
-    total = len(aJson['movies'])
+
+    total = len(apiJson['movies'])
     position = 0
-    for movie in aJson['movies']:
+    for movie in apiJson['movies']:
         position += 1
         if not '_id' in movie:
             continue
@@ -573,7 +573,7 @@ def SSsearch(sGui=False, sSearchText=False):
         dialog.close()
 
 def loadMoviesData():
-    global aJson
+    global apiJson
     sLanguage = cConfig().getSetting('prefLanguage')
     if sLanguage == '0':  # prefLang Alle Sprachen
         sLang = 'all'
@@ -586,13 +586,13 @@ def loadMoviesData():
         oRequest = cRequestHandler(URL_SEARCH % (sLang, 'new', '1'), caching=True)
         oRequest.addHeaderEntry('Referer', REFERER)
         oRequest.addHeaderEntry('Origin', ORIGIN)
-        oRequest.cacheTime = 60 * 60 * 24  # HTML Cache Zeit 1 Tag
+        oRequest.cacheTime = 60 * 60 * 48  # HTML Cache Zeit 2 Tage
         sJson = oRequest.request()
-        aJson = loads(sJson)
+        apiJson = loads(sJson)
         logger.info('API-Daten erfolgreich geladen')
     except:
         logger.error('Fehler beim Laden der API-Daten')
-        aJson = {'movies': []}
+        apiJson = {'movies': []}
         
 
 # Daten beim Import des Moduls laden
