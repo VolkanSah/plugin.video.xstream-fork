@@ -1,85 +1,16 @@
-[B]Version: 4.2.2.8[/B]
+[B]Version: 4.3.0[/B]
 
 
 21.06.2025
 
-- [API_Suche] Cache Zeiten für die Offline Suche angepasst, Suche beschleunigt und Treffer verbessert,
-  Fortschritts-Dialog für Offline Suche hinzugefügt
-- [intern] Zwei ziemlich fiese Bugs wurden behoben
-- [intern] Supportinfos korrigiert/erweitert (nun auch DNS Anzeige und aus welcher Repo xStream
-  installiert wurde
+- [BurningSeries] Neuer Scraper Thx @ Alex für den Code und an Kyle fürs Logo.
+- [BurningSeries] Exception Handler für fehlenden API Key hinzugefügt
 
-15.06.2025
+[coloryellow] WICHTIG! BurningSeries ist im Standard deaktiviert. Ihr benötigt zwingend
+ein Konto bei 2Captcha und müsst einen API Key mit Guthaben in xStream hinterlegen,
+sonst funktioniert BurningSeries nicht! Anleitung findet sich in unserer Wiki unter
+Punkt 5.4.2.9[/color]
 
-- [Settings] Cachetime wird nun in Minuten angezeigt zur besseren Lesbarkeit
-- [Kinokiste] fix für Suche
-- [Pluginhandler] DNS Server 1 + 2 in den Supportinformationen hinzugefügt
-- [Service] Kein Zugriff aufs Menü während Domainprüfung. Damit werden diverse
-  Probleme umgangen wenn xStream zu früh aufgerufen wird
-- [Api_Suche] Suchfunktion erfolgt jetzt offline über die ganze Datenbank
-- [intern] infoDialog nach tools verschoben
-- [intern] Optimierungen an CheckDomain (startet nun schneller)
-- [movie2k] Anpassungen und Anzeigeoptimierungen
-- [Api_Suche] Diverse Fehlerbehebungen
-- [Requesthandler] CleanupUrl deaktiviert
-- [Einschalten] Scraper gefixt
+- [API_Suche] Caching für Hoster-Listen aktiviert
+- [TMDB Helper] Neue Player zum Download verfügbar
 
-
-09.06.2025
-
-- [Alle VoDs] Kaputte Hoster (quasi alle) repariert
-- [Alle Sites] Fehlende Icons nachgebessert
-
-
-08.06.2025
-
-- [Settings] Einige Defaultwerte überarbeitet
-- [Requesthandler] Neue UserAgents hinzugefügt und aktualisiert für bessere Kompatibilität
-- [Requesthandler] Randomizer für Auswahl User Agents erstellt, sollte Kompatibilität mit
-  einigen Hostern verbessern
-- [Api_Suche] Ein Fehler in der Schauspielersuche wurde behoben, nun kann man auch nach mehr als
-  einem Wort suchen
-
-
-03.06.2025
-
-!!!WICHTIG!!! Ab diesem Release wird nur noch der Resolver in Version 5.1.173 und höher unterstützt!
-
-- [HDFilme] Fakehoster entfernt, Domain Update
-- [Movie2k] Domain Fix
-- [API_Suche] Domain Fix, Cache leeren und Kodi Neustart nötig
-- [Kinokiste] Domain Update
-- [KKiste] Domain Update
-- [Megakino] Domain Update
-- [Movie4k] Domain Update
-
-
-27.05.2025
-
-- [intern] Settings angepasst, Änderung an Suchparametern, Typos korrigiert
-- [Kinoger] diverse fixes
-- [Api_Suche] Korrekturen im Suchdialog
-
-
-18.05.2025
-
-- [PluginHandler] Checkdomain - Ablauf optimiert und beschleunigt
-- [API_Suche] Noch mehr aufgeräumt, Suche nach Schauspieler über Eingabemaske, Lokalisierung Deutsch/Englisch
-- [tmdb] Fix Request Jahr
-- [Kinoger] Diverse Fixes
-- [Serienstream] Suche überarbeitet, sollte jetzt noch mehr finden, auch mit dem TMDb Helper
-- [Alle Scraper] Domains aktualisiert
-- [Flimmerstube] Good bye my friend :(
-
-
-01.05.2025
-
-- [API Suche] Fix für die Default Domain
-
-
-01.05.2025
-
-- [XCine] Anpassungen Caching
-- [Settings] Resolver Update per default aktiv, XCine Settings Suche im
-  Standard deaktiviert
-- [API Suche] Neuer Scraper der über eine API nach Filmen und Serien sucht

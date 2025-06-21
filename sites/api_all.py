@@ -433,6 +433,8 @@ def showHosters():
     sEpisode = params.getValue('episode')
     try:
         oRequest = cRequestHandler(sUrl)
+        if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
+            oRequest.cacheTime = 60 * 60 * 8  # HTML Cache Zeit 8 Stunden
         oRequest.addHeaderEntry('Referer', REFERER)
         oRequest.addHeaderEntry('Origin', ORIGIN)
         sJson = oRequest.request()

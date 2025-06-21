@@ -1133,6 +1133,14 @@ msgctxt "#30322"
 msgid "[B][COLOR cyan]xStream[/COLOR] [COLOR white]Warning (Developer Options)[/COLOR][/B]"
 msgstr ""
 
+msgctxt "#30323"
+msgid "Recaptcha"
+msgstr ""
+
+msgctxt "#30324"
+msgid "2Captcha"
+msgstr ""
+
 msgctxt "#30402"
 msgid "Countries"
 msgstr ""
@@ -1269,7 +1277,11 @@ msgctxt "#30435"
 msgid "Installed from repository:"
 msgstr ""
 
-############### Scaper Language ###############
+msgctxt "#30436"
+msgid "API Key"
+msgstr ""
+
+############### Scraper Language ###############
 
 msgctxt "#30500"
 msgid "New"
@@ -1502,7 +1514,7 @@ msgid "FilmPalast"
 msgstr ""
 
 msgctxt "#30703"
-msgid ""
+msgid "Burning Series"
 msgstr ""
 
 msgctxt "#30704"
