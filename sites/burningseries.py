@@ -37,9 +37,10 @@ if cConfig().getSetting('2captcha.pass') == '':
     logger.info('-> [SitePlugin]: 2Captcha API Key not set')
 
 # Domain Abfrage
-DOMAIN = cConfig().getSetting('plugin_' + SITE_IDENTIFIER + '.domain') # Domain Auswahl über die xStream Einstellungen möglich
+DOMAIN = cConfig().getSetting('plugin_' + SITE_IDENTIFIER + '.domain', 'bs.to') # Domain Auswahl über die xStream Einstellungen möglich
 STATUS = cConfig().getSetting('plugin_' + SITE_IDENTIFIER + '_status') # Status Code Abfrage der Domain
 ACTIVE = cConfig().getSetting('plugin_' + SITE_IDENTIFIER) # Ob Plugin aktiviert ist oder nicht
+
 URL_LOGIN = ''
 URL_MAIN = 'https://' + DOMAIN
 REFERER = 'https://' + DOMAIN
