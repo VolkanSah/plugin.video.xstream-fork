@@ -1,64 +1,25 @@
-[B]Version: 4.2.2.6[/B]
+[B]Version: 4.3.0.1[/B]
 
 13.06.2025
 
 - [BurningSeries] Neuer Scraper (nur mit 2Captcha Account)
 
-09.06.2025
+22.06.2025
 
-- [Alle VoDs] Kaputte Hoster (quasi alle) repariert
-- [Alle Sites] Fehlende Icons nachgebessert
-
-
-08.06.2025
-
-- [Settings] Einige Defaultwerte überarbeitet
-- [Requesthandler] Neue UserAgents hinzugefügt und aktualisiert für bessere Kompatibilität
-- [Requesthandler] Randomizer für Auswahl User Agents erstellt, sollte Kompatibilität mit
-  einigen Hostern verbessern
-- [Api_Suche] Ein Fehler in der Schauspielersuche wurde behoben, nun kann man auch nach mehr als
-  einem Wort suchen
+- [Burningseries] Einen Fehler korrigiert, dass sich die Domain nicht automatisch in die
+  Settings schreibt
 
 
-03.06.2025
+21.06.2025
 
-!!!WICHTIG!!! Ab diesem Release wird nur noch der Resolver in Version 5.1.173 und höher unterstützt!
+- [BurningSeries] Neuer Scraper Thx @ Alex für den Code und an Kyle fürs Logo.
+- [BurningSeries] Exception Handler für fehlenden API Key hinzugefügt
 
-- [HDFilme] Fakehoster entfernt, Domain Update
-- [Movie2k] Domain Fix
-- [API_Suche] Domain Fix, Cache leeren und Kodi Neustart nötig
-- [Kinokiste] Domain Update
-- [KKiste] Domain Update
-- [Megakino] Domain Update
-- [Movie4k] Domain Update
+[color yellow] WICHTIG! BurningSeries ist im Standard deaktiviert. Ihr benötigt zwingend
+ein Konto bei 2Captcha und müsst einen API Key mit Guthaben in xStream hinterlegen,
+sonst funktioniert BurningSeries nicht! Anleitung findet sich in unserer Wiki unter
+Punkt 5.4.2.9[/color]
 
+- [API_Suche] Caching für Hoster-Listen aktiviert
+- [TMDB Helper] Neue Player zum Download verfügbar
 
-27.05.2025
-
-- [intern] Settings angepasst, Änderung an Suchparametern, Typos korrigiert
-- [Kinoger] diverse fixes
-- [Api_Suche] Korrekturen im Suchdialog
-
-
-18.05.2025
-
-- [PluginHandler] Checkdomain - Ablauf optimiert und beschleunigt
-- [API_Suche] Noch mehr aufgeräumt, Suche nach Schauspieler über Eingabemaske, Lokalisierung Deutsch/Englisch
-- [tmdb] Fix Request Jahr
-- [Kinoger] Diverse Fixes
-- [Serienstream] Suche überarbeitet, sollte jetzt noch mehr finden, auch mit dem TMDb Helper
-- [Alle Scraper] Domains aktualisiert
-- [Flimmerstube] Good bye my friend :(
-
-
-01.05.2025
-
-- [API Suche] Fix für die Default Domain
-
-
-01.05.2025
-
-- [XCine] Anpassungen Caching
-- [Settings] Resolver Update per default aktiv, XCine Settings Suche im
-  Standard deaktiviert
-- [API Suche] Neuer Scraper der über eine API nach Filmen und Serien sucht

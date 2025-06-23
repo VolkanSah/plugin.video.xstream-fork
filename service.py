@@ -6,7 +6,6 @@ import json
 import re
 import xbmc
 import xbmcaddon
-import xbmcgui
 import time
 
 from xbmcaddon import Addon
@@ -17,6 +16,9 @@ from resources.lib.handler.requestHandler import cRequestHandler
 from resources.lib.handler.pluginHandler import cPluginHandler
 from resources.lib import updateManager
 from resources.lib.utils import addonPath, translatePath
+from resources.lib.tools import cCache
+from resources.lib.tools import infoDialog
+
 
 HEADERMESSAGE = cConfig().getLocalizedString(30151)
 LOGMESSAGE = cConfig().getLocalizedString(30166)
@@ -33,15 +35,6 @@ RESOLVE_SHA = os.path.join(translatePath(RESOLVE_ADDON_DATA_PATH), "update_sha")
 
 # xStream Installationspfad
 ADDON_PATH = translatePath(os.path.join('special://home/addons/', '%s'))
-
-# Update Info beim Kodi Start
-def infoDialog(message, heading=AddonName, icon='', time=5000, sound=False):
-    if icon == '': icon = xbmcaddon.Addon().getAddonInfo('icon')
-    elif icon == 'INFO': icon = xbmcgui.NOTIFICATION_INFO
-    elif icon == 'WARNING': icon = xbmcgui.NOTIFICATION_WARNING
-    elif icon == 'ERROR': icon = xbmcgui.NOTIFICATION_ERROR
-    xbmcgui.Dialog().notification(heading, message, icon, time, sound=sound)
-
 
 # Aktiviere xStream Addon
 def enableAddon(ADDONID):
@@ -160,9 +153,12 @@ def checkVersion(xs='xstream'):
 
 
 def main():
-    if xbmcaddon.Addon().getAddonInfo('id') == 'plugin.video.xstream': checkVersion('xstream')
+    cCache().set(xbmcaddon.Addon().getAddonInfo('id') + '_main', 'running')
+
+    if xbmcaddon.Addon().getAddonInfo('id') == 'plugin.video.xstream':
+        checkVersion('xstream')
+
     if xbmcaddon.Addon().getSetting('githubUpdateDevXstream') == 'true':
-        #xbmcaddon.Addon().setSetting('githubUpdateXstream', 'false')
         status1 = updateManager.xStreamDevUpdate(True)
         cRequestHandler('').clearCache()  # Cache löschen
         if Addon().getSetting('update.notification') == 'full':  # Benachrichtung xStream vollständig
@@ -201,6 +197,9 @@ def main():
             cPluginHandler().getAvailablePlugins()
     except Exception:
         pass
+
+    # getAvailablePlugins must be finished before the main menu can be started!
+    cCache().set(xbmcaddon.Addon().getAddonInfo('id') + '_main', 'finished')
 
     # Changelog Popup in den "settings.xml" ein bzw. aus schaltbar
     if xbmcaddon.Addon().getSetting('popup.update.notification') == 'true':

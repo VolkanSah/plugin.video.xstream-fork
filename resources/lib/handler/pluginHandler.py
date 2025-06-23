@@ -15,7 +15,7 @@ from urllib.parse import urlparse
 from xbmcgui import Dialog
 from xbmcaddon import Addon
 from xbmcvfs import translatePath
-from resources.lib.tools import platform
+from resources.lib.tools import platform, infoDialog, getDNS, getRepofromAddonsDB
 
 
 ADDON_PATH = translatePath(os.path.join('special://home/addons/', '%s'))
@@ -248,9 +248,12 @@ class cPluginHandler:
             + Addon().getAddonInfo('name') + ' Version:  ' + Addon().getAddonInfo('id') + ' - ' + Addon().getAddonInfo('version') + '\n'  # xStream ID und Version
             + Addon('script.module.resolveurl').getAddonInfo('name') + ' Version:  ' + Addon('script.module.resolveurl').getAddonInfo('id') + ' - ' + Addon('script.module.resolveurl').getAddonInfo('version') + '\n'  # Resolver ID und Version
             + Addon('script.module.resolveurl').getAddonInfo('name') + ' Status:  ' + UPDATERU + Addon().getSettingString('resolver.branch') + '\n'  # Resolver Update Status und Branch
+            + cConfig().getLocalizedString(30435) + ' ' + getRepofromAddonsDB(Addon().getAddonInfo('id')) + '\n' # Repo-Info
             + '\n'  # Absatz
             + cConfig().getLocalizedString(30420) + '\n'  # DNS Informationen
             + cConfig().getLocalizedString(30417) + ' ' + BYPASS + '\n'  # xStream DNS Bypass aktiv/inaktiv
+            + cConfig().getLocalizedString(30434) + '1' + ' ' + getDNS('Network.DNS1Address') + '\n' # DNS Nameserver 1
+            + cConfig().getLocalizedString(30434) + '2' + ' ' + getDNS('Network.DNS2Address') + '\n' # DNS Nameserver 2
             + '\n'  # Absatz
             + cConfig().getLocalizedString(30421) + '\n'  # Repo Informationen
             + Addon('repository.xstream').getAddonInfo('name') + ':  ' + Addon('repository.xstream').getAddonInfo('id') + ' - ' + Addon('repository.xstream').getAddonInfo('version') + '\n'  # xStream Repository ID und Version
@@ -270,6 +273,8 @@ class cPluginHandler:
             try:
                 pluginDataDomain = self.__getPluginDataDomain(fileName, self.defaultFolder)
                 provider = pluginDataDomain['identifier']
+                if provider == 'api_all': #api_all bei der Überprüfung ignorieren da eh keine saubere Antwort kommt
+                    continue
                 _domain = pluginDataDomain['domain']
                 domain = cConfig().getSetting('plugin_' + provider + '.domain', _domain)
                 base_link = 'http://' + domain + '/'  # URL_MAIN
@@ -292,3 +297,44 @@ class cPluginHandler:
             except Exception:
                 pass
         log(LOGMESSAGE + ' -> [checkDomain]: Domains for all available Plugins updated', LOGNOTICE)
+        infoDialog("Domain-Überprüfung aller Plugins abgeschlossen", sound=False, icon='INFO', time=6000)
+
+
+    def _checkdomain(self, provider, base_link):
+        try:
+            oRequest = cRequestHandler(base_link, caching=False, ignoreErrors=True)
+            oRequest.request()
+            status_code = int(oRequest.getStatus())
+            cConfig().setSetting('plugin_' + provider + '_status', str(status_code))  # setzte Status Code in die settings
+            log(LOGMESSAGE + ' -> [checkDomain]: Status Code ' + str(status_code) + '  ' + provider + ': - ' + base_link, LOGNOTICE)
+
+            # Status 403 - bedeutet, dass der Zugriff auf eine angeforderte Ressource blockiert ist.
+            # Status 404 - Seite nicht gefunden. Diese Meldung zeigt an, dass die Seite oder der Ordner auf dem Server, die aufgerufen werden sollten, nicht unter der angegebenen URL zu finden sind.
+            if 403 <= status_code <= 503:  # Domain Interner Server Error und nicht erreichbar
+                cConfig().setSetting('global_search_' + provider, 'false')  # deaktiviere Globale Suche
+                log(LOGMESSAGE + ' -> [checkDomain]: Internal Server Error for ' + provider + ' (DDOS Guard, HTTP Error, Cloudflare or BlazingFast active)', LOGNOTICE)
+
+            # Status 301 - richtet Ihr auf Eurem Server ein, wenn sich die URL geändert hat, Eure Domain umgezogen ist oder sich ein Inhalt anderweitig verschoben hat.
+            elif 300 <= status_code <= 400:  # Domain erreichbar mit Umleitung
+                url = oRequest.getRealUrl()
+                cConfig().setSetting('plugin_' + provider + '.domain', urlparse(url).hostname)  # setze Domain in die settings.xml
+                cConfig().setSetting('global_search_' + provider, 'true')  # aktiviere Globale Suche
+                log(LOGMESSAGE + ' -> [checkDomain]: globalSearch for ' + provider + ' is activated.', LOGNOTICE)
+
+            # Status 200 - Dieser Code wird vom Server zurückgegeben, wenn er den Request eines Browsers korrekt zurückgeben kann. Für die Ausgabe des Codes und des Inhalts der Seite muss der Server die Anfrage zunächst akzeptieren.
+            elif status_code == 200:  # Domain erreichbar
+                cConfig().setSetting('plugin_' + provider + '.domain', urlparse(base_link).hostname)  # setze URL_MAIN in die settings.xml
+                cConfig().setSetting('global_search_' + provider, 'true')  # aktiviere Globale Suche
+                log(LOGMESSAGE + ' -> [checkDomain]: globalSearch for ' + provider + ' is activated.', LOGNOTICE)
+            # Wenn keiner der Status oben greift
+            else:
+                log(LOGMESSAGE + ' -> [checkDomain]: Error ' + provider + ' not available.', LOGNOTICE)
+                cConfig().setSetting('global_search_' + provider, 'false')  # deaktiviere Globale Suche
+                xbmcaddon.Addon().setSetting('plugin_' + provider + '.domain', '')  # lösche Settings Eintrag
+                log(LOGMESSAGE + ' -> [checkDomain]: globalSearch for ' + provider + ' is deactivated.', LOGNOTICE)
+        except:
+            # Wenn Timeout und die Seite Offline ist
+            cConfig().setSetting('global_search_' + provider, 'false')  # deaktiviere Globale Suche
+            xbmcaddon.Addon().setSetting('plugin_' + provider + '.domain', '')  # lösche Settings Eintrag
+            log(LOGMESSAGE + ' -> [checkDomain]: Error ' + provider + ' not available.', LOGNOTICE)
+            pass

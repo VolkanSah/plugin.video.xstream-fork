@@ -6,11 +6,10 @@
 # HTML LangzeitCache hinzugefügt
 # showValue:     24 Stunden
 # showAllSeries: 24 Stunden
-# showEpisodes:   4 Stunden
+# showEpisodes:   24 Stunden
 # SSsearch:      24 Stunden
 
-import xbmcgui
-import xbmcaddon
+
 import json
 import requests
 import time
@@ -31,10 +30,17 @@ if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'false':
     SITE_GLOBAL_SEARCH = False
     logger.info('-> [SitePlugin]: globalSearch for %s is deactivated.' % SITE_NAME)
 
+if cConfig().getSetting('2captcha.pass') == '':
+    cConfig().setSetting('plugin_burningseries', 'false')
+    cConfig().setSetting('global_search_burningseries', 'false')
+    cConfig().setSetting('plugin_burningseries_checkDomain', 'false')
+    logger.info('-> [SitePlugin]: 2Captcha API Key not set')
+
 # Domain Abfrage
-DOMAIN = cConfig().getSetting('plugin_' + SITE_IDENTIFIER + '.domain') # Domain Auswahl über die xStream Einstellungen möglich
+DOMAIN = cConfig().getSetting('plugin_' + SITE_IDENTIFIER + '.domain', 'bs.to') # Domain Auswahl über die xStream Einstellungen möglich
 STATUS = cConfig().getSetting('plugin_' + SITE_IDENTIFIER + '_status') # Status Code Abfrage der Domain
 ACTIVE = cConfig().getSetting('plugin_' + SITE_IDENTIFIER) # Ob Plugin aktiviert ist oder nicht
+
 URL_LOGIN = ''
 URL_MAIN = 'https://' + DOMAIN
 REFERER = 'https://' + DOMAIN
@@ -286,7 +292,7 @@ def showEpisodes():
     isMovieList = sUrl.endswith('filme')
     oRequest = cRequestHandler(sUrl)
     if cConfig().getSetting('global_search_' + SITE_IDENTIFIER) == 'true':
-        oRequest.cacheTime = 60 * 60 * 4  # HTML Cache Zeit 4 Stunden
+        oRequest.cacheTime = 60 * 60 * 24  # HTML Cache Zeit 24 Stunden
     sHtmlContent = oRequest.request()
     pattern = r'<tr[^>]*>\s*<td><a href="([^"]+)" title="([^"]+)">(\d+)</a></td>\s*<td>.*?<a href="([^"]+)" title="([^"]+)">.*?</td>\s*<td>(.*?)</td>\s*</tr>'
     isMatch, sEpisodes = cParser.parse(sHtmlContent, pattern)

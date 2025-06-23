@@ -32,8 +32,8 @@ msgid "Hoster selection"
 msgstr "Hoster-Auswahl"
 
 msgctxt "#30006"
-msgid "Cachetime for websites in seconds"
-msgstr "Cachezeit für Webseiten in Sekunden"
+msgid "Cachetime for websites in minutes"
+msgstr "Cachezeit für Webseiten in Minuten"
 
 msgctxt "#30007"
 msgid "Maximum number in hosterlist"
@@ -1128,6 +1128,14 @@ msgctxt "#30322"
 msgid "[B][COLOR cyan]xStream[/COLOR] [COLOR white]Warning (Developer Options)[/COLOR][/B]"
 msgstr "[B][COLOR cyan]xStream[/COLOR] [COLOR white]Warnhinweis (Entwickler Optionen)[/COLOR][/B]"
 
+msgctxt "#30323"
+msgid "ReCaptcha"
+msgstr "ReCaptcha"
+
+msgctxt "#30324"
+msgid "2Captcha"
+msgstr "2Captcha"
+
 msgctxt "#30402"
 msgid "Countries"
 msgstr "Länder"
@@ -1256,7 +1264,19 @@ msgctxt "#30433"
 msgid "Update disabled"
 msgstr "Aktualisierung deaktiviert"
 
-############### Scaper Language ###############
+msgctxt "#30434"
+msgid "actual DNS Nameserver"
+msgstr "aktiver DNS Nameserver"
+
+msgctxt "#30435"
+msgid "Installed from repository:"
+msgstr "Installiert aus Repository:"
+
+msgctxt "#30436"
+msgid "API Key"
+msgstr "API Schlüssel"
+
+############### Scraper Language ###############
 
 msgctxt "#30500"
 msgid "New"
@@ -1489,8 +1509,8 @@ msgid "FilmPalast"
 msgstr ""
 
 msgctxt "#30703"
-msgid ""
-msgstr ""
+msgid "Burning Series"
+msgstr "Burning Series"
 
 msgctxt "#30704"
 msgid "HD-Filme"

@@ -18,6 +18,11 @@ from xbmcvfs import translatePath
 from urllib.parse import quote, unquote, quote_plus, unquote_plus, urlparse
 from html.entities import name2codepoint
 from difflib import SequenceMatcher
+from functools import lru_cache
+from os import path, chdir
+
+# xStream = xbmcaddon.Addon().getAddonInfo('id')
+AddonName = xbmcaddon.Addon().getAddonInfo('name')
 
 # Aufgeführte Plattformen zum Anzeigen der Systemplattform
 def platform():
@@ -103,6 +108,15 @@ def textBox(heading, announce):
     TextBox()
     while xbmc.getCondVisibility('Window.IsVisible(10147)'):
         xbmc.sleep(500)
+
+
+# Info Meldung im Kodi
+def infoDialog(message, heading=AddonName, icon='', time=5000, sound=False):
+    if icon == '': icon = xbmcaddon.Addon().getAddonInfo('icon')
+    elif icon == 'INFO': icon = xbmcgui.NOTIFICATION_INFO
+    elif icon == 'WARNING': icon = xbmcgui.NOTIFICATION_WARNING
+    elif icon == 'ERROR': icon = xbmcgui.NOTIFICATION_ERROR
+    xbmcgui.Dialog().notification(heading, message, icon, time, sound=sound)
 
 
 class cParser:
@@ -336,23 +350,26 @@ class cUtil:
     @staticmethod
     def isSimilar(sSearch, sText, threshold=0.9):
         return (SequenceMatcher(None, sSearch, sText).ratio() >= threshold)
+
+    @staticmethod
+    @lru_cache(maxsize=200000)
+    def get_seq_match_ratio(token1, token2):
+        return SequenceMatcher(None, token1, token2).ratio()
     
     @staticmethod
     def isSimilarByToken(sSearch, sText, threshold=0.9):
         tokens_sSearch = sSearch.split()
         tokens_sText = sText.split()
-        total_ratio = 0.0
 
-        for token_sSearch in tokens_sSearch:
-            best_ratio = 0.0
-            for token_sText in tokens_sText:
-                ratio = SequenceMatcher(None, token_sSearch, token_sText).ratio()
-                best_ratio = max(best_ratio, ratio)
-            total_ratio += best_ratio
+        if not tokens_sSearch:
+            return False
 
-        if tokens_sSearch:
-            return (total_ratio / len(tokens_sSearch) >= threshold)
-        return False
+            # get_ratio = lambda a, b: SequenceMatcher(None, a, b).ratio()
+        best_ratios = [
+            max(cUtil.get_seq_match_ratio(token, token2) for token2 in tokens_sText)
+            for token in tokens_sSearch
+        ]
+        return (sum(best_ratios) / len(best_ratios)) >= threshold
 
 def valid_email(email): #ToDo: Funktion in Settings / Konten aktivieren
     # Überprüfen der EMail-Adresse mit dem Muster
@@ -360,6 +377,35 @@ def valid_email(email): #ToDo: Funktion in Settings / Konten aktivieren
         return True
     else:
         return False
+
+def getDNS(dns):
+    status = 'Beschäftigt'
+    loop = 1
+    while status == 'Beschäftigt':
+        if loop == 20:
+            break
+        status = xbmc.getInfoLabel(dns)
+        xbmc.sleep(20)
+        loop += 1
+    return status
+
+def getRepofromAddonsDB(addonID):
+    from sqlite3 import dbapi2 as database
+    from glob import glob
+    chdir(path.join(translatePath('special://database/')))
+    addonsDB = path.join(translatePath('special://database/'), sorted(glob("Addons*.db"), reverse=True)[0])
+    dbcon = database.connect(addonsDB)
+    dbcur = dbcon.cursor()
+    select = ("SELECT origin FROM installed WHERE addonID = '%s'") % addonID
+    dbcur.execute(select)
+    match = dbcur.fetchone()
+    dbcon.close()
+    if match and len(match) > 0:
+         repo = match[0]
+    else:
+        repo = ''
+    return repo
+
 
 class cCache(object):
     _win = None
@@ -376,7 +422,7 @@ class cCache(object):
 
         if cachedata:
             cachedata = eval(cachedata)
-            if time.time() - cachedata[0] < cache_time:
+            if time.time() - cachedata[0] < cache_time or cache_time < 0:
                 return cachedata[1]
             else:
                 self._win.clearProperty(key)
